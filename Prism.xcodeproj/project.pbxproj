@@ -1,0 +1,856 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		100763C22041B106005093C5 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100763C12041B106005093C5 /* Constraints.swift */; };
+		10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10863A4D203FD57800FA851B /* UIColorExtensions.swift */; };
+		1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F3203E838500C282BA /* AppDelegate.swift */; };
+		1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F5203E838500C282BA /* LoginViewController.swift */; };
+		1091E1F9203E838500C282BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1091E1F7203E838500C282BA /* Main.storyboard */; };
+		1091E1FB203E838500C282BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1091E1FA203E838500C282BA /* Assets.xcassets */; };
+		1091E1FE203E838500C282BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1091E1FC203E838500C282BA /* LaunchScreen.storyboard */; };
+		1091E209203E838500C282BA /* PrismTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E208203E838500C282BA /* PrismTests.swift */; };
+		1091E214203E838500C282BA /* PrismUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E213203E838500C282BA /* PrismUITests.swift */; };
+		10E3F557204659DF00C82F3F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F556204659DF00C82F3F /* RegisterViewController.swift */; };
+		10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F558204659EE00C82F3F /* ScreenType.swift */; };
+		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
+		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
+		10E3F55F204659F600C82F3F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55E204659F500C82F3F /* ViewController.swift */; };
+		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
+		4FB0EDCF2043DBD800F79988 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */; };
+		4FB0EDD02043DBD800F79988 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */; };
+		4FB0EDD12043DBD800F79988 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */; };
+		68027A98BF11F075EE0D168F /* Pods_PrismUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BDFE7215CD5E190950B491B /* Pods_PrismUITests.framework */; };
+		BCB811FC130209F7BEAA5342 /* Pods_Prism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3644F339173237F42FBC0459 /* Pods_Prism.framework */; };
+		C1486B8044EB40DAD581D5B1 /* Pods_PrismTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD8C3AF1BF3E179192CC9D1B /* Pods_PrismTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1091E205203E838500C282BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1091E1E8203E838500C282BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1091E1EF203E838500C282BA;
+			remoteInfo = Prism;
+		};
+		1091E210203E838500C282BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1091E1E8203E838500C282BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1091E1EF203E838500C282BA;
+			remoteInfo = Prism;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		100763C12041B106005093C5 /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
+		10863A4D203FD57800FA851B /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		1091E1F0203E838500C282BA /* Prism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prism.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1091E1F3203E838500C282BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1091E1F5203E838500C282BA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		1091E1F8203E838500C282BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1091E1FA203E838500C282BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1091E1FD203E838500C282BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1091E1FF203E838500C282BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1091E204203E838500C282BA /* PrismTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrismTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1091E208203E838500C282BA /* PrismTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismTests.swift; sourceTree = "<group>"; };
+		1091E20A203E838500C282BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1091E20F203E838500C282BA /* PrismUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrismUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1091E213203E838500C282BA /* PrismUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismUITests.swift; sourceTree = "<group>"; };
+		1091E215203E838500C282BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		10E3F556204659DF00C82F3F /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		10E3F558204659EE00C82F3F /* ScreenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenType.swift; sourceTree = "<group>"; };
+		10E3F559204659EE00C82F3F /* Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
+		10E3F55A204659EE00C82F3F /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		10E3F55E204659F500C82F3F /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
+		4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		570B94E1B88EBFA96F19DD07 /* Pods-PrismTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests.release.xcconfig"; sourceTree = "<group>"; };
+		5C04D5E0B49BD9CB9E071F02 /* Pods-PrismTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests.debug.xcconfig"; sourceTree = "<group>"; };
+		73F31C4B9B92F692DA9C08D8 /* Pods-PrismUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrismUITests/Pods-PrismUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7BDFE7215CD5E190950B491B /* Pods_PrismUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrismUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83B276D149C91BCA4DD8A4B9 /* Pods-PrismUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrismUITests/Pods-PrismUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		ACBE2805777E97999396C651 /* Pods-Prism.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Prism.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Prism/Pods-Prism.debug.xcconfig"; sourceTree = "<group>"; };
+		AD8C3AF1BF3E179192CC9D1B /* Pods_PrismTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrismTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB8BC78859E5DF127678D11F /* Pods-Prism.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Prism.release.xcconfig"; path = "Pods/Target Support Files/Pods-Prism/Pods-Prism.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1091E1ED203E838500C282BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCB811FC130209F7BEAA5342 /* Pods_Prism.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1091E201203E838500C282BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1486B8044EB40DAD581D5B1 /* Pods_PrismTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1091E20C203E838500C282BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68027A98BF11F075EE0D168F /* Pods_PrismUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0C2F12303E93891A7B23F86A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3644F339173237F42FBC0459 /* Pods_Prism.framework */,
+				AD8C3AF1BF3E179192CC9D1B /* Pods_PrismTests.framework */,
+				7BDFE7215CD5E190950B491B /* Pods_PrismUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		100763C02041B06B005093C5 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				100763C12041B106005093C5 /* Constraints.swift */,
+				10E3F55A204659EE00C82F3F /* Colors.swift */,
+				10E3F559204659EE00C82F3F /* Icons.swift */,
+				10E3F558204659EE00C82F3F /* ScreenType.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		100763C32041F937005093C5 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1091E1F5203E838500C282BA /* LoginViewController.swift */,
+				10E3F556204659DF00C82F3F /* RegisterViewController.swift */,
+				10E3F55E204659F500C82F3F /* ViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		10863A4C203FD55800FA851B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				10863A4D203FD57800FA851B /* UIColorExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		1091E1E7203E838500C282BA = {
+			isa = PBXGroup;
+			children = (
+				1091E1F2203E838500C282BA /* Prism */,
+				1091E207203E838500C282BA /* PrismTests */,
+				1091E212203E838500C282BA /* PrismUITests */,
+				1091E1F1203E838500C282BA /* Products */,
+				8469119918C7F2493D6D1660 /* Pods */,
+				0C2F12303E93891A7B23F86A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		1091E1F1203E838500C282BA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1091E1F0203E838500C282BA /* Prism.app */,
+				1091E204203E838500C282BA /* PrismTests.xctest */,
+				1091E20F203E838500C282BA /* PrismUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1091E1F2203E838500C282BA /* Prism */ = {
+			isa = PBXGroup;
+			children = (
+				100763C32041F937005093C5 /* ViewControllers */,
+				100763C02041B06B005093C5 /* Helper */,
+				10863A4C203FD55800FA851B /* Extensions */,
+				1091E1F3203E838500C282BA /* AppDelegate.swift */,
+				1091E1F7203E838500C282BA /* Main.storyboard */,
+				1091E1FA203E838500C282BA /* Assets.xcassets */,
+				1091E1FC203E838500C282BA /* LaunchScreen.storyboard */,
+				1091E1FF203E838500C282BA /* Info.plist */,
+				4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */,
+				4F4A1808204381C6002DAA54 /* MyUser.swift */,
+			);
+			path = Prism;
+			sourceTree = "<group>";
+		};
+		1091E207203E838500C282BA /* PrismTests */ = {
+			isa = PBXGroup;
+			children = (
+				1091E208203E838500C282BA /* PrismTests.swift */,
+				1091E20A203E838500C282BA /* Info.plist */,
+			);
+			path = PrismTests;
+			sourceTree = "<group>";
+		};
+		1091E212203E838500C282BA /* PrismUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1091E213203E838500C282BA /* PrismUITests.swift */,
+				1091E215203E838500C282BA /* Info.plist */,
+			);
+			path = PrismUITests;
+			sourceTree = "<group>";
+		};
+		8469119918C7F2493D6D1660 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ACBE2805777E97999396C651 /* Pods-Prism.debug.xcconfig */,
+				FB8BC78859E5DF127678D11F /* Pods-Prism.release.xcconfig */,
+				5C04D5E0B49BD9CB9E071F02 /* Pods-PrismTests.debug.xcconfig */,
+				570B94E1B88EBFA96F19DD07 /* Pods-PrismTests.release.xcconfig */,
+				83B276D149C91BCA4DD8A4B9 /* Pods-PrismUITests.debug.xcconfig */,
+				73F31C4B9B92F692DA9C08D8 /* Pods-PrismUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1091E1EF203E838500C282BA /* Prism */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1091E218203E838500C282BA /* Build configuration list for PBXNativeTarget "Prism" */;
+			buildPhases = (
+				DA286B346C4B930B80B056EA /* [CP] Check Pods Manifest.lock */,
+				1091E1EC203E838500C282BA /* Sources */,
+				1091E1ED203E838500C282BA /* Frameworks */,
+				1091E1EE203E838500C282BA /* Resources */,
+				A4E274339D637F09286E49F1 /* [CP] Embed Pods Frameworks */,
+				C7B8FBB30E09585BC38DF14E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Prism;
+			productName = Prism;
+			productReference = 1091E1F0203E838500C282BA /* Prism.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1091E203203E838500C282BA /* PrismTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1091E21B203E838500C282BA /* Build configuration list for PBXNativeTarget "PrismTests" */;
+			buildPhases = (
+				74B101564E2D082A11453BA9 /* [CP] Check Pods Manifest.lock */,
+				1091E200203E838500C282BA /* Sources */,
+				1091E201203E838500C282BA /* Frameworks */,
+				1091E202203E838500C282BA /* Resources */,
+				1031CE3934494EC2A29DF47A /* [CP] Embed Pods Frameworks */,
+				874E9FD3A81A29B17677E44B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1091E206203E838500C282BA /* PBXTargetDependency */,
+			);
+			name = PrismTests;
+			productName = PrismTests;
+			productReference = 1091E204203E838500C282BA /* PrismTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1091E20E203E838500C282BA /* PrismUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1091E21E203E838500C282BA /* Build configuration list for PBXNativeTarget "PrismUITests" */;
+			buildPhases = (
+				0E7FD21834294AD2AF1973FB /* [CP] Check Pods Manifest.lock */,
+				1091E20B203E838500C282BA /* Sources */,
+				1091E20C203E838500C282BA /* Frameworks */,
+				1091E20D203E838500C282BA /* Resources */,
+				83065C935801717638636FBF /* [CP] Embed Pods Frameworks */,
+				FD71089D268CFC0CC20658DC /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1091E211203E838500C282BA /* PBXTargetDependency */,
+			);
+			name = PrismUITests;
+			productName = PrismUITests;
+			productReference = 1091E20F203E838500C282BA /* PrismUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1091E1E8203E838500C282BA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "Satish Boggarapu";
+				TargetAttributes = {
+					1091E1EF203E838500C282BA = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					1091E203203E838500C282BA = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1091E1EF203E838500C282BA;
+					};
+					1091E20E203E838500C282BA = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1091E1EF203E838500C282BA;
+					};
+				};
+			};
+			buildConfigurationList = 1091E1EB203E838500C282BA /* Build configuration list for PBXProject "Prism" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1091E1E7203E838500C282BA;
+			productRefGroup = 1091E1F1203E838500C282BA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1091E1EF203E838500C282BA /* Prism */,
+				1091E203203E838500C282BA /* PrismTests */,
+				1091E20E203E838500C282BA /* PrismUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1091E1EE203E838500C282BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1091E1FE203E838500C282BA /* LaunchScreen.storyboard in Resources */,
+				4FB0EDCF2043DBD800F79988 /* GoogleService-Info.plist in Resources */,
+				1091E1FB203E838500C282BA /* Assets.xcassets in Resources */,
+				1091E1F9203E838500C282BA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1091E202203E838500C282BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FB0EDD02043DBD800F79988 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1091E20D203E838500C282BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FB0EDD12043DBD800F79988 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0E7FD21834294AD2AF1973FB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PrismUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1031CE3934494EC2A29DF47A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		74B101564E2D082A11453BA9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PrismTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		83065C935801717638636FBF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrismUITests/Pods-PrismUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		874E9FD3A81A29B17677E44B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A4E274339D637F09286E49F1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Prism/Pods-Prism-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/MDFInternationalization/MDFInternationalization.framework",
+				"${BUILT_PRODUCTS_DIR}/MDFTextAccessibility/MDFTextAccessibility.framework",
+				"${BUILT_PRODUCTS_DIR}/Material/Material.framework",
+				"${BUILT_PRODUCTS_DIR}/MaterialComponents/MaterialComponents.framework",
+				"${BUILT_PRODUCTS_DIR}/Motion/Motion.framework",
+				"${BUILT_PRODUCTS_DIR}/MotionAnimator/MotionAnimator.framework",
+				"${BUILT_PRODUCTS_DIR}/MotionInterchange/MotionInterchange.framework",
+				"${BUILT_PRODUCTS_DIR}/MotionTransitioning/MotionTransitioning.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MDFInternationalization.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MDFTextAccessibility.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Material.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialComponents.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Motion.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionAnimator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionInterchange.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionTransitioning.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Prism/Pods-Prism-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C7B8FBB30E09585BC38DF14E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Prism/Pods-Prism-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DA286B346C4B930B80B056EA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Prism-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD71089D268CFC0CC20658DC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrismUITests/Pods-PrismUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1091E1EC203E838500C282BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10E3F55F204659F600C82F3F /* ViewController.swift in Sources */,
+				100763C22041B106005093C5 /* Constraints.swift in Sources */,
+				10E3F55D204659EF00C82F3F /* Colors.swift in Sources */,
+				10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */,
+				10E3F55C204659EF00C82F3F /* Icons.swift in Sources */,
+				1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */,
+				10E3F557204659DF00C82F3F /* RegisterViewController.swift in Sources */,
+				1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */,
+				4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */,
+				10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1091E200203E838500C282BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1091E209203E838500C282BA /* PrismTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1091E20B203E838500C282BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1091E214203E838500C282BA /* PrismUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1091E206203E838500C282BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1091E1EF203E838500C282BA /* Prism */;
+			targetProxy = 1091E205203E838500C282BA /* PBXContainerItemProxy */;
+		};
+		1091E211203E838500C282BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1091E1EF203E838500C282BA /* Prism */;
+			targetProxy = 1091E210203E838500C282BA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1091E1F7203E838500C282BA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1091E1F8203E838500C282BA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1091E1FC203E838500C282BA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1091E1FD203E838500C282BA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1091E216203E838500C282BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1091E217203E838500C282BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1091E219203E838500C282BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACBE2805777E97999396C651 /* Pods-Prism.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y255RY3RZB;
+				INFOPLIST_FILE = Prism/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = satishboggarapu.Prism;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1091E21A203E838500C282BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB8BC78859E5DF127678D11F /* Pods-Prism.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y255RY3RZB;
+				INFOPLIST_FILE = Prism/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = satishboggarapu.Prism;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1091E21C203E838500C282BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C04D5E0B49BD9CB9E071F02 /* Pods-PrismTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TEGLEE3UYA;
+				INFOPLIST_FILE = PrismTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = satishboggarapu.PrismTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Prism.app/Prism";
+			};
+			name = Debug;
+		};
+		1091E21D203E838500C282BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 570B94E1B88EBFA96F19DD07 /* Pods-PrismTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TEGLEE3UYA;
+				INFOPLIST_FILE = PrismTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = satishboggarapu.PrismTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Prism.app/Prism";
+			};
+			name = Release;
+		};
+		1091E21F203E838500C282BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 83B276D149C91BCA4DD8A4B9 /* Pods-PrismUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TEGLEE3UYA;
+				INFOPLIST_FILE = PrismUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = satishboggarapu.PrismUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Prism;
+			};
+			name = Debug;
+		};
+		1091E220203E838500C282BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 73F31C4B9B92F692DA9C08D8 /* Pods-PrismUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TEGLEE3UYA;
+				INFOPLIST_FILE = PrismUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = satishboggarapu.PrismUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Prism;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1091E1EB203E838500C282BA /* Build configuration list for PBXProject "Prism" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1091E216203E838500C282BA /* Debug */,
+				1091E217203E838500C282BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1091E218203E838500C282BA /* Build configuration list for PBXNativeTarget "Prism" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1091E219203E838500C282BA /* Debug */,
+				1091E21A203E838500C282BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1091E21B203E838500C282BA /* Build configuration list for PBXNativeTarget "PrismTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1091E21C203E838500C282BA /* Debug */,
+				1091E21D203E838500C282BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1091E21E203E838500C282BA /* Build configuration list for PBXNativeTarget "PrismUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1091E21F203E838500C282BA /* Debug */,
+				1091E220203E838500C282BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1091E1E8203E838500C282BA /* Project object */;
+}
