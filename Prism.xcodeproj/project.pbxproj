@@ -20,7 +20,7 @@
 		10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F558204659EE00C82F3F /* ScreenType.swift */; };
 		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
 		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
-		10E3F55F204659F600C82F3F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55E204659F500C82F3F /* ViewController.swift */; };
+		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
 		4FB0EDCF2043DBD800F79988 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */; };
 		4FB0EDD02043DBD800F79988 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */; };
@@ -67,7 +67,7 @@
 		10E3F558204659EE00C82F3F /* ScreenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenType.swift; sourceTree = "<group>"; };
 		10E3F559204659EE00C82F3F /* Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 		10E3F55A204659EE00C82F3F /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		10E3F55E204659F500C82F3F /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
 		4FB0EDCE2043DBD700F79988 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -135,7 +135,6 @@
 			children = (
 				1091E1F5203E838500C282BA /* LoginViewController.swift */,
 				10E3F556204659DF00C82F3F /* RegisterViewController.swift */,
-				10E3F55E204659F500C82F3F /* ViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -144,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				10863A4D203FD57800FA851B /* UIColorExtensions.swift */,
+				192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -536,7 +536,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10E3F55F204659F600C82F3F /* ViewController.swift in Sources */,
 				100763C22041B106005093C5 /* Constraints.swift in Sources */,
 				10E3F55D204659EF00C82F3F /* Colors.swift in Sources */,
 				10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */,
@@ -546,6 +545,7 @@
 				1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */,
 				4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */,
 				10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */,
+				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
