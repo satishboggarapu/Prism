@@ -399,7 +399,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     func showMainViewController() {
         let layout = UICollectionViewFlowLayout()
-        let viewController = MainViewController(collectionViewLayout: layout)
+        let viewController = MainViewController()
         self.navigationController?.pushViewController(viewController, animated: false)
 //        present(viewController, animated: false, completion: nil)
     }
