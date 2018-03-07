@@ -22,6 +22,10 @@ public class Constraints {
     static public func statusBarHeight() -> CGFloat {
         return UIApplication.shared.statusBarFrame.size.height
     }
+
+    static  public func navigationBarHeight() -> CGFloat {
+        return 44.0
+    }
     
     public class LoginViewController {
         

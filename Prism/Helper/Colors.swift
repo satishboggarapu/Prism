@@ -12,5 +12,6 @@ import UIKit
 extension UIColor {
     static var materialBlue: UIColor { return UIColor(hex: 0x1A62D9) }
     static var loginBackground: UIColor { return UIColor(hex: 0x2B2B2B) }
-    static var statusBarBackgroud: UIColor { return UIColor(hex: 0x222222) }
+    static var statusBarBackground: UIColor { return UIColor(hex: 0x222222) }
+    static var navigationBarColor: UIColor { return  UIColor(hex: 0x2A2A2A) }
 }

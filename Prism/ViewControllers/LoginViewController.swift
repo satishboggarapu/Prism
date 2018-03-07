@@ -11,6 +11,7 @@
 
 import UIKit
 import Material
+import Motion
 import Firebase
 import FirebaseAuth
 
@@ -45,6 +46,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+
         // Initialize Variables
         defaultWidth = Constraints.screenWidth() - 2*defaultMargin
 
@@ -55,6 +58,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
         ref = Database.database().reference()
 
+        isMotionEnabled = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -84,7 +88,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private func initializeUIElements() {
         initializeStatusBarBackground()
         initializeScrollView()
-        initialzeIconImageView()
+        initializeIconImageView()
         animateIconImageViewFromSplashScreen()
         initializeEmailTextField()
         initializePasswordTextField()
@@ -95,7 +99,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private func initializeStatusBarBackground() {
         statusBarBackground = UIView()
         statusBarBackground.frame = CGRect(x: 0, y: 0, width: Constraints.screenWidth(), height: Constraints.statusBarHeight())
-        statusBarBackground.backgroundColor = UIColor.statusBarBackgroud
+        statusBarBackground.backgroundColor = UIColor.statusBarBackground
         self.view.addSubview(statusBarBackground)
     }
 
@@ -106,12 +110,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(scrollView)
     }
 
-    private func initialzeIconImageView() {
+    private func initializeIconImageView() {
         iconImageView = UIImageView(image: UIImage(icon: .SPLASH_SCREEN_ICON))
         let size = Constraints.LoginViewController.getIconSize()
         iconImageView.frame.origin = CGPoint(x: (self.view.frame.width - size.width)/2, y: ((self.view.frame.height - size.height)/2) - Constraints.statusBarHeight())
         iconImageView.frame.size = size
         iconImageView.contentMode = .scaleAspectFit
+        iconImageView.motionIdentifier = "v1"
         scrollView.addSubview(iconImageView)
     }
 
@@ -187,7 +192,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     /**
-        Runs the animation for the icon when transistining from splash screen, along with the rest of the uielements
+        Runs the animation for the icon when transitioning from splash screen, along with the rest of the uielements
     */
     private func animateIconImageViewFromSplashScreen() {
         UIView.animate(withDuration: 0.75, animations: {
@@ -257,7 +262,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     /**
-        Register button action. Segues to the RegisterViewContorller to create a new account.
+        Register button action. Segues to the RegisterViewController to create a new account.
     */
     @objc private func registerButtonAction(_ sender: UIButton) {
         print("registerButton pressed")
@@ -268,7 +273,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Check if point is inside the password visibility icon touchable area.
 
         - parameters:
-            - point: Tap gesuture location as CGPoint
+            - point: Tap gesture location as CGPoint
 
         - returns: Boolean (true if point inside icon touchable area)
     */
@@ -357,12 +362,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             print("User logged in")
+            self.showMainViewController()
         }
     }
 
     func logOut() {
         try! Auth.auth().signOut()
-        print("user logges out")
+        print("user logged out")
     }
 
     // MARK: Error Functions
@@ -389,6 +395,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.isErrorRevealed = false
         passwordTextField.dividerNormalColor = UIColor.white
         passwordTextField.dividerActiveColor = UIColor.materialBlue
+    }
+
+    func showMainViewController() {
+        let layout = UICollectionViewFlowLayout()
+        let viewController = MainViewController(collectionViewLayout: layout)
+        self.navigationController?.pushViewController(viewController, animated: false)
+//        present(viewController, animated: false, completion: nil)
     }
 }
 
@@ -425,13 +438,8 @@ extension LoginViewController {
             return
         }
 
-//        let difference: CGFloat = loginButton.frame.maxY + Constraints.statusBarHeight() - frame.origin.y
-//        print(difference)
-//        if difference > 0 {
         let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: frame.height + 30, right: 0)
         scrollView.contentInset = contentInset
-//        }
-
     }
 
     /**

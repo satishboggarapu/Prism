@@ -17,13 +17,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        
+        window?.makeKeyAndVisible()
+
+        UINavigationBar.appearance().barTintColor = UIColor.navigationBarColor
+
+        // get rid of black bar underneath navbar
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+
+        application.statusBarStyle = .lightContent
+
+        let statusBarBackgroundView = UIView()
+        statusBarBackgroundView.backgroundColor = UIColor.navigationBarColor
+
+        window?.addSubview(statusBarBackgroundView)
+        window?.addConstraintsWithFormat(format: "H:|[v0]|", views: statusBarBackgroundView)
+        window?.addConstraintsWithFormat(format: "V:|[v0(20)]", views: statusBarBackgroundView)
+
         // rootViewController from StoryBoard
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let navigationController = mainStoryboard.instantiateViewController(withIdentifier: "splashScreenViewController")
-        let viewcontroller = mainStoryboard.instantiateViewController(withIdentifier: "loginViewController")
+
+        let viewController = mainStoryboard.instantiateViewController(withIdentifier: "loginViewController")
         self.window!.rootViewController = navigationController
         navigationController.view.backgroundColor = UIColor(hex: 0x2b2b2b)
 
@@ -33,12 +50,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         iconImageView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         iconImageView.layer.position = CGPoint(x: navigationController.view.frame.width/2, y: navigationController.view.frame.height/2)
         navigationController.view.addSubview(iconImageView)
-        
+
         // Icon rotation animation for the splash screen
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             // seque to the LoginViewController
-            self.window!.rootViewController! = viewcontroller
+            self.window!.rootViewController! = UINavigationController(rootViewController: viewController)
         })
         let rotationAnimation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
         rotationAnimation.toValue = NSNumber(value: .pi * 2.0)
