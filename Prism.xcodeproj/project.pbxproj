@@ -23,6 +23,7 @@
 		10ADF6BE2050D33500060A19 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BC2050D33500060A19 /* NavigationBar.swift */; };
 		10ADF6C12050D36000060A19 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BF2050D36000060A19 /* UIViewControllerExtensions.swift */; };
 		10ADF6C22050D36000060A19 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6C02050D36000060A19 /* UIViewExtensions.swift */; };
+		10ADF6C42050D52000060A19 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6C32050D52000060A19 /* MainViewController.swift */; };
 		10E3F557204659DF00C82F3F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F556204659DF00C82F3F /* RegisterViewController.swift */; };
 		10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F558204659EE00C82F3F /* ScreenType.swift */; };
 		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
@@ -77,6 +78,7 @@
 		10ADF6BC2050D33500060A19 /* NavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NavigationBar.swift; path = Prism/CustomViews/NavigationBar.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6BF2050D36000060A19 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		10ADF6C02050D36000060A19 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		10ADF6C32050D52000060A19 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		10E3F556204659DF00C82F3F /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		10E3F558204659EE00C82F3F /* ScreenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenType.swift; sourceTree = "<group>"; };
 		10E3F559204659EE00C82F3F /* Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			children = (
 				1091E1F5203E838500C282BA /* LoginViewController.swift */,
 				10E3F556204659DF00C82F3F /* RegisterViewController.swift */,
+				10ADF6C32050D52000060A19 /* MainViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -602,6 +605,7 @@
 				10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */,
 				10ADF6B72050D30B00060A19 /* FeedPosts.swift in Sources */,
 				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
+				10ADF6C42050D52000060A19 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
