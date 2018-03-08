@@ -87,7 +87,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     private func initializeStatusBarBackground() {
         statusBarBackground = UIView()
         statusBarBackground.frame = CGRect(x: 0, y: 0, width: Constraints.screenWidth(), height: Constraints.statusBarHeight())
-        statusBarBackground.backgroundColor = UIColor.statusBarBackgroud
+        statusBarBackground.backgroundColor = UIColor.statusBarBackground
         self.view.addSubview(statusBarBackground)
 
     }
