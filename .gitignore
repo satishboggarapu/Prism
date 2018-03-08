@@ -3,6 +3,7 @@
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 .idea/
+Prism/GoogleService-Info.plist
 
 ## Build generated
 build/
