@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
 
-        UINavigationBar.appearance().barTintColor = UIColor.navigationBarColor
+        UINavigationBar.appearance().barTintColor = UIColor.statusBarBackground
 
         // get rid of black bar underneath navbar
         UINavigationBar.appearance().shadowImage = UIImage()
@@ -30,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.statusBarStyle = .lightContent
 
         let statusBarBackgroundView = UIView()
-        statusBarBackgroundView.backgroundColor = UIColor.navigationBarColor
+        statusBarBackgroundView.backgroundColor = UIColor.statusBarBackground
 
         window?.addSubview(statusBarBackgroundView)
         window?.addConstraintsWithFormat(format: "H:|[v0]|", views: statusBarBackgroundView)

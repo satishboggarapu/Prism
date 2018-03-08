@@ -8,6 +8,7 @@
 
 import UIKit
 import Material
+import Firebase
 
 class MainViewController: UIViewController{
 
@@ -29,7 +30,7 @@ class MainViewController: UIViewController{
     private func setupNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationController?.navigationBar.barTintColor = UIColor.navigationBarColor
+        self.navigationController?.navigationBar.barTintColor = UIColor.statusBarBackground
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationItem.setHidesBackButton(true, animated: false)
 
@@ -49,6 +50,9 @@ class MainViewController: UIViewController{
         navigationView.addSubview(titleLabel)
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navigationView)
+
+        let signOutButton = UIBarButtonItem(title: "SignOut", style: .done, target: self, action: #selector(signOutButtonAction(_:)))
+        self.navigationItem.rightBarButtonItem = signOutButton
 
     }
 
@@ -72,6 +76,7 @@ class MainViewController: UIViewController{
 
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView?.register(FeedPosts.self, forCellWithReuseIdentifier: "FeedPosts")
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.showsVerticalScrollIndicator = false
@@ -102,6 +107,12 @@ class MainViewController: UIViewController{
         print("newPostButton pressed")
     }
 
+    @objc func signOutButtonAction(_ sender: UIBarButtonItem) {
+        try! Auth.auth().signOut()
+        print("user logged out")
+        self.navigationController?.popViewController(animated: true)
+    }
+
     func scrollToMenuIndex(_ menuIndex: Int) {
         let indexPath = IndexPath(item: menuIndex, section: 0)
         collectionView?.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition(), animated: true)
@@ -128,8 +139,8 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
      }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = colors[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath)
+//        cell.backgroundColor = colors[indexPath.item]
         return cell
     }
 

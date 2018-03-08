@@ -14,4 +14,5 @@ extension UIColor {
     static var loginBackground: UIColor { return UIColor(hex: 0x2B2B2B) }
     static var statusBarBackground: UIColor { return UIColor(hex: 0x222222) }
     static var navigationBarColor: UIColor { return  UIColor(hex: 0x2A2A2A) }
+    static var collectionViewBackground: UIColor { return  UIColor(hex: 0x2A2A2A) }
 }

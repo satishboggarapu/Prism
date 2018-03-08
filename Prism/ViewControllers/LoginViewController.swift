@@ -62,24 +62,26 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.addObservers()
-        if animateFromRegister {
-            animateIconImageViewFromRegister()
-            animateFromRegister = false
+        if Auth.auth().currentUser != nil {
+            self.navigationController?.pushViewController(MainViewController(), animated: false)
+        } else {
+            self.addObservers()
+            if animateFromRegister {
+                animateIconImageViewFromRegister()
+                animateFromRegister = false
+            }
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         self.removeObservers()
 
-        iconImageView.frame = Constraints.RegisterViewController.getIconFrame()
-        iconImageView.frame.origin.y -= Constraints.statusBarHeight()
-        self.emailTextField.alpha = 0.0
-        self.passwordTextField.alpha = 0.0
-        self.loginButton.alpha = 0.0
-        self.registerButton.alpha = 0.0
-
-        logOut()
+//        iconImageView.frame = Constraints.RegisterViewController.getIconFrame()
+//        iconImageView.frame.origin.y -= Constraints.statusBarHeight()
+//        self.emailTextField.alpha = 0.0
+//        self.passwordTextField.alpha = 0.0
+//        self.loginButton.alpha = 0.0
+//        self.registerButton.alpha = 0.0
     }
 
     /**
@@ -364,11 +366,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             print("User logged in")
             self.showMainViewController()
         }
-    }
-
-    func logOut() {
-        try! Auth.auth().signOut()
-        print("user logged out")
     }
 
     // MARK: Error Functions
