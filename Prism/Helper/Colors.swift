@@ -15,4 +15,5 @@ extension UIColor {
     static var statusBarBackground: UIColor { return UIColor(hex: 0x222222) }
     static var navigationBarColor: UIColor { return  UIColor(hex: 0x2A2A2A) }
     static var collectionViewBackground: UIColor { return  UIColor(hex: 0x2A2A2A) }
+    static var collectionViewCellDivider: UIColor { return UIColor(hex: 0x828282, alpha: 1) }
 }

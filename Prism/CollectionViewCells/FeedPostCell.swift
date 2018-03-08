@@ -3,18 +3,18 @@
 // Copyright (c) 2018 Satish Boggarapu. All rights reserved.
 //
 
+// Image - max height 60%
+//       - max width 90%
+
 import UIKit
 import Material
 
 class FeedPostCell: UICollectionViewCell {
 
     // MARK: UIElements
-    var topView: UIView!
     var profilePicture: UIImageView!
     var userName: UILabel!
     var postDate: UILabel!
-
-
     var postImage: UIImageView!
     var likes: UILabel!
     var likeButton: UIButton!
@@ -22,9 +22,20 @@ class FeedPostCell: UICollectionViewCell {
     var moreButton: UIButton!
     var reposts: UILabel!
 
+    let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.collectionViewCellDivider
+        return view
+    }()
 
+
+    var profilePictureSize: CGFloat = 48
+    var buttonSize: CGFloat = 28
     var boldFont: UIFont = RobotoFont.bold(with: 17)
+    var mediumFont: UIFont = RobotoFont.light(with: 15)
     var thinFont: UIFont = RobotoFont.thin(with: 12)
+    let imageMaxWidth: CGFloat = Constraints.screenWidth() * 0.9
+    let imageMaxHeight: CGFloat = Constraints.screenHeight() * 0.6
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,7 +44,7 @@ class FeedPostCell: UICollectionViewCell {
 
     private func setupView() {
         // topView
-        topView = UIView()
+        let topView = UIView()
         let topRightView = UIView()
 
         initializeProfilePicture()
@@ -48,35 +59,58 @@ class FeedPostCell: UICollectionViewCell {
 
         topView.addSubview(profilePicture)
         topView.addSubview(topRightView)
+        topView.addConstraintsWithFormat(format: "H:|[v0(\(profilePictureSize))]-8-[v1]|", views: profilePicture, topRightView)
+        topView.addConstraintsWithFormat(format: "V:|[v0(\(profilePictureSize))]|", views: profilePicture)
+        topView.addConstraintsWithFormat(format: "V:|-4-[v0]-4-|", views: topRightView)
 
+        initializePostImage()
+
+        initializeLikes()
+        initializeLikeButton()
+        initializeShareButton()
+        initializeMoreButton()
+        initializeReposts()
+        let bottomView = UIView()
+        bottomView.addSubview(likes)
+        bottomView.addSubview(likeButton)
+        bottomView.addSubview(shareButton)
+        bottomView.addSubview(moreButton)
+        bottomView.addSubview(reposts)
+        bottomView.addConstraintsWithFormat(format: "V:|[v0]|", views: likes)
+        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: likeButton)
+        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: shareButton)
+        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: moreButton)
+        bottomView.addConstraintsWithFormat(format: "V:|[v0]|", views: reposts)
+        bottomView.addConstraintsWithFormat(format: "H:|[v0]-16-[v1(\(buttonSize))]-8-[v2(\(buttonSize))]-8-[v3(\(buttonSize))]-16-[v4]|", views: likes, likeButton, shareButton, moreButton, reposts)
+
+        self.addSubview(topView)
+        self.addSubview(postImage)
+        self.addSubview(bottomView)
+        self.addSubview(separatorView)
         
+        addConstraintsWithFormat(format: "H:[v0]", views: topView)
+        addConstraint(NSLayoutConstraint(item: topView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraintsWithFormat(format: "H:|[v0]|", views: postImage)
+        addConstraint(NSLayoutConstraint(item: postImage, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraintsWithFormat(format: "H:[v0]", views: bottomView)
+        addConstraint(NSLayoutConstraint(item: bottomView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraintsWithFormat(format: "H:|[v0]|", views: separatorView)
 
-//        self.addSubview(topRightView)
-//        addConstraintsWithFormat(format: "H:[v0]", views: topRightView)
-//        addConstraintsWithFormat(format: "V:|-16-[v0]", views: topRightView)
-//        addConstraint(NSLayoutConstraint(item: topRightView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-
-
-//        initializePostImage()
-//        initializeLikes()
-//        initializeLikeButton()
-//        initializeShareButton()
-//        initializeMoreButton()
-//        initializeReposts()
-
+        addConstraintsWithFormat(format: "V:|-16-[v0]-16-[v1(<=\(imageMaxHeight))]-16-[v2]-16-[v3(1)]|", views: topView, postImage, bottomView, separatorView)
 
     }
 
     private func initializeProfilePicture() {
         profilePicture = UIImageView()
-        profilePicture.image = UIImage(icon: .SPLASH_SCREEN_ICON).withRenderingMode(.alwaysTemplate)
+        profilePicture.image = UIImage(icon: .SPLASH_SCREEN_ICON)
         profilePicture.contentMode = .scaleAspectFit
-        profilePicture.layer.cornerRadius = profilePicture.frame.width/2
-        profilePicture.layer.borderWidth = 2
-        profilePicture.layer.borderColor = UIColor.white.cgColor
+        profilePicture.layer.cornerRadius = profilePictureSize/2
         profilePicture.clipsToBounds = true
         profilePicture.translatesAutoresizingMaskIntoConstraints = false
-//        topView.addSubview(profilePicture)
+
+        // border code
+//        profilePicture.layer.borderWidth = 2
+//        profilePicture.layer.borderColor = UIColor.white.cgColor
     }
 
     private func initializeUserName() {
@@ -85,7 +119,6 @@ class FeedPostCell: UICollectionViewCell {
         userName.textColor = UIColor.white
         userName.font = boldFont
         userName.translatesAutoresizingMaskIntoConstraints = false
-//        topView.addSubview(userName)
     }
 
     private func initializePostDate() {
@@ -94,30 +127,31 @@ class FeedPostCell: UICollectionViewCell {
         postDate.textColor = UIColor.white
         postDate.font = thinFont
         postDate.translatesAutoresizingMaskIntoConstraints = false
-//        topView.addSubview(postDate)
     }
 
     private func initializePostImage() {
         postImage = UIImageView()
-        postImage.image = UIImage(icon: .SPLASH_SCREEN_ICON).withRenderingMode(.alwaysTemplate)
-        postImage.contentMode = .scaleAspectFill
+//        postImage.image = UIImage(icon: .SPLASH_SCREEN_ICON)
+        postImage.image = UIImage(named: "image1.jpeg")
+        postImage.contentMode = .scaleAspectFit
+        postImage.clipsToBounds = true
         postImage.translatesAutoresizingMaskIntoConstraints = false
-//        self.addSubview(postImage)
     }
 
     private func initializeLikes() {
         likes = UILabel()
         likes.text = "1 like"
         likes.textColor = UIColor.white
-        likes.font = thinFont
+        likes.font = mediumFont
         likes.translatesAutoresizingMaskIntoConstraints = false
 //        self.addSubview(likes)
     }
 
     private func initializeLikeButton() {
         likeButton = UIButton()
-        likeButton.setImage(UIImage(icon: .SPLASH_SCREEN_ICON), for: .normal)
+        likeButton.setImage(UIImage(icon: .LIKE_OUTLINE_36).withRenderingMode(.alwaysTemplate), for: .normal)
         likeButton.imageView?.contentMode = .scaleAspectFit
+        likeButton.tintColor = UIColor.white
         likeButton.setTitle("", for: .normal)
         likeButton.translatesAutoresizingMaskIntoConstraints = false
 //        self.addSubview(likeButton)
@@ -125,8 +159,9 @@ class FeedPostCell: UICollectionViewCell {
 
     private func initializeShareButton() {
         shareButton = UIButton()
-        shareButton.setImage(UIImage(icon: .SPLASH_SCREEN_ICON), for: .normal)
+        shareButton.setImage(UIImage(icon: .SPLASH_SCREEN_ICON).withRenderingMode(.alwaysTemplate), for: .normal)
         shareButton.imageView?.contentMode = .scaleAspectFit
+        shareButton.tintColor = UIColor.white
         shareButton.setTitle("", for: .normal)
         shareButton.translatesAutoresizingMaskIntoConstraints = false
 //        self.addSubview(shareButton)
@@ -134,8 +169,9 @@ class FeedPostCell: UICollectionViewCell {
 
     private func initializeMoreButton() {
         moreButton = UIButton()
-        moreButton.setImage(UIImage(icon: .SPLASH_SCREEN_ICON), for: .normal)
+        moreButton.setImage(UIImage(icon: .MORE_VERTICAL_DOTS_36).withRenderingMode(.alwaysTemplate), for: .normal)
         moreButton.imageView?.contentMode = .scaleAspectFit
+        moreButton.tintColor = UIColor.white
         moreButton.setTitle("", for: .normal)
         moreButton.translatesAutoresizingMaskIntoConstraints = false
 //        self.addSubview(moreButton)
@@ -145,7 +181,7 @@ class FeedPostCell: UICollectionViewCell {
         reposts = UILabel()
         reposts.text = "0 reposts"
         reposts.textColor = UIColor.white
-        reposts.font = thinFont
+        reposts.font = mediumFont
         reposts.translatesAutoresizingMaskIntoConstraints = false
 //        self.addSubview(reposts)
     }
@@ -155,5 +191,8 @@ class FeedPostCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func getImageSize(image: UIImage) {
+
+    }
 
 }

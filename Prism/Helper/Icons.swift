@@ -26,7 +26,20 @@ public enum Icons: String {
     case NOTIFICATIONS_36 = "ic_bell_36dp"
     case NOTIFICATIONS_48 = "ic_bell_48dp"
 
-    case MORE_24 = "ic_dehaze"
+    case MORE_HORIZONTAL_LINES_24 = "ic_dehaze"
+
+    // Post Icons
+    case LIKE_OUTLINE_24 = "ic_heart_outline_24dp"
+    case LIKE_OUTLINE_36 = "ic_heart_outline_36dp"
+    case LIKE_OUTLINE_48 = "ic_heart_outline_48dp"
+
+    case LIKE_FILL_24 = "ic_heart_24dp"
+    case LIKE_FILL_36 = "ic_heart_36dp"
+    case LIKE_FILL_48 = "ic_heart_48dp"
+
+    case MORE_VERTICAL_DOTS_24 = "ic_dots_vertical_24dp"
+    case MORE_VERTICAL_DOTS_36 = "ic_dots_vertical_36dp"
+    case MORE_VERTICAL_DOTS_48 = "ic_dots_vertical_48dp"
 }
 
 //extension Icons {

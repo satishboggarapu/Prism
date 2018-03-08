@@ -20,7 +20,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     let images = [UIImage(icon: .IMAGE_FILTER_24),
                   UIImage(icon: .SEARCH_24),
                   UIImage(icon: .NOTIFICATIONS_24),
-                  UIImage(icon: .MORE_24)]
+                  UIImage(icon: .MORE_HORIZONTAL_LINES_24)]
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
     
     var homeController: MainViewController?
