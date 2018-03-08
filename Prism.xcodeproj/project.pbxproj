@@ -233,8 +233,7 @@
 				10ADF6B42050D30A00060A19 /* FeedPosts.swift */,
 				10ADF6B62050D30B00060A19 /* MenuCell.swift */,
 			);
-			name = CollectionViewCells;
-			path = "New Group";
+			path = CollectionViewCells;
 			sourceTree = "<group>";
 		};
 		10ADF6BA2050D32000060A19 /* CustomViews */ = {
@@ -243,8 +242,7 @@
 				10ADF6BB2050D33500060A19 /* MenuBar.swift */,
 				10ADF6BC2050D33500060A19 /* NavigationBar.swift */,
 			);
-			name = CustomViews;
-			path = "New Group1";
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		4F9C957F2050C59000C08C9E /* Constants */ = {
