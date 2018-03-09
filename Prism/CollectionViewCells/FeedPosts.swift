@@ -5,6 +5,7 @@
 
 import UIKit
 import AVFoundation
+import Material
 
 class FeedPosts: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
@@ -14,10 +15,14 @@ class FeedPosts: UICollectionViewCell, UICollectionViewDataSource, UICollectionV
         cv.backgroundColor = UIColor.collectionViewBackground
         cv.dataSource = self
         cv.delegate = self
+        cv.bounces = false
         return cv
     }()
 
     let images: [UIImage] = [UIImage(named: "image1")!, UIImage(named: "image2")!, UIImage(named: "image3")!, UIImage(named: "image4")!, UIImage(named: "image5")!, UIImage(named: "image6")!]
+
+    private var lastCollectionViewContentOffset: CGFloat = 0
+    var viewController = MainViewController()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +41,18 @@ class FeedPosts: UICollectionViewCell, UICollectionViewDataSource, UICollectionV
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
+//            print("Scrolled up")
+            viewController.toggleNewPostButton(hide: false)
+        } else if self.lastCollectionViewContentOffset < scrollView.contentOffset.y {
+//            print("scrolled down")
+            viewController.toggleNewPostButton(hide: true)
+        }
+//        print(abs(self.lastCollectionViewContentOffset - scrollView.contentOffset.y))
+        self.lastCollectionViewContentOffset = scrollView.contentOffset.y
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

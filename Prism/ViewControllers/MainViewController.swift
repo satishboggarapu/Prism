@@ -9,6 +9,8 @@
 import UIKit
 import Material
 import Firebase
+import Motion
+import MaterialComponents
 
 class MainViewController: UIViewController{
 
@@ -16,6 +18,8 @@ class MainViewController: UIViewController{
     var menuBar: MenuBar!
     var collectionView: UICollectionView!
     var newPostButton: FABButton!
+    var newPostButtonHidden: Bool = false
+
     let colors = [UIColor.white, UIColor.blue, UIColor.gray, UIColor.green]
 
     override func viewDidLoad() {
@@ -53,6 +57,66 @@ class MainViewController: UIViewController{
 
         let signOutButton = UIBarButtonItem(title: "SignOut", style: .done, target: self, action: #selector(signOutButtonAction(_:)))
         self.navigationItem.rightBarButtonItem = signOutButton
+
+    }
+
+    private func setupNavigationBarForImageUpload(uploadImage: UIImage) {
+        let progressViewWidth = Constraints.screenWidth() - 20 - 8 - 24 - 24 - 8 - 20
+
+        let uploadImageNavigationTitleView = UIView()
+        uploadImageNavigationTitleView.frame = CGRect(x: 0, y: 0, width: Constraints.screenWidth() - 40, height: 44)
+
+        // image view
+        let image = UIImageView()
+        image.image = uploadImage
+        image.contentMode = .scaleAspectFit
+        image.layer.cornerRadius = 34/2
+        image.layer.borderWidth = 1
+        image.layer.borderColor = UIColor.white.cgColor
+        image.clipsToBounds = true
+
+        let rightView = UIView()
+
+        let label = UILabel()
+        label.text = "Uploading image ..."
+        label.textColor = UIColor.white
+        label.font = RobotoFont.thin(with: 13)
+
+        let progress = UIProgressView()
+
+        rightView.addSubview(label)
+        rightView.addSubview(progress)
+        rightView.addConstraintsWithFormat(format: "H:|[v0]", views: label)
+        rightView.addConstraintsWithFormat(format: "H:|[v0(\(progressViewWidth))]|", views: progress)
+        rightView.addConstraintsWithFormat(format: "V:|[v0][v1(3)]-|", views: label, progress)
+
+        uploadImageNavigationTitleView.addSubview(image)
+        uploadImageNavigationTitleView.addSubview(rightView)
+        uploadImageNavigationTitleView.addConstraintsWithFormat(format: "H:|[v0(34)]-8-[v1]|", views: image, rightView)
+        uploadImageNavigationTitleView.addConstraintsWithFormat(format: "V:|-5-[v0(34)]|", views: image)
+        uploadImageNavigationTitleView.addConstraintsWithFormat(format: "V:|[v0]|", views: rightView)
+
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: uploadImageNavigationTitleView)
+        self.navigationItem.rightBarButtonItem = nil
+
+        UIView.animate(withDuration: 0, animations: {
+            progress.setProgress(0, animated: false)
+        }, completion: { (finished) in
+            UIView.animate(withDuration: 2, animations: {
+                progress.setProgress(1.0, animated: true)
+            })
+        })
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.75) {
+            label.text = "Finishing up ..."
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                label.text = "Done"
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+                    self.setupNavigationBar()
+                }
+            }
+        }
+
 
     }
 
@@ -105,6 +169,9 @@ class MainViewController: UIViewController{
 
     @objc func newPostButtonAction(_ sender: FABButton) {
         print("newPostButton pressed")
+
+        setupNavigationBarForImageUpload(uploadImage: UIImage(icon: .SPLASH_SCREEN_ICON))
+
     }
 
     @objc func signOutButtonAction(_ sender: UIBarButtonItem) {
@@ -127,6 +194,18 @@ class MainViewController: UIViewController{
         let indexPath = IndexPath(item: Int(index), section: 0)
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition())
     }
+
+    func toggleNewPostButton(hide: Bool) {
+        if hide && !newPostButtonHidden {
+            newPostButtonHidden = true
+            print("hide button")
+            self.newPostButton.animate(.scale(0), .duration(0.25))
+        } else if !hide && newPostButtonHidden {
+            newPostButtonHidden = false
+            print("show button")
+            self.newPostButton.animate(.scale(1), .duration(0.25))
+        }
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource,  UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -139,7 +218,8 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
      }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath) as! FeedPosts
+        cell.viewController = self
 //        cell.backgroundColor = colors[indexPath.item]
         return cell
     }
