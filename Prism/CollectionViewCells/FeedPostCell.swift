@@ -9,6 +9,14 @@
 import UIKit
 import Material
 
+// TODO: Make Top View Clickable
+// TODO: Likes Button target
+// TODO: Reposts Button target
+// TODO: LikeButton target
+// TODO: ShareButton target
+// TODO: MoreButton target
+// TODO: Double Tap gesture for the profile picture
+
 class FeedPostCell: UICollectionViewCell {
 
     // MARK: UIElements
