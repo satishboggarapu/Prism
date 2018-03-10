@@ -48,8 +48,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-
         // Initialize Variables
         defaultWidth = Constraints.screenWidth() - 2*defaultMargin
 
@@ -58,12 +56,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.hideKeyboardWhenTappedAround()
         initializeUIElements()
 
-        auth = Auth.auth();
+        auth = Auth.auth()
 
         isMotionEnabled = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         if Auth.auth().currentUser != nil {
             self.navigationController?.pushViewController(MainViewController(), animated: false)
         } else {
@@ -77,13 +76,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         self.removeObservers()
-
-//        iconImageView.frame = Constraints.RegisterViewController.getIconFrame()
-//        iconImageView.frame.origin.y -= Constraints.statusBarHeight()
-//        self.emailTextField.alpha = 0.0
-//        self.passwordTextField.alpha = 0.0
-//        self.loginButton.alpha = 0.0
-//        self.registerButton.alpha = 0.0
+        iconImageView.frame = Constraints.RegisterViewController.getIconFrame()
+        self.emailTextField.alpha = 0.0
+        self.passwordTextField.alpha = 0.0
+        self.loginButton.alpha = 0.0
+        self.registerButton.alpha = 0.0
     }
 
     /**
@@ -109,7 +106,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     private func initializeScrollView() {
         scrollView = UIScrollView()
-        scrollView.frame = CGRect(x: 0, y: 20, width: self.view.frame.width, height: self.view.frame.height)
+        scrollView.frame = CGRect(x: 0, y: Constraints.statusBarHeight(), width: self.view.frame.width, height: self.view.frame.height)
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height - buttonHeight - Constraints.LoginViewController.getRegisterButtonYOffset() - 20)
         self.view.addSubview(scrollView)
     }
@@ -196,13 +193,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     /**
-        Runs the animation for the icon when transitioning from splash screen, along with the rest of the uielements
+        Runs the animation for the icon when transitioning from splash screen, along with the rest of the UIElements
     */
     private func animateIconImageViewFromSplashScreen() {
-        UIView.animate(withDuration: 0.75, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.iconImageView.frame = Constraints.LoginViewController.getIconFrame()
         }, completion: { finished in
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: 0.15, animations: {
                 self.emailTextField.alpha = 1.0
                 self.passwordTextField.alpha = 1.0
                 self.loginButton.alpha = 1.0
@@ -216,10 +213,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
      */
     private func animateIconImageViewFromRegister() {
 
-        UIView.animate(withDuration: 0.75, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.iconImageView.frame = Constraints.LoginViewController.getIconFrame()
         }, completion: { finished in
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: 0.15, animations: {
                 self.emailTextField.alpha = 1.0
                 self.passwordTextField.alpha = 1.0
                 self.loginButton.alpha = 1.0
@@ -248,12 +245,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     /**
         Login button action. Checks if the entered email/username and password are valid and login.
+
+        When the login button is clicked, this should check whether it is a username or email
+        Error handle for invalid credentials and otherwise go to MainActivity
     */
     @objc private func loginButtonAction(_ sender: UIButton) {
         print("Inside logInButtonPressed")
-        let userName: String = emailTextField.text!
-        let password: String = passwordTextField.text!
-        loginButtonPressed()
+        var emailOrUsername = getFormattedEmailOrUsername()
+        let password = getFormattedPassword()
+        if (!isEmailOrUsernameValid(email: emailOrUsername) || !isPasswordValid(password: password)) {
+            return
+        }
+        // If input is username, extract email from database
+        if (!isInputOfTypeEmail(emailOrUsername: emailOrUsername)) {
+            let accountReference = Default.ACCOUNT_REFERENCE.child(emailOrUsername)
+            accountReference.observeSingleEvent(of: .value, with: { snapshot in
+                if snapshot.exists() {
+                    emailOrUsername = String(describing: snapshot.value!)
+//                    print(emailOrUsername)
+                    self.attemptLogin(email: emailOrUsername, password: password)
+                } else {
+                    print("Username does not exist")
+                    self.displayEmailTextFieldError()
+                }
+            })
+        } else {
+            self.attemptLogin(email: emailOrUsername, password: password)
+        }
     }
 
     /**
@@ -261,7 +279,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     */
     @objc private func registerButtonAction(_ sender: UIButton) {
         print("registerButton pressed")
-        performSegue(withIdentifier: "LoginToRegisterVIewController", sender: nil)
+        let viewController = RegisterViewController()
+        viewController.onDoneBlock = { result in
+            print("RegisterViewController Dismissed")
+            self.animateFromRegister = true
+        }
+        self.navigationController?.pushViewController(viewController, animated: false)
+
+//        performSegue(withIdentifier: "LoginToRegisterVIewController", sender: nil)
     }
 
     /**
@@ -287,58 +312,27 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
      */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? RegisterViewController {
-            destinationViewController.onDoneBlock = { result in
-                print("view dismissed")
-                self.animateFromRegister = true
-            }
-        }
+//        if let destinationViewController = segue.destination as? RegisterViewController {
+//            destinationViewController.onDoneBlock = { result in
+//                print("view dismissed")
+//                self.animateFromRegister = true
+//            }
+//        }
     }
 
     // MARK: Login Button Functions
-    
-    /**
-     * When the login button is clicked, this should check whether it is a username or email
-     * Error handle for invalid credentials and otherwise go to MainActivity
-     */
-    private func loginButtonPressed() {
-        var emailOrUsername = getFormattedEmailOrUsername()
-        let password = getFormattedPassword()
-        if (!isEmailOrUsernameValid(email: emailOrUsername) || !isPasswordValid(password: password)){
-            return
-        }
-        // If input is username, extract email from database
-        if (!isInputOfTypeEmail(emailOrUsername: emailOrUsername)){
-            let accountReference = Default.ACCOUNT_REFERENCE.child(emailOrUsername)
-            accountReference.observeSingleEvent(of: .value, with: { snapshot in
-                if snapshot.exists() {
-                    emailOrUsername = String(describing: snapshot.value!)
-                    print(emailOrUsername)
-                    self.attemptLogin(email: emailOrUsername, password: password)
-                } else {
-                    print("Username does not exist")
-                    self.displayEmailTextFieldError()
-
-                }
-            })
-        }
-        else{
-            self.attemptLogin(email: emailOrUsername, password: password)
-        }
-    }
     
     /**
      * Perform validation checks before attempting sign in
      */
     private func attemptLogin(email: String, password: String){
         print("Inside attemptLogin")
-        print(email)
-        print(password)
+//        print(email)
+//        print(password)
         Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
             if error != nil {
-                print(error)
                 if let errorCode = AuthErrorCode(rawValue: error!._code) {
-                    print(error)
+                    print(error!)
                     switch errorCode {
                     case .wrongPassword:
                         self.displayPasswordTextFieldError()
@@ -359,7 +353,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     //     * Email/Username validation check
     //     */
     private func isEmailOrUsernameValid(email: String) -> Bool {
-        
         let isValid = (isInputOfTypeEmail(emailOrUsername: email) || (email.count >= 5 && email.count <= 30))
         if (!isValid) {
             print("Invalid username/email")
@@ -368,7 +361,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     /**
-     * Checks to see if what firebaseUser typed in the username/email editText
+     * Checks to see if what FirebaseUser typed in the username/email editText
      * is of type email or username. The purpose is that if the firebaseUser
      * enters an email, we can directly attemptLogin otherwise for username,
      * we have to go to the database and extract the email for the given
@@ -430,8 +423,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func showMainViewController() {
-        let layout = UICollectionViewFlowLayout()
         let viewController = MainViewController()
+        viewController.onDoneBlock = { result in
+            self.animateFromRegister = true
+        }
         self.navigationController?.pushViewController(viewController, animated: false)
 //        present(viewController, animated: false, completion: nil)
     }
@@ -505,7 +500,7 @@ extension LoginViewController {
 
     /**
         Tap gesture recognizer. Checks if the password visibility icon is pressed, if so keyboard is not dismissed.
-        If tapped anywhere else except for the textfield, keyboard is dismissed.
+        If tapped anywhere else except for the textField, keyboard is dismissed.
     */
     @objc private func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.scrollView)

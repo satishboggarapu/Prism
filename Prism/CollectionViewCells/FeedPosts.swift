@@ -155,7 +155,7 @@ class FeedPosts: UICollectionViewCell, UICollectionViewDataSource, UICollectionV
         }, completion: nil)
     }
 
-    // gets the indexpath at the tap position
+    // gets the indexPath at the tap position
     private func getTappedCellIndexForGesture(gesture: UITapGestureRecognizer) -> IndexPath? {
         let position = gesture.location(in: collectionView)
         if let indexPath = collectionView.indexPathForItem(at: position) {

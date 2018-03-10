@@ -59,8 +59,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         // User authentication instance
         auth = Auth.auth();
         usersDatabaseRef = Database.database().reference().child(Key.DB_REF_USER_PROFILES);
-        
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,7 +93,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         statusBarBackground.frame = CGRect(x: 0, y: 0, width: Constraints.screenWidth(), height: Constraints.statusBarHeight())
         statusBarBackground.backgroundColor = UIColor.statusBarBackground
         self.view.addSubview(statusBarBackground)
-
     }
 
     private func initializeScrollView() {
@@ -109,7 +106,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     private func initializeIconImageView() {
         iconImageView = UIImageView(image: UIImage(icon: .SPLASH_SCREEN_ICON))
         iconImageView.frame = Constraints.LoginViewController.getIconFrame()
-        iconImageView.frame.origin.y += Constraints.statusBarHeight()
         iconImageView.contentMode = .scaleAspectFit
         scrollView.addSubview(iconImageView)
     }
@@ -235,13 +231,13 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     /**
-     Runs the animation for the icon, along with the rest of the uielements
+     Runs the animation for the icon, along with the rest of the UIElements
      */
     private func animateIconImageView() {
-        UIView.animate(withDuration: 0.75, animations: {
+        UIView.animate(withDuration: 0.50, animations: {
             self.iconImageView.frame = Constraints.RegisterViewController.getIconFrame()
         }, completion: { finished in
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: 0.15, animations: {
                 self.fullNameTextField.alpha = 1.0
                 self.usernameTextField.alpha = 1.0
                 self.emailTextField.alpha = 1.0
@@ -279,7 +275,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     @objc private func alreadyMemberButtonAction(_ sender: UIButton) {
 //        print("alreadyMemberButton pressed")
         onDoneBlock!(true)
-        self.dismiss(animated: false, completion: nil)
+        self.navigationController?.popToRootViewController(animated: false)
     }
 
     /**
@@ -302,7 +298,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     // MARK: Register Functions
-    func registerUser(){
+    func registerUser() {
         print("Inside registerUser")
         let fullName = getFormattedFullName()
         let inputUsername = getFormattedUsername()
@@ -336,8 +332,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                     // TODO: UI for general error
                     return
                 }
-                
-
                 let uid = user!.uid
                 let email = user!.email
                 
@@ -350,8 +344,19 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                 accountReference.setValue(email);
                 
                 print("Successfully Authenticated user")
+                self.showMainViewController()
             }
         })
+    }
+
+    func showMainViewController() {
+        // TODO:
+        let viewController = MainViewController()
+//        viewController.onDoneBlock = { result in
+//            self.animateFromRegister = true
+//        }
+        self.navigationController?.pushViewController(viewController, animated: false)
+//        present(viewController, animated: false, completion: nil)
     }
     
     /**
@@ -367,41 +372,42 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     /**
      * Verify that all inputs to the EditText fields are valid
      */
+    // TODO: Remove parameters, no reason for parameters since we are always going to pass in the same
     private func areInputsValid(fullName: String, username: String, email: String, password: String) -> Bool {
-        return isFullNameValid(fullname: fullName) && isUsernameValid(username: username) && isEmailValid(emailAddress: email) && isPasswordValid(password: password)
+        return isFullNameValid(fullName: fullName) && isUsernameValid(username: username) && isEmailValid(emailAddress: email) && isPasswordValid(password: password)
     }
     
     /**
      * @param fullName
      * @return: runs the current fullName through several checks to verify it is valid
      */
-    private func isFullNameValid(fullname: String) -> Bool{
+    private func isFullNameValid(fullName: String) -> Bool{
         print("Inside isFullNameValid")
-        if fullname.count < 2 {
+        if fullName.count < 2 {
             print("Name must be at least 2 characters long")
             return false
         }
-        if fullname.count > 70 {
+        if fullName.count > 70 {
             print("Name cannot be longer than 70 characters")
             return false
         }
-        if !(String(fullname[fullname.startIndex])).isAlpha {
+        if !(String(fullName[fullName.startIndex])).isAlpha {
             print("Name must start with a letter")
             return false
         }
-        if !(String(fullname.last!).isAlpha) {
+        if !(String(fullName.last!).isAlpha) {
             print("Name must end with a letter")
             return false
         }
-        if !(fullname.range(of: "[^'a-zA-Z ]+", options: .regularExpression) == nil) {
+        if !(fullName.range(of: "[^'a-zA-Z ]+", options: .regularExpression) == nil) {
             print("Name can only contain letters, space, and apostrophe")
             return false
         }
-        if !(fullname.range(of: ".*(.)\\1{3,}.*", options: .regularExpression) == nil) {
+        if !(fullName.range(of: ".*(.)\\1{3,}.*", options: .regularExpression) == nil) {
             print("Name cannot contain more than 3 repeating characters")
             return false
         }
-        if !(fullname.range(of: ".*(['])\\1{1,}.*", options: .regularExpression) == nil) {
+        if !(fullName.range(of: ".*(['])\\1{1,}.*", options: .regularExpression) == nil) {
             print("Name cannot contain more than 1 repeating apostrophe")
             return false
         }
@@ -422,23 +428,23 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             print("Username cannot be longer than 30 characters long")
             return false
         }
-        if !(username.range(of: "[^a-z0-9._']+", options: .regularExpression) == nil) {
+        if username.range(of: "[^a-z0-9._']+", options: .regularExpression) != nil {
             print("Username can only contain lowercase letters, numbers, period, and underscore")
             return false
         }
-        if !(username.range(of: ".*([a-z0-9])\\1{5,}.*", options: .regularExpression) == nil) {
+        if username.range(of: ".*([a-z0-9])\\1{5,}.*", options: .regularExpression) != nil {
             print("Username cannot contain more than 3 repeating characters")
             return false
         }
-        if !(username.range(of: ".*([._]){2,}.*", options: .regularExpression) == nil) {
+        if username.range(of: ".*([._]){2,}.*", options: .regularExpression) != nil {
             print("Username cannot contain more than 1 repeating symbol")
             return false
         }
-        if !(String(username[username.startIndex])).isAlpha {
+        if !String(username[username.startIndex]).isAlpha {
             print("Username must start with a letter")
             return false
         }
-        if !(String(username.last!).isAlpha || String(username.last!).isNumeric) {
+        if !String(username.last!).isAlpha || String(username.last!).isNumeric {
             print("Username must end with a letter or number")
             return false
         }
@@ -451,8 +457,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
      */
     private func isEmailValid(emailAddress: String) -> Bool{
         print("Inside isEmailValid")
-        if !(NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}").evaluate(with: emailAddress))
-        {
+        if !NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}").evaluate(with: emailAddress) {
             print("Invalid email")
             return false
         }
@@ -471,7 +476,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         print("Password must be at least 6 characters long")
         return false
     }
-    
+
     /**
      * Cleans the fullName entered and returns the clean version
      */
@@ -504,7 +509,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     // MARK: TextField Error Toggle Functions
 
     func toggleFullNameTextFieldError() {
-        fullNameTextField.isErrorRevealed = !isFullNameValid(fullname: fullNameTextField.text!)
+        fullNameTextField.isErrorRevealed = !isFullNameValid(fullName: fullNameTextField.text!)
     }
 
     func toggleUsernameTextFieldError() {
@@ -531,7 +536,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     func toggleTextFieldDividerColor() {
-
+        // TODO: Create a extension of ErrorTextField for divider color
         if fullNameTextField.isErrorRevealed {
             fullNameTextField.dividerNormalColor = Color.red.base
             fullNameTextField.dividerActiveColor = Color.red.base
@@ -587,7 +592,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             self.emailTextField.frame.origin.y = emailY
             self.passwordTextField.frame.origin.y = passwordY
             self.registerButton.frame.origin.y = registerY
-            self.toggleRegisterButton()
+//            self.toggleRegisterButton()
             self.toggleTextFieldDividerColor()
         })
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: registerY + buttonHeight + 20)
@@ -677,7 +682,7 @@ extension RegisterViewController {
 
     /**
      Tap gesture recognizer. Checks if the password visibility icon is pressed, if so keyboard is not dismissed.
-     If tapped anywhere else except for the textfield, keyboard is dismissed.
+     If tapped anywhere else except for the textField, keyboard is dismissed.
      */
     @objc private func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: self.scrollView)

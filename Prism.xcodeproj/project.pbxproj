@@ -28,7 +28,6 @@
 		10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F558204659EE00C82F3F /* ScreenType.swift */; };
 		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
 		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
-		192E4251D853FFB1463BEF75 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4CF25E4495BA30215621 /* Settings.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
@@ -92,7 +91,6 @@
 		10E3F55A204659EE00C82F3F /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
-		192E4CF25E4495BA30215621 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
 		4F9C95802050C5A800C08C9E /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
@@ -193,6 +191,7 @@
 				1091E1F1203E838500C282BA /* Products */,
 				8469119918C7F2493D6D1660 /* Pods */,
 				0C2F12303E93891A7B23F86A /* Frameworks */,
+				10C259B6205446C400FABBB5 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -637,7 +636,6 @@
 				10ADF6B72050D30B00060A19 /* FeedPosts.swift in Sources */,
 				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
 				10ADF6C42050D52000060A19 /* MainViewController.swift in Sources */,
-				192E4251D853FFB1463BEF75 /* Settings.swift in Sources */,
 				4F9C95902050D71C00C08C9E /* Helper.swift in Sources */,
 				4F9C958A2050D6F400C08C9E /* PrismPost.swift in Sources */,
 				4F9C958B2050D6F400C08C9E /* PrismUser.swift in Sources */,

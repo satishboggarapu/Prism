@@ -20,6 +20,8 @@ class MainViewController: UIViewController{
     var newPostButton: FABButton!
     var newPostButtonHidden: Bool = false
 
+    var onDoneBlock : ((Bool) -> Void)?
+
     let colors = [UIColor.white, UIColor.blue, UIColor.gray, UIColor.green]
 
     override func viewDidLoad() {
@@ -177,7 +179,8 @@ class MainViewController: UIViewController{
     @objc func signOutButtonAction(_ sender: UIBarButtonItem) {
         try! Auth.auth().signOut()
         print("user logged out")
-        self.navigationController?.popViewController(animated: true)
+        onDoneBlock!(true)
+        self.navigationController?.popViewController(animated: false)
     }
 
     func scrollToMenuIndex(_ menuIndex: Int) {
