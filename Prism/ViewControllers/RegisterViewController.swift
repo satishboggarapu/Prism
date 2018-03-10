@@ -14,6 +14,10 @@ import Firebase
 
 class RegisterViewController: UIViewController, UITextFieldDelegate {
 
+    // Mark: Database Reference
+    private var usersDatabaseRef: DatabaseReference!
+    private var auth: Auth!
+    
     // MARK: UIElements
 
     private var statusBarBackground: UIView!
@@ -43,7 +47,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     private let textFieldFont: UIFont = RobotoFont.regular(with: 18)
     private let buttonFont: UIFont = RobotoFont.regular(with: 18)
 
-    var ref: DatabaseReference!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +54,12 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         // Initialize Variables
         defaultWidth = Constraints.screenWidth() - 2*defaultMargin
         self.view.backgroundColor = UIColor.loginBackground
-        ref = Database.database().reference()
         self.hideKeyboardWhenTappedAround()
+        
+        // User authentication instance
+        auth = Auth.auth();
+        usersDatabaseRef = Database.database().reference().child(Key.DB_REF_USER_PROFILES);
+        
 
     }
 
@@ -65,7 +72,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         print("inside viewWillDisappear")
         self.removeObservers()
-        try! Auth.auth().signOut()
     }
 
     /**
@@ -267,17 +273,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
 
     @objc private func registerButtonAction(_ sender: UIButton) {
         print("saveButton pressed")
-        if (isFullNameValid(fullName: fullNameTextField.text!) &&
-                isUsernameValid(username: usernameTextField.text!) &&
-                isEmailValid(emailAddress: emailTextField.text!) &&
-                isPasswordValid(password: passwordTextField.text!)){
-            let myUser = MyUser(userName: usernameTextField.text!, fullName: fullNameTextField.text!, email: emailTextField.text!, password: passwordTextField.text!, profilePic: generateProfilePicture())
-            registerUserIfUserNameDoesNotExist(myUser: myUser)
-        }  else {
-            // TODO: UI for general error
-
-            print("Registration Error")
-        }
+        registerUser()
     }
 
     @objc private func alreadyMemberButtonAction(_ sender: UIButton) {
@@ -306,186 +302,209 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     // MARK: Register Functions
-
-    /**
-    Checks if username exists in the database, if so throws an error else creates a new user.
-
-    -parameters:
-    -myUser: new user of MyUser object
-
-    - returns: None
-    */
-    func registerUserIfUserNameDoesNotExist(myUser : MyUser) {
-        ref.child("ACCOUNTS").observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.hasChild(myUser.userName) {
-                self.showErrorForTextField(self.usernameTextField, message: "Username exists")
-            } else {
-                self.registerUser(myUser: myUser)
+    func registerUser(){
+        print("Inside registerUser")
+        let fullName = getFormattedFullName()
+        let inputUsername = getFormattedUsername()
+        let username = Helper.getFirebaseEncodedUsername(inputUsername: inputUsername)
+        let email = getFormattedEmail()
+        let password = getFormattedPassword()
+        let accountReference = Default.ACCOUNT_REFERENCE
+        
+        Default.ACCOUNT_REFERENCE.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.hasChild(username){
+                print("Username exists")
+                // TODO: Display error to screen
+                return
             }
-        })
-    }
-
-    /**
-    Creates a new user with email and password. If user creation successful, user is added to Users and Accounts nodes
-
-    - parameters:
-    - myUser: MyUser object trying to add
-    */
-    func registerUser(myUser: MyUser) {
-        Auth.auth().createUser(withEmail: myUser.email, password: myUser.password) { (user, error) in
-            if error != nil {
-                if let errCode = AuthErrorCode(rawValue: error!._code) {
-                    switch errCode {
-                    case .emailAlreadyInUse:
-                        self.showErrorForTextField(self.emailTextField, message: "Email already in use")
-                    case .invalidEmail:
-                        self.showErrorForTextField(self.emailTextField, message: "Invalid email")
-//                    case .weakPassword:
-//                        print("weak password")
-                    default:
-                        print("Create User Error: \(error!)")
+            self.auth.createUser(withEmail: email, password: password) { (user, error) in
+                if error != nil {
+                    if let errCode = AuthErrorCode(rawValue: error!._code) {
+                        switch errCode {
+                        case .emailAlreadyInUse:
+                            print("email is already in use")
+                        // TODO: Email error UI
+                        case .invalidEmail:
+                            print("invalid email")
+                        case .weakPassword:
+                            print("weak password")
+                        default:
+                            print("Create User Error: \(error!)")
+                        }
                     }
+                    print("could not save username")
+                    // TODO: UI for general error
+                    return
                 }
+                
 
-                print("could not save username")
-                // TODO: UI for general error, possibly a snackbar
-                return
+                let uid = user!.uid
+                let email = user!.email
+                
+                let profileReference = self.usersDatabaseRef.child(uid);
+                profileReference.child(Key.USER_PROFILE_FULL_NAME).setValue(fullName);
+                profileReference.child(Key.USER_PROFILE_USERNAME).setValue(username);
+                profileReference.child(Key.USER_PROFILE_PIC).setValue(self.generateDefaultProfilePic());
+                
+                let accountReference = accountReference.child(username);
+                accountReference.setValue(email);
+                
+                print("Successfully Authenticated user")
             }
-            self.addChildToUsers(userChild: user!, myUser: myUser)
-            self.addChildToAccounts(myUser: myUser)
-            print("Successfully Authenticated user")
-        }
-    }
-
-    func addChildToUsers(userChild: User?, myUser : MyUser) {
-        guard let uid = userChild?.uid else {
-            return
-        }
-        let usersRef = ref.child("USERS").child(uid)
-        let values: [String: String] = ["fullname": myUser.fullName,
-                                        "profilepic" : myUser.profilePic,
-                                        "username": myUser.userName]
-        usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
-            if err != nil {
-                print(err!)
-                return
-            }
-            print("Successfully saved user child to users")
         })
     }
-
-    func addChildToAccounts(myUser : MyUser) {
-        let accountsRef = ref.child("ACCOUNTS")
-        let values: [String: String] = [myUser.userName: myUser.email]
-        accountsRef.updateChildValues(values, withCompletionBlock: {  (err, ref) in
-            if err != nil {
-                print(err!)
-                return
-            }
-            print("Successfully saved userName child to Accounts")
-        })
-    }
-
-    func generateProfilePicture() -> String {
-        print("Inside randomProfilePicGenerator")
+    
+    /**
+     * Generate random Int from 1-10 for default profile picture
+     */
+    func generateDefaultProfilePic() -> String {
+        print("Inside generateDefaultProfilePic")
         // Random int between 1-10
         let profilePic = arc4random_uniform(10)
         return String(profilePic)
     }
-
-    // MARK: TextField Error Functions
-
-    func isFullNameValid(fullName: String) -> Bool {
-        if fullName.count < 2 {
-            fullNameTextField.detail = "Name must be at least 2 characters long"
+    
+    /**
+     * Verify that all inputs to the EditText fields are valid
+     */
+    private func areInputsValid(fullName: String, username: String, email: String, password: String) -> Bool {
+        return isFullNameValid(fullname: fullName) && isUsernameValid(username: username) && isEmailValid(emailAddress: email) && isPasswordValid(password: password)
+    }
+    
+    /**
+     * @param fullName
+     * @return: runs the current fullName through several checks to verify it is valid
+     */
+    private func isFullNameValid(fullname: String) -> Bool{
+        print("Inside isFullNameValid")
+        if fullname.count < 2 {
+            print("Name must be at least 2 characters long")
             return false
         }
-        if fullName.count > 70 {
-            fullNameTextField.detail = "Name cannot be longer than 70 characters"
+        if fullname.count > 70 {
+            print("Name cannot be longer than 70 characters")
             return false
         }
-        if !(String(fullName[fullName.startIndex])).isAlpha {
-            fullNameTextField.detail = "Name must start with a letter"
+        if !(String(fullname[fullname.startIndex])).isAlpha {
+            print("Name must start with a letter")
             return false
         }
-        if !(String(fullName.last!).isAlpha) && (fullName.last! != " ") {
-            fullNameTextField.detail = "Name must end with a letter"
+        if !(String(fullname.last!).isAlpha) {
+            print("Name must end with a letter")
             return false
         }
-        if !(fullName.range(of: "[^'a-zA-Z ]+", options: .regularExpression) == nil) {
-            fullNameTextField.detail = "Name can only contain letters, space, and apostrophe"
+        if !(fullname.range(of: "[^'a-zA-Z ]+", options: .regularExpression) == nil) {
+            print("Name can only contain letters, space, and apostrophe")
             return false
         }
-        if !(fullName.range(of: ".*(.)\\1{3,}.*", options: .regularExpression) == nil) {
-            fullNameTextField.detail = "Name cannot contain more than 3 repeating characters"
+        if !(fullname.range(of: ".*(.)\\1{3,}.*", options: .regularExpression) == nil) {
+            print("Name cannot contain more than 3 repeating characters")
             return false
         }
-        if !(fullName.range(of: ".*(['])\\1{1,}.*", options: .regularExpression) == nil) {
-            fullNameTextField.detail = "Name cannot contain more than 1 repeating apostrophe"
+        if !(fullname.range(of: ".*(['])\\1{1,}.*", options: .regularExpression) == nil) {
+            print("Name cannot contain more than 1 repeating apostrophe")
             return false
         }
         return true
     }
-
-
-    func isUsernameValid(username: String) -> Bool{
-        let username = username.trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    /**
+     * @param username
+     * @return: runs the current username through several checks to verify it is valid
+     */
+    private func isUsernameValid(username: String) -> Bool{
+        print("Inside isUsernameValid")
         if username.count < 5 {
-            usernameTextField.detail = "Username must be at least 5 characters long"
+            print("Username must be at least 5 characters long")
             return false
         }
         if username.count > 30 {
-            usernameTextField.detail = "Username cannot be longer than 30 characters long"
+            print("Username cannot be longer than 30 characters long")
             return false
         }
         if !(username.range(of: "[^a-z0-9._']+", options: .regularExpression) == nil) {
-            usernameTextField.detail = "Username can only contain lowercase letters, numbers, period, and underscore"
+            print("Username can only contain lowercase letters, numbers, period, and underscore")
             return false
         }
         if !(username.range(of: ".*([a-z0-9])\\1{5,}.*", options: .regularExpression) == nil) {
-            usernameTextField.detail = "Username cannot contain more than 3 repeating characters"
+            print("Username cannot contain more than 3 repeating characters")
             return false
         }
         if !(username.range(of: ".*([._]){2,}.*", options: .regularExpression) == nil) {
-            usernameTextField.detail = "Username cannot contain more than 1 repeating symbol"
+            print("Username cannot contain more than 1 repeating symbol")
             return false
         }
         if !(String(username[username.startIndex])).isAlpha {
-            usernameTextField.detail = "Username must start with a letter"
+            print("Username must start with a letter")
             return false
         }
         if !(String(username.last!).isAlpha || String(username.last!).isNumeric) {
-            usernameTextField.detail = "Username must end with a letter or number"
+            print("Username must end with a letter or number")
             return false
         }
         return true
     }
-
-    func isEmailValid(emailAddress: String) -> Bool {
-        if !(NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}").evaluate(with: emailAddress)) {
+    
+    /**
+     * @param email
+     * @return: runs the current email through several checks to verify it is valid
+     */
+    private func isEmailValid(emailAddress: String) -> Bool{
+        print("Inside isEmailValid")
+        if !(NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}").evaluate(with: emailAddress))
+        {
+            print("Invalid email")
             return false
         }
         return true
     }
-
-    func isPasswordValid(password: String) -> Bool {
+    
+    /**
+     * @param password
+     * @return: runs the current password through several checks to verify it is valid
+     */
+    private func isPasswordValid(password: String) -> Bool{
+        print("Inside isPasswordValid")
         if password.count > 5 {
             return true
         }
+        print("Password must be at least 6 characters long")
         return false
     }
-
-    func areInputsValid() -> Bool {
-        return isFullNameValid(fullName: fullNameTextField.text!) &&
-                isUsernameValid(username: usernameTextField.text!) &&
-                isEmailValid(emailAddress: emailTextField.text!) &&
-                isPasswordValid(password: passwordTextField.text!)
+    
+    /**
+     * Cleans the fullName entered and returns the clean version
+     */
+    private func getFormattedFullName() -> String{
+        return fullNameTextField.text!.trimmingCharacters(in: .whitespaces)
     }
+    
+    /**
+     * Cleans the username entered and returns the clean version
+     */
+    private func getFormattedUsername() -> String{
+        return usernameTextField.text!.trimmingCharacters(in: .whitespaces)
+    }
+    
+    /**
+     * Cleans the email entered and returns the clean version
+     */
+    private func getFormattedEmail() -> String {
+        return emailTextField.text!.trimmingCharacters(in: .whitespaces)
+    }
+    
+    /**
+     * Cleans the password entered and returns the clean version
+     */
+    private func getFormattedPassword() -> String {
+        return passwordTextField.text!.trimmingCharacters(in: .whitespaces)
+    }
+
 
     // MARK: TextField Error Toggle Functions
 
     func toggleFullNameTextFieldError() {
-        fullNameTextField.isErrorRevealed = !isFullNameValid(fullName: fullNameTextField.text!)
+        fullNameTextField.isErrorRevealed = !isFullNameValid(fullname: fullNameTextField.text!)
     }
 
     func toggleUsernameTextFieldError() {
@@ -501,7 +520,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     func toggleRegisterButton() {
-        let backgroundColor = areInputsValid() ? UIColor.materialBlue : Color.lightGray
+        let backgroundColor = areInputsValid(fullName: fullNameTextField.text!, username: usernameTextField.text!, email: emailTextField.text!, password: passwordTextField.text!) ? UIColor.materialBlue : Color.lightGray
         registerButton.backgroundColor = backgroundColor
     }
 
