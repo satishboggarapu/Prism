@@ -13,13 +13,17 @@ public class Helper {
     
     public static func constructPrismPostObject(postSnapshot: DataSnapshot) -> PrismPost {
         let prismPost = PrismPost()
-        prismPost.setCaption(caption: String(describing: postSnapshot.value(forKey: Key.POST_DESC)))
-        prismPost.setImage(image: String(describing: postSnapshot.value(forKey: Key.POST_IMAGE_URI)))
-        prismPost.setTimestamp(timestamp: String(describing: postSnapshot.value(forKey: Key.POST_TIMESTAMP)))
-        prismPost.setUid(uid: String(describing: postSnapshot.value(forKey: Key.POST_UID)))
+        let postSnapshotdict = postSnapshot.value as? NSDictionary
+
+        prismPost.setCaption(caption: String(describing: (postSnapshotdict?[Key.POST_DESC])!))
+        prismPost.setImage(image: String(describing: (postSnapshotdict?[Key.POST_IMAGE_URI])!))
+        prismPost.setTimestamp(timestamp: String(describing: (postSnapshotdict?[Key.POST_TIMESTAMP])!))
+        prismPost.setUid(uid: String(describing: (postSnapshotdict?[Key.POST_UID])!))
         prismPost.setPostId(postId: postSnapshot.key)
         prismPost.setLikes(likes: Int(postSnapshot.childSnapshot(forPath: Key.DB_REF_USER_LIKES).childrenCount))
         prismPost.setReposts(reposts: Int(postSnapshot.childSnapshot(forPath: Key.DB_REF_USER_REPOSTS).childrenCount))
+        
+        print(prismPost.getTimestamp())
         return prismPost
     }
     

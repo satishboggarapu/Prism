@@ -17,6 +17,10 @@ class MainViewController: UIViewController{
     var collectionView: UICollectionView!
     var newPostButton: FABButton!
     let colors = [UIColor.white, UIColor.blue, UIColor.gray, UIColor.green]
+    
+    private var databaseReferenceAllPosts: DatabaseReference!
+    private var usersReference: DatabaseReference!
+    public var prismPostArrayList: [PrismPost]! = [PrismPost]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +29,10 @@ class MainViewController: UIViewController{
         initializeMenuBar()
         initializeCollectionView()
         initializeNewPostButton()
+        
+        // Database Initialization
+        databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
+        usersReference = Default.USERS_REFERENCE
     }
 
     private func setupNavigationBar() {
@@ -105,6 +113,7 @@ class MainViewController: UIViewController{
 
     @objc func newPostButtonAction(_ sender: FABButton) {
         print("newPostButton pressed")
+        refreshData()
     }
 
     @objc func signOutButtonAction(_ sender: UIBarButtonItem) {
@@ -146,5 +155,32 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width, height: view.frame.height - 50)
+    }
+    
+    func refreshData() {
+        prismPostArrayList.removeAll()
+        let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
+        query.observeSingleEvent(of: .value, with: {(snapshot) in
+            if snapshot.exists() {
+                for postSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
+                    let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)
+                    self.prismPostArrayList.append(prismPost)
+
+//                    for post in prismPostArrayList {
+//                        print("caption", post.getCaption())
+//                        print("image", post.getImage())
+//                        print("timestamp", post.getTimestamp())
+//                        print("uid", post.getUid())
+//                        print("///////////")
+//                    }
+                }
+                //                populateUserDetailsForAllPosts(true)
+                
+            }
+            else{
+                print("No More Posts available")
+            }
+            
+        })
     }
 }

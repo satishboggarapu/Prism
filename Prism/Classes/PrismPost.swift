@@ -76,7 +76,7 @@ public class PrismPost {
     
     // Setters for attributes not saved in cloud
 
-    public func setTimestamp(timestamp : String) {
+    public func setTimestamp(timestamp : String!) {
         self.timestamp = Int64(timestamp)
     }
     
