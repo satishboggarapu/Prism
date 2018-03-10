@@ -18,9 +18,20 @@ class MainViewController: UIViewController{
     var newPostButton: FABButton!
     let colors = [UIColor.white, UIColor.blue, UIColor.gray, UIColor.green]
     
+    /*
+     * Globals
+     */
+    private var auth: Auth!
+    private var databaseReference: DatabaseReference!
+    private var storageReference: StorageReference!
     private var databaseReferenceAllPosts: DatabaseReference!
     private var usersReference: DatabaseReference!
+    private var userReference: DatabaseReference!
+
     public var prismPostArrayList: [PrismPost]! = [PrismPost]()
+    
+    private var uploadedImageUri: String!
+    private var uploadedImageDescription: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +42,10 @@ class MainViewController: UIViewController{
         initializeNewPostButton()
         
         // Database Initialization
+        auth = Auth.auth()
+        storageReference = Default.STORAGE_REFERENCE
+        databaseReference = Default.ALL_POSTS_REFERENCE
+        userReference = Default.USERS_REFERENCE.child((auth.currentUser?.uid)!)
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
     }
@@ -157,13 +172,20 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         return CGSize(width: self.view.frame.width, height: view.frame.height - 50)
     }
     
-    func refreshData() {
+    /**
+     *  Clears the data structure and pulls ALL_POSTS info again from cloud
+     *  Queries the ALL_POSTS data sorted by the post timestamp and pulls n
+     *  number of posts and loads them into an ArrayList of postIds and
+     *  a HashMap of PrismObjects
+     */
+    private func refreshData() {
+        print("Inside refreshData")
         prismPostArrayList.removeAll()
         let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
         query.observeSingleEvent(of: .value, with: {(snapshot) in
             if snapshot.exists() {
                 for postSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
-                    let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)
+                    let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)  as! PrismPost
                     self.prismPostArrayList.append(prismPost)
                 }
                 self.populateUserDetailsForAllPosts()
@@ -174,11 +196,19 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         })
     }
     
-    func populateUserDetailsForAllPosts(){
+    /**
+     * Once all posts are loaded into the prismPostHashMap,
+     * this method iterates over each post, grabs firebaseUser's details
+     * for the post like "profilePicUriString" and "username" and
+     * updates the prismPost objects in that hashMap and then
+     * updates the RecyclerViewAdapter so the UI gets updated
+     */
+    private func populateUserDetailsForAllPosts(){
+        print("Inside populateUserDetailsForAllPosts")
         usersReference.observeSingleEvent(of: .value, with: {(snapshot) in
             if snapshot.exists(){
                 for post in self.prismPostArrayList as! [PrismPost]{
-                    let userSnapshot = snapshot.childSnapshot(forPath: post.getUid()) as! DataSnapshot
+                    let userSnapshot = snapshot.childSnapshot(forPath: post.getUid())
                     let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
                     post.setPrismUser(prismUser: prismUser)
                 }
@@ -187,6 +217,150 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
                 print("no data")
             }
         })
+    }
+    
+    private func fetchMorePosts() {
+        print("Inside fetchMorePosts")
+        let lastPostTimestamp = prismPostArrayList.last?.getTimestamp() as! Int64
+        let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryStarting(atValue: lastPostTimestamp + 1).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
+        query.observeSingleEvent(of: .value, with: {(snapshot) in
+            if snapshot.exists(){
+                for postSnapshot in snapshot.children{
+                    let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot as! DataSnapshot)
+                    self.prismPostArrayList.append(prismPost)
+                }
+                self.populateUserDetailsForAllPosts()
+            }else{
+                print("no data")
+            }
+        })
+    }
+    
+    private func uploadImageToCloud(uploadImage : UIImage){
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        let imageName = generateUniqueNsUid()
+//        StorageReference postImageRef = storageReference.child(Key.STORAGE_POST_IMAGES_REF).child(uploadedImageUri.getLastPathSegment());
+
+        let postImageRef = storageReference.child(Key.STORAGE_POST_IMAGES_REF).child("\(imageName).jpeg") as StorageReference
+        if let uploadData = UIImageJPEGRepresentation(uploadImage, 1){
+            print(uploadData)
+            postImageRef.putData(uploadData, metadata: metadata, completion: { (metadata, error) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+                let downloadUrl = metadata?.downloadURL()?.absoluteString as! String
+                let postReference = self.databaseReference.childByAutoId() as DatabaseReference
+                let prismPost = self.createPrismPostObjectForUpload(downloadUrl: downloadUrl) as PrismPost
+                
+                
+                // Add postId to USER_UPLOADS table
+                let userPostRef = self.userReference.child(Key.DB_REF_USER_UPLOADS).child(postReference.key) as DatabaseReference
+                userPostRef.value(forKey: String(prismPost.getTimestamp()))
+
+                // Create the post in cloud and on success, add the image to local recycler view adapter
+//                postReference.setValue(, withCompletionBlock: )
+//                postReference.setValue(prismPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            updateLocalRecyclerViewWithNewPost(prismPost);
+//                        } else {
+//                            uploadingImageTextView.setText("Failed to make the post");
+//                            Log.wtf(Default.TAG_DB, Message.POST_UPLOAD_FAIL, task.getException());
+//                        }
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                            imageUploadProgressBar.setProgress(100, true);
+//                        } else {
+//                            imageUploadProgressBar.setProgress(100);
+//                        }
+//                    }
+//                })
+                print("Upload Successful")
+                
+            })
+        }
+        
+    }
+    
+//    private func uploadImageToCloud(uploadImage : UIImage){
+//
+//        let metadata = StorageMetadata()
+//        metadata.contentType = "image/jpeg"
+//        let imageName = NSUUID().uuidString
+//        let uploadImagesRef = storageRef.child("POST_IMAGES").child("\(imageName).jpeg")
+//        if let uploadData = UIImageJPEGRepresentation(uploadImage, 90){
+//            print(uploadData)
+//            uploadImagesRef.putData(uploadData, metadata: metadata, completion: { (metadata, error) in
+//                if error != nil{
+//                    print(error)
+//                    return
+//                }
+//                print("Upload Successful")
+//
+//                let imageURL = (metadata?.downloadURL()?.absoluteString)!
+//                let timestamp = self.getNegativeCurrentTimeStampInMillis()
+//                let uid = Auth.auth().currentUser!.uid
+//                let prismPostObject = PrismPost(timestamp: timestamp, postDescription: "", imageURL: imageURL, uid: uid)
+//                self.addPrismPostChildtoAllPosts(prismPostObject: prismPostObject)
+//            })
+//        }
+//    }
+//
+//    func addPrismPostChildtoAllPosts(prismPostObject : PrismPost){
+//        print("Inside addPrismPostChildtoAllPosts")
+//        let usersRef = accountsRef.child("ALL_POSTS").childByAutoId()
+//        let values = ["caption": prismPostObject.postDescription,
+//                      "image" : prismPostObject.imageURL,
+//                      "timestamp": prismPostObject.timestamp,
+//                      "uid": prismPostObject.uid] as [String : Any]
+//        usersRef.setValue(values, withCompletionBlock: {
+//            (err, ref) in
+//            if err != nil {
+//                print(err)
+//                return
+//            }
+//            let postId = usersRef.key
+//            self.addUserUploadtoUser(timestamp: prismPostObject.timestamp, postId: postId)
+//            print("Successfully added Prism post child to ALL_POSTS")
+//        })
+//    }
+//
+//    func addUserUploadtoUser(timestamp : Int64, postId : String){
+//        print("Inside addUserUploadtoUser")
+//        let uid = Auth.auth().currentUser!.uid
+//        let usersRef = accountsRef.child("USERS").child(uid).child("USER_UPLOADS").child(postId)
+//        //        let values = [ postId : timestamp] as [String : Int64]
+//        usersRef.setValue(timestamp, withCompletionBlock: {
+//            (err, ref) in
+//            if err != nil {
+//                print(err)
+//                return
+//            }
+//            print("Successfully added user upload to USER")
+//        })
+//    }
+
+    /**
+     * Takes in the downloadUri that was create in cloud and reference to the post that
+     * got created in cloud and prepares the PrismPost object that will be pushed
+     */
+    private func createPrismPostObjectForUpload(downloadUrl: String) -> PrismPost{
+        let imageUri = downloadUrl as String
+        let userId = auth.currentUser?.uid as! String
+        let timestamp = getNegativeCurrentTimeStampInMillis() as Int64
+        let description = "Parth's new haircut>>>>>>>>>>>>>" as String
+        return PrismPost(timestamp: timestamp, postDescription: description, imageURL: imageUri, uid: userId)
+    }
+    public func generateUniqueNsUid() -> String {
+        return NSUUID().uuidString
+    }
+
+    
+    
+    func getNegativeCurrentTimeStampInMillis() -> Int64 {
+        return (Date().toMillis()) * -1
     }
     
 }
