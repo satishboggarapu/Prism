@@ -198,11 +198,9 @@ class MainViewController: UIViewController{
     func toggleNewPostButton(hide: Bool) {
         if hide && !newPostButtonHidden {
             newPostButtonHidden = true
-            print("hide button")
             self.newPostButton.animate(.scale(0), .duration(0.25))
         } else if !hide && newPostButtonHidden {
             newPostButtonHidden = false
-            print("show button")
             self.newPostButton.animate(.scale(1), .duration(0.25))
         }
     }
