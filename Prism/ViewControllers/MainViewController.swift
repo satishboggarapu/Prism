@@ -165,22 +165,28 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
                 for postSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
                     let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)
                     self.prismPostArrayList.append(prismPost)
-
-//                    for post in prismPostArrayList {
-//                        print("caption", post.getCaption())
-//                        print("image", post.getImage())
-//                        print("timestamp", post.getTimestamp())
-//                        print("uid", post.getUid())
-//                        print("///////////")
-//                    }
                 }
-                //                populateUserDetailsForAllPosts(true)
-                
+                self.populateUserDetailsForAllPosts()
             }
             else{
                 print("No More Posts available")
             }
-            
         })
     }
+    
+    func populateUserDetailsForAllPosts(){
+        usersReference.observeSingleEvent(of: .value, with: {(snapshot) in
+            if snapshot.exists(){
+                for post in self.prismPostArrayList as! [PrismPost]{
+                    let userSnapshot = snapshot.childSnapshot(forPath: post.getUid()) as! DataSnapshot
+                    let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
+                    post.setPrismUser(prismUser: prismUser)
+                }
+            }
+            else{
+                print("no data")
+            }
+        })
+    }
+    
 }

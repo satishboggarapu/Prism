@@ -23,12 +23,13 @@ public class Helper {
         prismPost.setLikes(likes: Int(postSnapshot.childSnapshot(forPath: Key.DB_REF_USER_LIKES).childrenCount))
         prismPost.setReposts(reposts: Int(postSnapshot.childSnapshot(forPath: Key.DB_REF_USER_REPOSTS).childrenCount))
         
-        print(prismPost.getTimestamp())
         return prismPost
     }
     
     public static func constructPrismUserObject(userSnapshot: DataSnapshot) -> PrismUser{
         let prismUser = PrismUser()
+        let userSnapshotdict = userSnapshot.value as? NSDictionary
+        
         prismUser.setUid(uid: userSnapshot.key)
         prismUser.setUsername(username: String(describing: userSnapshot.childSnapshot(forPath: Key.USER_PROFILE_USERNAME).value))
         prismUser.setFullName(fullName: String(describing: userSnapshot.childSnapshot(forPath: Key.USER_PROFILE_FULL_NAME).value))
