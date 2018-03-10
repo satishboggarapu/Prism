@@ -9,14 +9,6 @@
 import UIKit
 import Material
 
-// TODO: Make Top View Clickable
-// TODO: Likes Button target
-// TODO: Reposts Button target
-// TODO: LikeButton target
-// TODO: ShareButton target
-// TODO: MoreButton target
-// TODO: Double Tap gesture for the profile picture
-
 class FeedPostCell: UICollectionViewCell {
 
     // MARK: UIElements
@@ -29,6 +21,11 @@ class FeedPostCell: UICollectionViewCell {
     var shareButton: UIButton!
     var moreButton: UIButton!
     var reposts: UILabel!
+
+    var heartImageView: UIImageView!
+
+    // MARK: UIViews
+    var topView: UIView!
 
     let separatorView: UIView = {
         let view = UIView()
@@ -52,7 +49,9 @@ class FeedPostCell: UICollectionViewCell {
 
     private func setupView() {
         // topView
-        let topView = UIView()
+        // TODO: Set tag for the view
+        topView = UIView()
+
         let topRightView = UIView()
 
         initializeProfilePicture()
@@ -93,6 +92,7 @@ class FeedPostCell: UICollectionViewCell {
 
         self.addSubview(topView)
         self.addSubview(postImage)
+        self.insertSubview(heartImageView, aboveSubview: postImage)
         self.addSubview(bottomView)
         self.addSubview(separatorView)
         
@@ -100,11 +100,18 @@ class FeedPostCell: UICollectionViewCell {
         addConstraint(NSLayoutConstraint(item: topView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         addConstraintsWithFormat(format: "H:|[v0]|", views: postImage)
         addConstraint(NSLayoutConstraint(item: postImage, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraintsWithFormat(format: "H:[v0(100)]", views: heartImageView)
+        addConstraint(NSLayoutConstraint(item: heartImageView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraintsWithFormat(format: "V:[v0(100)]", views: heartImageView)
+        addConstraint(NSLayoutConstraint(item: heartImageView, attribute: .centerY, relatedBy: .equal, toItem: postImage, attribute: .centerY, multiplier: 1, constant: 0))
         addConstraintsWithFormat(format: "H:[v0]", views: bottomView)
         addConstraint(NSLayoutConstraint(item: bottomView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         addConstraintsWithFormat(format: "H:|[v0]|", views: separatorView)
-
         addConstraintsWithFormat(format: "V:|-16-[v0]-16-[v1(<=\(imageMaxHeight))]-16-[v2]-16-[v3(1)]|", views: topView, postImage, bottomView, separatorView)
+
+//        // tap gesture for likesLabel
+//        let likesTapGesture = UITapGestureRecognizer(target: self, action: #selector(likesLabelTapGestureAction(_:)))
+//        likes.addGestureRecognizer(likesTapGesture)
 
     }
 
@@ -144,6 +151,15 @@ class FeedPostCell: UICollectionViewCell {
         postImage.contentMode = .scaleAspectFit
         postImage.clipsToBounds = true
         postImage.translatesAutoresizingMaskIntoConstraints = false
+        postImage.isUserInteractionEnabled = true
+
+        heartImageView = UIImageView()
+        heartImageView.image = UIImage(icon: .LIKE_FILL_36).withRenderingMode(.alwaysTemplate)
+        heartImageView.tintColor = UIColor.white
+        heartImageView.contentMode = .scaleAspectFit
+        heartImageView.clipsToBounds = true
+        heartImageView.alpha = 0
+
     }
 
     private func initializeLikes() {
@@ -152,14 +168,17 @@ class FeedPostCell: UICollectionViewCell {
         likes.textColor = UIColor.white
         likes.font = mediumFont
         likes.translatesAutoresizingMaskIntoConstraints = false
+        likes.isUserInteractionEnabled = true
 //        self.addSubview(likes)
     }
 
     private func initializeLikeButton() {
         likeButton = UIButton()
         likeButton.setImage(UIImage(icon: .LIKE_OUTLINE_36).withRenderingMode(.alwaysTemplate), for: .normal)
+        likeButton.setImage(UIImage(icon: .LIKE_FILL_36).withRenderingMode(.alwaysTemplate), for: .selected)
         likeButton.imageView?.contentMode = .scaleAspectFit
         likeButton.tintColor = UIColor.white
+//        likeButton.imageView.tintC
         likeButton.setTitle("", for: .normal)
         likeButton.translatesAutoresizingMaskIntoConstraints = false
 //        self.addSubview(likeButton)
@@ -191,6 +210,7 @@ class FeedPostCell: UICollectionViewCell {
         reposts.textColor = UIColor.white
         reposts.font = mediumFont
         reposts.translatesAutoresizingMaskIntoConstraints = false
+        reposts.isUserInteractionEnabled = true
 //        self.addSubview(reposts)
     }
 
