@@ -40,7 +40,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     private let textFieldFont: UIFont = RobotoFont.regular(with: 18)
     private let buttonFont: UIFont = RobotoFont.regular(with: 18)
 
-    var ref: DatabaseReference!
+    // Mark: Database Reference
+    private var auth: Auth!
+
     var animateFromRegister: Bool = false
 
     override func viewDidLoad() {
@@ -56,7 +58,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.hideKeyboardWhenTappedAround()
         initializeUIElements()
 
-        ref = Database.database().reference()
+        auth = Auth.auth();
 
         isMotionEnabled = true
     }
@@ -251,16 +253,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         print("Inside logInButtonPressed")
         let userName: String = emailTextField.text!
         let password: String = passwordTextField.text!
-        if isLoginPasswordValid(password: password) {
-            if (isInputAnEmail(input: userName)) {
-                attemptSignInWithEmail(email: userName, password: password)
-            } else {
-                attemptSignInWithUserName(userName: userName, password: password)
-            }
-        } else {
-            displayPasswordTextFieldError()
-            hidePasswordTextFieldError()
-        }
+        loginButtonPressed()
     }
 
     /**
@@ -302,56 +295,50 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-
     // MARK: Login Button Functions
-
-    func isLoginPasswordValid(password: String) -> Bool {
-        print("Inside isLoginPasswordValid")
-        if password.count > 5 {
-            return true
+    
+    /**
+     * When the login button is clicked, this should check whether it is a username or email
+     * Error handle for invalid credentials and otherwise go to MainActivity
+     */
+    private func loginButtonPressed() {
+        var emailOrUsername = getFormattedEmailOrUsername()
+        let password = getFormattedPassword()
+        if (!isEmailOrUsernameValid(email: emailOrUsername) || !isPasswordValid(password: password)){
+            return
         }
-        return false
-    }
+        // If input is username, extract email from database
+        if (!isInputOfTypeEmail(emailOrUsername: emailOrUsername)){
+            let accountReference = Default.ACCOUNT_REFERENCE.child(emailOrUsername)
+            accountReference.observeSingleEvent(of: .value, with: { snapshot in
+                if snapshot.exists() {
+                    emailOrUsername = String(describing: snapshot.value!)
+                    print(emailOrUsername)
+                    self.attemptLogin(email: emailOrUsername, password: password)
+                } else {
+                    print("Username does not exist")
+                    self.displayEmailTextFieldError()
 
-    func isInputAnEmail (input : String) -> Bool{
-        print("Inside isInputAnEmail" )
-        if !(NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}").evaluate(with: input)) {
-            return false
+                }
+            })
         }
-        return true
+        else{
+            self.attemptLogin(email: emailOrUsername, password: password)
+        }
     }
-
-    func attemptSignInWithUserName(userName : String, password : String) {
-        print("Inside attemptSignInWithUserName")
-        let accountsRef = ref.child("ACCOUNTS").child(userName)
-        accountsRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.exists() {
-                self.getEmailFromFirebaseWithUsername(userName: userName, password: password)
-            } else {
-//                print("Username does not exist")
-                self.displayEmailTextFieldError()
-            }
-        })
-    }
-
-    func getEmailFromFirebaseWithUsername(userName: String, password : String) {
-        print("Inside getEmailFromFirebaseWithUsername")
-        let usernameKey = ref.child("ACCOUNTS").child(userName)
-        usernameKey.observeSingleEvent(of: .value, with: { snapshot in
-            let email = String(describing: snapshot.value!)
-            self.attemptSignInWithEmail(email: email, password: password)
-        })
-    }
-
-    func attemptSignInWithEmail(email: String, password: String) {
-        print("Inside attemptSignInWithEmail")
+    
+    /**
+     * Perform validation checks before attempting sign in
+     */
+    private func attemptLogin(email: String, password: String){
+        print("Inside attemptLogin")
         print(email)
         print(password)
         Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
             if error != nil {
                 print(error)
                 if let errorCode = AuthErrorCode(rawValue: error!._code) {
-//                    print(error)
+                    print(error)
                     switch errorCode {
                     case .wrongPassword:
                         self.displayPasswordTextFieldError()
@@ -366,6 +353,54 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             print("User logged in")
             self.showMainViewController()
         }
+    }
+    
+    //    /**
+    //     * Email/Username validation check
+    //     */
+    private func isEmailOrUsernameValid(email: String) -> Bool {
+        
+        let isValid = (isInputOfTypeEmail(emailOrUsername: email) || (email.count >= 5 && email.count <= 30))
+        if (!isValid) {
+            print("Invalid username/email")
+        }
+        return isValid
+    }
+    
+    /**
+     * Checks to see if what firebaseUser typed in the username/email editText
+     * is of type email or username. The purpose is that if the firebaseUser
+     * enters an email, we can directly attemptLogin otherwise for username,
+     * we have to go to the database and extract the email for the given
+     * username
+     * @param emailOrUsername text from the email/username editText
+     * @return True if input is an email and False if it's a username
+     */
+    private func isInputOfTypeEmail(emailOrUsername: String) -> Bool{
+        print("Inside isEmailValid")
+        return (NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}").evaluate(with: emailOrUsername))
+    }
+    
+    /**
+     * Password validation check
+     */
+    private func isPasswordValid(password: String) -> Bool{
+        print("Inside isPasswordValid")
+        return (password.count > 5)
+    }
+    
+    /**
+     * Cleans the email or username entered and returns the clean version
+     */
+    private func getFormattedEmailOrUsername() -> String {
+        return emailTextField.text!.trimmingCharacters(in: .whitespaces)
+    }
+    
+    /**
+     * Cleans the password entered and returns the clean version
+     */
+    private func getFormattedPassword() -> String {
+        return passwordTextField.text!.trimmingCharacters(in: .whitespaces)
     }
 
     // MARK: Error Functions
