@@ -8,23 +8,28 @@
 
 import Foundation
 
-public class PrismPost {
+public class PrismPost: Equatable {
+    public static func ==(lhs: PrismPost, rhs: PrismPost) -> Bool {
+        return lhs.getPostId() == rhs.getPostId()
+    }
+    
     
     // --------------------------------------- //
     // DO NOT CHANGE ANYTHING IN THIS FILE     //
     // THESE HAVE TO BE SAME AS "POST_*" KEYS  //
     // --------------------------------------- //
     
-    private var timestamp: Int64!
-    private var caption: String!
-    private var image: String!
-    private var uid: String!
+    fileprivate var timestamp: Int64!
+    fileprivate var caption: String!
+    fileprivate var image: String!
+    fileprivate var uid: String!
     
     // Attributes not saved in cloud
     private var likes: Int!
     private var reposts: Int!
     private var postId: String!
     private var prismUser: PrismUser!
+    private var isReposted: Bool!
     
     // Empty Constructor required by Firebase to convert DataSnapshot to PrismPost.class
     public init () { }
@@ -74,6 +79,10 @@ public class PrismPost {
         return prismUser
     }
     
+    public func getIsReposted() -> Bool {
+        return (isReposted == nil) ? false : isReposted
+    }
+    
     // Setters for attributes not saved in cloud
 
     public func setTimestamp(timestamp : String!) {
@@ -106,6 +115,10 @@ public class PrismPost {
     
     public func setPostId(postId : String) {
         self.postId = postId
+    }
+    
+    public func setIsReposted(isReposted: Bool) {
+        self.isReposted = isReposted
     }
     
 }

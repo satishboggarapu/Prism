@@ -17,10 +17,10 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }()
     
     let cellId = "cell"
-    let images = [UIImage(icon: .IMAGE_FILTER_24),
-                  UIImage(icon: .SEARCH_24),
-                  UIImage(icon: .NOTIFICATIONS_24),
-                  UIImage(icon: .MORE_HORIZONTAL_LINES_24)]
+    let images = [Icons.IMAGE_FILTER_24,
+                  Icons.SEARCH_24,
+                  Icons.NOTIFICATIONS_24,
+                  Icons.MORE_HORIZONTAL_LINES_24]
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
     
     var homeController: MainViewController?
@@ -65,7 +65,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
-        cell.imageView.image = images[indexPath.item].withRenderingMode(.alwaysTemplate)
+        cell.imageView.image = images[indexPath.item]?.withRenderingMode(.alwaysTemplate)
 //        cell.tintColor = UIColor.white
         return cell
     }

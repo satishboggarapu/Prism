@@ -112,7 +112,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func initializeIconImageView() {
-        iconImageView = UIImageView(image: UIImage(icon: .SPLASH_SCREEN_ICON))
+        iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
         let size = Constraints.LoginViewController.getIconSize()
         iconImageView.frame.origin = CGPoint(x: (self.view.frame.width - size.width)/2, y: ((self.view.frame.height - size.height)/2) - Constraints.statusBarHeight())
         iconImageView.frame.size = size

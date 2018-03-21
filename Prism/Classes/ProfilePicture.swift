@@ -6,45 +6,31 @@
 //  Copyright © 2018 Satish Boggarapu. All rights reserved.
 //
 
-import Foundation
-
+import UIKit
 
 public class ProfilePicture {
 
     public var profilePicUriString: String
-//    public var hiResUri: Uri
-//    public var lowResUri: Uri
     public var isDefault = true
 
     
     public init(profilePicUriString : String) {
         self.profilePicUriString = profilePicUriString
+        self.isDefault =  (self.profilePicUriString.count == 1 && Int(self.profilePicUriString) != nil) ? true : false
     }
-//public ProfilePicture(String profilePicUriString) {
-//    this.profilePicUriString = profilePicUriString;
-//    isDefault = Character.isDigit(profilePicUriString.charAt(0));
-//    hiResUri = getHiResProfilePicUri();
-//    lowResUri = getLowResProfilePicUri();
-//}
-//
-//private Uri getHiResProfilePicUri() {
-//    if (isDefault) {
-//        int profileIndex = Integer.parseInt(profilePicUriString);
-//        DefaultProfilePicture picture = DefaultProfilePicture.values()[profileIndex];
-//        return Uri.parse(picture.getProfilePicture());
-//    }
-//    return Uri.parse(profilePicUriString);
-//}
-//
-//private Uri getLowResProfilePicUri() {
-//    if (isDefault) {
-//        int profileIndex = Integer.parseInt(profilePicUriString);
-//        DefaultProfilePicture picture = DefaultProfilePicture.values()[profileIndex];
-//        return Uri.parse(picture.getProfilePictureLow());
-//    }
-//    return Uri.parse(profilePicUriString);
-//}
-
-
+    
+    public func getHiResDefaultProfilePic() -> UIImage? {
+        if isDefault {
+            return DefaultProfilePicture.getProfilePicture(index: Int(self.profilePicUriString)!).hiResPicture
+        }
+        return nil
+    }
+    
+    public func getLowResDefaultProfilePic() -> UIImage? {
+        if isDefault {
+            return DefaultProfilePicture.getProfilePicture(index: Int(self.profilePicUriString)!).lowResPicture
+        }
+        return nil
+    }
 }
 

@@ -211,38 +211,54 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
   self = [super init];
   if (self) {
-    _activeColor = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseActiveColorKey];
-    _borderFillColor = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseBorderFillColorKey];
-    _characterCounter = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseCharacterCounterKey];
-    _disabledColor = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseDisabledColorKey];
-    _errorColor = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseErrorColorKey];
+    _activeColor = [aDecoder decodeObjectOfClass:[UIColor class]
+                                          forKey:MDCTextInputControllerBaseActiveColorKey];
+    _borderFillColor = [aDecoder decodeObjectOfClass:[UIColor class]
+                                              forKey:MDCTextInputControllerBaseBorderFillColorKey];
+    _characterCounter =
+        [aDecoder decodeObjectOfClass:[NSObject<MDCTextInputCharacterCounter> class]
+                               forKey:MDCTextInputControllerBaseCharacterCounterKey];
+    _disabledColor = [aDecoder decodeObjectOfClass:[UIColor class]
+                                            forKey:MDCTextInputControllerBaseDisabledColorKey];
+    _errorColor = [aDecoder decodeObjectOfClass:[UIColor class]
+                                         forKey:MDCTextInputControllerBaseErrorColorKey];
     _expandsOnOverflow = [aDecoder decodeBoolForKey:MDCTextInputControllerBaseExpandsOnOverflowKey];
     _floatingEnabled = [aDecoder decodeBoolForKey:MDCTextInputControllerBaseFloatingEnabledKey];
     _floatingPlaceholderNormalColor =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseFloatingPlaceholderNormalColorKey];
+        [aDecoder decodeObjectOfClass:[UIColor class]
+                               forKey:MDCTextInputControllerBaseFloatingPlaceholderNormalColorKey];
     _floatingPlaceholderScale =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseFloatingPlaceholderScaleKey];
+        [aDecoder decodeObjectOfClass:[NSNumber class]
+                               forKey:MDCTextInputControllerBaseFloatingPlaceholderScaleKey];
     _inlinePlaceholderColor =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseInlinePlaceholderColorKey];
+        [aDecoder decodeObjectOfClass:[UIColor class]
+                               forKey:MDCTextInputControllerBaseInlinePlaceholderColorKey];
     _inlinePlaceholderFont =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseInlinePlaceholderFontKey];
+        [aDecoder decodeObjectOfClass:[UIFont class]
+                               forKey:MDCTextInputControllerBaseInlinePlaceholderFontKey];
     _leadingUnderlineLabelFont =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseLeadingUnderlineLabelFontKey];
+        [aDecoder decodeObjectOfClass:[UIFont class]
+                               forKey:MDCTextInputControllerBaseLeadingUnderlineLabelFontKey];
     _leadingUnderlineLabelTextColor =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseLeadingUnderlineLabelTextColor];
+        [aDecoder decodeObjectOfClass:[UIColor class]
+                               forKey:MDCTextInputControllerBaseLeadingUnderlineLabelTextColor];
     _minimumLines = [aDecoder decodeIntegerForKey:MDCTextInputControllerBaseMinimumLinesKey];
-    _normalColor = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseNormalColorKey];
+    _normalColor = [aDecoder decodeObjectOfClass:[UIColor class]
+                                          forKey:MDCTextInputControllerBaseNormalColorKey];
     if ([aDecoder containsValueForKey:MDCTextInputControllerBaseTextInputKey]) {
-      _textInput = [aDecoder decodeObjectForKey:MDCTextInputControllerBaseTextInputKey];
+      _textInput = [aDecoder decodeObjectOfClass:[UIView<MDCTextInput> class]
+                                          forKey:MDCTextInputControllerBaseTextInputKey];
     }
     _trailingUnderlineLabelFont =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseTrailingUnderlineLabelFontKey];
+        [aDecoder decodeObjectOfClass:[UIFont class]
+                               forKey:MDCTextInputControllerBaseTrailingUnderlineLabelFontKey];
     _trailingUnderlineLabelTextColor =
-        [aDecoder decodeObjectForKey:MDCTextInputControllerBaseTrailingUnderlineLabelTextColor];
+        [aDecoder decodeObjectOfClass:[UIColor class]
+                               forKey:MDCTextInputControllerBaseTrailingUnderlineLabelTextColor];
     _underlineHeightActive =
-        [aDecoder decodeFloatForKey:MDCTextInputControllerBaseUnderlineHeightActiveKey];
+        (CGFloat)[aDecoder decodeDoubleForKey:MDCTextInputControllerBaseUnderlineHeightActiveKey];
     _underlineHeightNormal =
-        [aDecoder decodeFloatForKey:MDCTextInputControllerBaseUnderlineHeightNormalKey];
+        (CGFloat)[aDecoder decodeDoubleForKey:MDCTextInputControllerBaseUnderlineHeightNormalKey];
     _underlineViewMode = (UITextFieldViewMode)
         [aDecoder decodeIntegerForKey:MDCTextInputControllerBaseUnderlineViewModeKey];
 
@@ -282,7 +298,7 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [aCoder encodeObject:self.activeColor forKey:MDCTextInputControllerBaseActiveColorKey];
   [aCoder encodeObject:self.borderFillColor forKey:MDCTextInputControllerBaseBorderFillColorKey];
-  if ([self.characterCounter conformsToProtocol:@protocol(NSCoding)]) {
+  if ([self.characterCounter conformsToProtocol:@protocol(NSSecureCoding)]) {
     [aCoder encodeObject:self.characterCounter
                   forKey:MDCTextInputControllerBaseCharacterCounterKey];
   }
@@ -313,17 +329,17 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
                 forKey:MDCTextInputControllerBaseLeadingUnderlineLabelTextColor];
   [aCoder encodeInteger:self.minimumLines forKey:MDCTextInputControllerBaseMinimumLinesKey];
   [aCoder encodeObject:self.normalColor forKey:MDCTextInputControllerBaseNormalColorKey];
-  if ([self.textInput conformsToProtocol:@protocol(NSCoding)]) {
+  if ([self.textInput conformsToProtocol:@protocol(NSSecureCoding)]) {
     [aCoder encodeConditionalObject:self.textInput forKey:MDCTextInputControllerBaseTextInputKey];
   }
   [aCoder encodeObject:self.trailingUnderlineLabelFont
                 forKey:MDCTextInputControllerBaseTrailingUnderlineLabelFontKey];
   [aCoder encodeObject:self.trailingUnderlineLabelTextColor
                 forKey:MDCTextInputControllerBaseTrailingUnderlineLabelTextColor];
-  [aCoder encodeFloat:(float)self.underlineHeightActive
-               forKey:MDCTextInputControllerBaseUnderlineHeightActiveKey];
-  [aCoder encodeFloat:(float)self.underlineHeightNormal
-               forKey:MDCTextInputControllerBaseUnderlineHeightNormalKey];
+  [aCoder encodeDouble:(double)self.underlineHeightActive
+                forKey:MDCTextInputControllerBaseUnderlineHeightActiveKey];
+  [aCoder encodeDouble:(double)self.underlineHeightNormal
+                forKey:MDCTextInputControllerBaseUnderlineHeightNormalKey];
   [aCoder encodeInteger:self.underlineViewMode
                  forKey:MDCTextInputControllerBaseUnderlineViewModeKey];
 }
@@ -400,12 +416,12 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 
   if ([_textInput conformsToProtocol:@protocol(MDCMultilineTextInput)] &&
       [_textInput respondsToSelector:@selector(setMinimumLines:)]) {
-    ((MDCMultilineTextField *)_textInput).minimumLines = self.minimumLines;
+    ((id<MDCMultilineTextInput>)_textInput).minimumLines = self.minimumLines;
   }
 
   if ([_textInput conformsToProtocol:@protocol(MDCMultilineTextInput)] &&
       [_textInput respondsToSelector:@selector(setExpandsOnOverflow:)]) {
-    ((MDCMultilineTextField *)_textInput).expandsOnOverflow = self.expandsOnOverflow;
+    ((id<MDCMultilineTextInput>)_textInput).expandsOnOverflow = self.expandsOnOverflow;
   }
 
   [self subscribeForNotifications];
@@ -503,6 +519,14 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
     _characterCountMax = characterCountMax;
     [self updateLayout];
   }
+}
+
+#pragma mark - Cursor Customization
+
+- (void)updateCursor {
+  self.textInput.cursorColor = (self.isDisplayingErrorText || self.isDisplayingCharacterCountError)
+                                   ? self.errorColor
+                                   : self.activeColor;
 }
 
 #pragma mark - Leading Label Customization
@@ -843,7 +867,7 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 - (void)setActiveColor:(UIColor *)activeColor {
   if (![_activeColor isEqual:activeColor]) {
     _activeColor = activeColor;
-    [self updateUnderline];
+    [self updateLayout];
   }
 }
 
@@ -974,7 +998,7 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
     _expandsOnOverflow = expandsOnOverflow;
     if ([_textInput conformsToProtocol:@protocol(MDCMultilineTextInput)] &&
         [_textInput respondsToSelector:@selector(setExpandsOnOverflow:)]) {
-      ((MDCMultilineTextField *)_textInput).expandsOnOverflow = expandsOnOverflow;
+      ((id<MDCMultilineTextInput>)_textInput).expandsOnOverflow = expandsOnOverflow;
     }
   }
 }
@@ -1166,7 +1190,7 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
     _minimumLines = minimumLines;
     if ([_textInput conformsToProtocol:@protocol(MDCMultilineTextInput)] &&
         [_textInput respondsToSelector:@selector(setMinimumLines:)]) {
-      ((MDCMultilineTextField *)_textInput).minimumLines = minimumLines;
+      ((id<MDCMultilineTextInput>)_textInput).minimumLines = minimumLines;
     }
   }
 }
@@ -1333,6 +1357,12 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
   _underlineViewModeDefault = underlineViewModeDefault;
 }
 
+#pragma mark - NSSecureCoding
+
++ (BOOL)supportsSecureCoding {
+  return YES;
+}
+
 #pragma mark - Layout
 
 - (void)updateLayout {
@@ -1340,6 +1370,7 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
     return;
   }
 
+  [self updateCursor];
   [self updatePlaceholder];
   [self updateLeadingUnderlineLabel];
   [self updateTrailingUnderlineLabel];

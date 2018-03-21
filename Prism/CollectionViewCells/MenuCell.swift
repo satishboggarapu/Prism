@@ -9,7 +9,7 @@ class MenuCell: UICollectionViewCell {
 
     let imageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(icon: .IMAGE_FILTER_24).withRenderingMode(.alwaysTemplate)
+        image.image = Icons.IMAGE_FILTER_24?.withRenderingMode(.alwaysTemplate)
         image.tintColor = UIColor.white
         return image
     }()

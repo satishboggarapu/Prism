@@ -104,7 +104,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func initializeIconImageView() {
-        iconImageView = UIImageView(image: UIImage(icon: .SPLASH_SCREEN_ICON))
+        iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
         iconImageView.frame = Constraints.LoginViewController.getIconFrame()
         iconImageView.contentMode = .scaleAspectFit
         scrollView.addSubview(iconImageView)
@@ -603,8 +603,8 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
 // MARK: ScrollView Functions for Keyboard
 extension RegisterViewController {
     /**
-     Adds UIKeyboardWillShow and UIKeyboardWillHide observers to the view.
-     Called in viewWillAppear method.
+     * Adds UIKeyboardWillShow and UIKeyboardWillHide observers to the view.
+     * Called in viewWillAppear method.
      */
     private func addObservers() {
         NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: nil) { notification in
@@ -617,15 +617,15 @@ extension RegisterViewController {
     }
 
     /**
-     Removes UIKeyboardWillShow and UIKeyboardWillHide observers from the view
-     Called in viewWillDisappear method.
+     * Removes UIKeyboardWillShow and UIKeyboardWillHide observers from the view
+     * Called in viewWillDisappear method.
      */
     private func removeObservers() {
         NotificationCenter.default.removeObserver(self)
     }
 
     /**
-     UIKeyboardWillShow action. Makes the view scrollable if the TextFields are hidden under the keyboard.
+     * UIKeyboardWillShow action. Makes the view scrollable if the TextFields are hidden under the keyboard.
      */
     private func keyboardWillShow(notification: Notification) {
         guard let userInfo = notification.userInfo, let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {

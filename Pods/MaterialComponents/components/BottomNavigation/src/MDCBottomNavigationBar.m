@@ -13,13 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+#import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
 #import "MDCBottomNavigationBar.h"
 
 #import <MDFInternationalization/MDFInternationalization.h>
 
-#import "MaterialMath.h"
 #import "MaterialShadowLayer.h"
 #import "MaterialTypography.h"
 #import "private/MaterialBottomNavigationStrings.h"
@@ -97,15 +97,18 @@ static NSString *const kMDCBottomNavigationBarTitleString = @"title";
       _alignment = [aDecoder decodeIntegerForKey:kMDCBottomNavigationBarAlignmentKey];
     }
     if ([aDecoder containsValueForKey:kMDCBottomNavigationBarItemTitleFontKey]) {
-      _itemTitleFont = [aDecoder decodeObjectForKey:kMDCBottomNavigationBarItemTitleFontKey];
+      _itemTitleFont = [aDecoder decodeObjectOfClass:[UIFont class]
+                                              forKey:kMDCBottomNavigationBarItemTitleFontKey];
     }
     if ([aDecoder containsValueForKey:kMDCBottomNavigationBarSelectedItemTintColorKey]) {
       _selectedItemTintColor =
-          [aDecoder decodeObjectForKey:kMDCBottomNavigationBarSelectedItemTintColorKey];
+          [aDecoder decodeObjectOfClass:[UIColor class]
+                                 forKey:kMDCBottomNavigationBarSelectedItemTintColorKey];
     }
     if ([aDecoder containsValueForKey:kMDCBottomNavigationBarUnselectedItemTintColorKey]) {
       _unselectedItemTintColor =
-          [aDecoder decodeObjectForKey:kMDCBottomNavigationBarUnselectedItemTintColorKey];
+          [aDecoder decodeObjectOfClass:[UIColor class]
+                                 forKey:kMDCBottomNavigationBarUnselectedItemTintColorKey];
     }
     if ([aDecoder containsValueForKey:kMDCBottomNavigationBarItemsDistributedKey]) {
       _itemsDistributed = [aDecoder decodeBoolForKey:kMDCBottomNavigationBarItemsDistributedKey];
@@ -116,11 +119,13 @@ static NSString *const kMDCBottomNavigationBarTitleString = @"title";
 
     // Should be second-last due to KVO
     if ([aDecoder containsValueForKey:KMDCBottomNavigationBarItemsKey]) {
-      self.items = [aDecoder decodeObjectForKey:KMDCBottomNavigationBarItemsKey];
+      self.items = [aDecoder decodeObjectOfClass:[NSArray class]
+                                          forKey:KMDCBottomNavigationBarItemsKey];
     }
     // Should be last due to updating views
     if ([aDecoder containsValueForKey:kMDCBottomNavigationBarSelectedItemKey]) {
-      self.selectedItem = [aDecoder decodeObjectForKey:kMDCBottomNavigationBarSelectedItemKey];
+      self.selectedItem = [aDecoder decodeObjectOfClass:[UITabBarItem class]
+                                                 forKey:kMDCBottomNavigationBarSelectedItemKey];
     }
   }
   return self;
@@ -429,7 +434,8 @@ static NSString *const kMDCBottomNavigationBarTitleString = @"title";
 #if defined(__IPHONE_10_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpartial-availability"
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
+    NSOperatingSystemVersion iOS10Version = {10, 0, 0};
+    if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:iOS10Version]) {
       if (item.badgeColor) {
         itemView.badgeColor = item.badgeColor;
       }

@@ -6,12 +6,13 @@ target 'Prism' do
   use_frameworks!
 
   # Pods for Prism
-  pod 'Firebase/Core'
+  pod 'Firebase'
   pod 'Firebase/Database'
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
   pod 'Material'
   pod 'MaterialComponents'
+  pod 'SDWebImage'
 
   target 'PrismTests' do
     inherit! :search_paths

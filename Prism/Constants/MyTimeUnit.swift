@@ -9,7 +9,6 @@
 import Foundation
 
 public class MyTimeUnit {
-
         public static let SECONDS_UNIT = 60
         public static let MINUTES_UNIT = 60
         public static let HOURS_UNIT = 24

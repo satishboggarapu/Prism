@@ -247,7 +247,8 @@ static NSString *const MDCFlexibleHeaderDelegateKey = @"MDCFlexibleHeaderDelegat
     }
 
     if ([aDecoder containsValueForKey:MDCFlexibleHeaderTrackingScrollViewKey]) {
-      _trackingScrollView = [aDecoder decodeObjectForKey:MDCFlexibleHeaderTrackingScrollViewKey];
+      _trackingScrollView = [aDecoder decodeObjectOfClass:[UIScrollView class] 
+                                                   forKey:MDCFlexibleHeaderTrackingScrollViewKey];
     }
 
     if ([aDecoder containsValueForKey:MDCFlexibleHeaderInFrontOfInfiniteContentKey]) {
@@ -839,7 +840,7 @@ static NSString *const MDCFlexibleHeaderDelegateKey = @"MDCFlexibleHeaderDelegat
   frameBottomEdge = MAX(0, MIN(kShadowScaleLength, frameBottomEdge));
   CGFloat boundedAccumulator = MIN([self fhv_accumulatorMax], _shiftAccumulator);
 
-  if (_shiftBehavior == MDCFlexibleHeaderShiftBehaviorEnabled) {
+  if (_shiftBehavior != MDCFlexibleHeaderShiftBehaviorDisabled) {
     CGFloat contentHeight = self.computedMinimumHeight - MDCDeviceTopSafeAreaInset();
     CGFloat hideThreshold = kContentHidingThreshold;
     CGFloat alpha = MAX(contentHeight - boundedAccumulator / hideThreshold, 0) / contentHeight;
@@ -1198,7 +1199,7 @@ static BOOL isRunningiOS10_3OrAbove() {
     }
 
     // When the tracking scroll view is cleared we need a shadow update.
-    if (!_trackingScrollView) {
+    if (!self.trackingScrollView) {
       [self fhv_accumulatorDidChange];
     }
   };

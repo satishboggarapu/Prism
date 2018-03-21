@@ -16,6 +16,7 @@
 
 #import "MDCInkView.h"
 
+#import "MaterialMath.h"
 #import "private/MDCInkLayer.h"
 #import "private/MDCLegacyInkLayer.h"
 
@@ -49,7 +50,9 @@ static NSString *const MDCInkViewMaxRippleRadiusKey = @"MDCInkViewMaxRippleRadiu
 
 @end
 
-@implementation MDCInkView
+@implementation MDCInkView {
+  CGFloat _maxRippleRadius;
+}
 
 + (Class)layerClass {
   return [MDCLegacyInkLayer class];
@@ -96,7 +99,7 @@ static NSString *const MDCInkViewMaxRippleRadiusKey = @"MDCInkViewMaxRippleRadiu
       self.maxRippleRadius = (CGFloat)[aDecoder decodeDoubleForKey:MDCInkViewMaxRippleRadiusKey];
     }
     if ([aDecoder containsValueForKey:MDCInkViewInkColorKey]) {
-      self.inkColor = [aDecoder decodeObjectForKey:MDCInkViewInkColorKey];
+      self.inkColor = [aDecoder decodeObjectOfClass:[UIColor class] forKey:MDCInkViewInkColorKey];
     }
   }
   return self;
@@ -174,6 +177,15 @@ static NSString *const MDCInkViewMaxRippleRadiusKey = @"MDCInkViewMaxRippleRadiu
         self.inkLayer.bounded = NO;
         break;
     }
+  } else {
+    switch(inkStyle) {
+      case MDCInkStyleBounded:
+        self.inkLayer.maxRippleRadius = 0;
+        break;
+      case MDCInkStyleUnbounded:
+        self.inkLayer.maxRippleRadius = _maxRippleRadius;
+        break;
+    }
   }
 }
 
@@ -193,9 +205,27 @@ static NSString *const MDCInkViewMaxRippleRadiusKey = @"MDCInkViewMaxRippleRadiu
 }
 
 - (void)setMaxRippleRadius:(CGFloat)radius {
-  if (self.inkLayer.maxRippleRadius != radius) {
+  // Keep track of the set value in case the caller will change inkStyle later
+  _maxRippleRadius = radius;
+  if (MDCCGFloatEqual(self.inkLayer.maxRippleRadius, radius)) {
+    return;
+  }
+
+  // Legacy Ink updates inkLayer.maxRippleRadius regardless of inkStyle
+  if (self.usesLegacyInkRipple) {
     self.inkLayer.maxRippleRadius = radius;
+    // This is required for legacy Ink so that the Ink bounds will be adjusted correctly
     [self setNeedsLayout];
+  } else {
+    // New Ink Bounded style ignores maxRippleRadius
+    switch(self.inkStyle) {
+      case MDCInkStyleUnbounded:
+        self.inkLayer.maxRippleRadius = radius;
+        break;
+      case MDCInkStyleBounded:
+        // No-op
+        break;
+    }
   }
 }
 
@@ -221,6 +251,11 @@ static NSString *const MDCInkViewMaxRippleRadiusKey = @"MDCInkViewMaxRippleRadiu
 
 - (void)startTouchBeganAnimationAtPoint:(CGPoint)point
                              completion:(MDCInkCompletionBlock)completionBlock {
+  [self startTouchBeganAtPoint:point animated:YES withCompletion:completionBlock];
+}
+
+- (void)startTouchBeganAtPoint:(CGPoint)point animated:(BOOL)animated
+                withCompletion:(nullable MDCInkCompletionBlock)completionBlock {
   if (self.usesLegacyInkRipple) {
     [self.inkLayer spreadFromPoint:point completion:completionBlock];
   } else {
@@ -232,19 +267,24 @@ static NSString *const MDCInkViewMaxRippleRadiusKey = @"MDCInkViewMaxRippleRadiu
     inkLayer.opacity = 0;
     inkLayer.frame = self.bounds;
     [self.layer addSublayer:inkLayer];
-    [inkLayer startAnimationAtPoint:point];
+    [inkLayer startInkAtPoint:point animated:animated];
     self.activeInkLayer = inkLayer;
+  }
+}
+
+- (void)startTouchEndAtPoint:(CGPoint)point animated:(BOOL)animated
+              withCompletion:(nullable MDCInkCompletionBlock)completionBlock {
+  if (self.usesLegacyInkRipple) {
+    [self.inkLayer evaporateWithCompletion:completionBlock];
+  } else {
+    self.endInkRippleCompletionBlock = completionBlock;
+    [self.activeInkLayer endInkAtPoint:point animated:animated];
   }
 }
 
 - (void)startTouchEndedAnimationAtPoint:(CGPoint)point
                              completion:(MDCInkCompletionBlock)completionBlock {
-  if (self.usesLegacyInkRipple) {
-    [self.inkLayer evaporateWithCompletion:completionBlock];
-  } else {
-    self.endInkRippleCompletionBlock = completionBlock;
-    [self.activeInkLayer endAnimationAtPoint:point];
-  }
+  [self startTouchEndAtPoint:point animated:YES withCompletion:completionBlock];
 }
 
 - (void)cancelAllAnimationsAnimated:(BOOL)animated {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		100763C22041B106005093C5 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100763C12041B106005093C5 /* Constraints.swift */; };
+		103399162061DFE000E105EC /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103399152061DFE000E105EC /* DictionaryExtensions.swift */; };
 		10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10863A4D203FD57800FA851B /* UIColorExtensions.swift */; };
 		1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F3203E838500C282BA /* AppDelegate.swift */; };
 		1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F5203E838500C282BA /* LoginViewController.swift */; };
@@ -16,8 +17,8 @@
 		1091E1FE203E838500C282BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1091E1FC203E838500C282BA /* LaunchScreen.storyboard */; };
 		1091E209203E838500C282BA /* PrismTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E208203E838500C282BA /* PrismTests.swift */; };
 		1091E214203E838500C282BA /* PrismUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E213203E838500C282BA /* PrismUITests.swift */; };
-		10ADF6B72050D30B00060A19 /* FeedPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B42050D30A00060A19 /* FeedPosts.swift */; };
-		10ADF6B82050D30B00060A19 /* FeedPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B52050D30B00060A19 /* FeedPostCell.swift */; };
+		10ADF6B72050D30B00060A19 /* PrismPostCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */; };
+		10ADF6B82050D30B00060A19 /* PrismPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */; };
 		10ADF6B92050D30B00060A19 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B62050D30B00060A19 /* MenuCell.swift */; };
 		10ADF6BD2050D33500060A19 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BB2050D33500060A19 /* MenuBar.swift */; };
 		10ADF6BE2050D33500060A19 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BC2050D33500060A19 /* NavigationBar.swift */; };
@@ -28,7 +29,9 @@
 		10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F558204659EE00C82F3F /* ScreenType.swift */; };
 		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
 		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
+		10FCD82A205F03E8001E0C1F /* DefaultProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
+		192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E406B8694AA1A663C7AFC /* DatabaseAction.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
 		4F23015A2053A88200B5F794 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2301592053A88200B5F794 /* DataExtensions.swift */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
@@ -64,6 +67,7 @@
 
 /* Begin PBXFileReference section */
 		100763C12041B106005093C5 /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
+		103399152061DFE000E105EC /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		10863A4D203FD57800FA851B /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		1091E1F0203E838500C282BA /* Prism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prism.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1091E1F3203E838500C282BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,8 +82,8 @@
 		1091E20F203E838500C282BA /* PrismUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrismUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1091E213203E838500C282BA /* PrismUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismUITests.swift; sourceTree = "<group>"; };
 		1091E215203E838500C282BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		10ADF6B42050D30A00060A19 /* FeedPosts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedPosts.swift; path = Prism/CollectionViewCells/FeedPosts.swift; sourceTree = SOURCE_ROOT; };
-		10ADF6B52050D30B00060A19 /* FeedPostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedPostCell.swift; path = Prism/CollectionViewCells/FeedPostCell.swift; sourceTree = SOURCE_ROOT; };
+		10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrismPostCollectionView.swift; path = Prism/CollectionViewCells/PrismPostCollectionView.swift; sourceTree = SOURCE_ROOT; };
+		10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrismPostCollectionViewCell.swift; path = Prism/CollectionViewCells/PrismPostCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6B62050D30B00060A19 /* MenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuCell.swift; path = Prism/CollectionViewCells/MenuCell.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6BB2050D33500060A19 /* MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuBar.swift; path = Prism/CustomViews/MenuBar.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6BC2050D33500060A19 /* NavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NavigationBar.swift; path = Prism/CustomViews/NavigationBar.swift; sourceTree = SOURCE_ROOT; };
@@ -90,6 +94,8 @@
 		10E3F558204659EE00C82F3F /* ScreenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenType.swift; sourceTree = "<group>"; };
 		10E3F559204659EE00C82F3F /* Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 		10E3F55A204659EE00C82F3F /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfilePicture.swift; sourceTree = "<group>"; };
+		192E406B8694AA1A663C7AFC /* DatabaseAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseAction.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -181,6 +187,7 @@
 				10863A4D203FD57800FA851B /* UIColorExtensions.swift */,
 				192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */,
 				4F2301592053A88200B5F794 /* DataExtensions.swift */,
+				103399152061DFE000E105EC /* DictionaryExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -194,7 +201,6 @@
 				1091E1F1203E838500C282BA /* Products */,
 				8469119918C7F2493D6D1660 /* Pods */,
 				0C2F12303E93891A7B23F86A /* Frameworks */,
-				10C259B6205446C400FABBB5 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -250,8 +256,8 @@
 		10ADF6B32050D2F200060A19 /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				10ADF6B52050D30B00060A19 /* FeedPostCell.swift */,
-				10ADF6B42050D30A00060A19 /* FeedPosts.swift */,
+				10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */,
+				10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */,
 				10ADF6B62050D30B00060A19 /* MenuCell.swift */,
 			);
 			path = CollectionViewCells;
@@ -283,6 +289,8 @@
 				4F9C95882050D6F400C08C9E /* PrismUser.swift */,
 				4F9C95892050D6F400C08C9E /* ProfilePicture.swift */,
 				4F9C958D2050D70900C08C9E /* CurrentUser.swift */,
+				10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */,
+				192E406B8694AA1A663C7AFC /* DatabaseAction.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -538,6 +546,7 @@
 				"${BUILT_PRODUCTS_DIR}/MotionAnimator/MotionAnimator.framework",
 				"${BUILT_PRODUCTS_DIR}/MotionInterchange/MotionInterchange.framework",
 				"${BUILT_PRODUCTS_DIR}/MotionTransitioning/MotionTransitioning.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -553,6 +562,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionAnimator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionInterchange.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionTransitioning.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -618,12 +628,14 @@
 			files = (
 				10ADF6BE2050D33500060A19 /* NavigationBar.swift in Sources */,
 				100763C22041B106005093C5 /* Constraints.swift in Sources */,
-				10ADF6B82050D30B00060A19 /* FeedPostCell.swift in Sources */,
+				10ADF6B82050D30B00060A19 /* PrismPostCollectionViewCell.swift in Sources */,
 				10ADF6BD2050D33500060A19 /* MenuBar.swift in Sources */,
 				4F9C958C2050D6F400C08C9E /* ProfilePicture.swift in Sources */,
+				103399162061DFE000E105EC /* DictionaryExtensions.swift in Sources */,
 				4F9C958E2050D70900C08C9E /* CurrentUser.swift in Sources */,
 				10ADF6C12050D36000060A19 /* UIViewControllerExtensions.swift in Sources */,
 				4F9C95832050CBC700C08C9E /* Default.swift in Sources */,
+				10FCD82A205F03E8001E0C1F /* DefaultProfilePicture.swift in Sources */,
 				10E3F55D204659EF00C82F3F /* Colors.swift in Sources */,
 				4F9C95812050C5A800C08C9E /* Key.swift in Sources */,
 				10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */,
@@ -637,12 +649,13 @@
 				4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */,
 				10ADF6B92050D30B00060A19 /* MenuCell.swift in Sources */,
 				10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */,
-				10ADF6B72050D30B00060A19 /* FeedPosts.swift in Sources */,
+				10ADF6B72050D30B00060A19 /* PrismPostCollectionView.swift in Sources */,
 				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
 				10ADF6C42050D52000060A19 /* MainViewController.swift in Sources */,
 				4F9C95902050D71C00C08C9E /* Helper.swift in Sources */,
 				4F9C958A2050D6F400C08C9E /* PrismPost.swift in Sources */,
 				4F9C958B2050D6F400C08C9E /* PrismUser.swift in Sources */,
+				192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -810,7 +823,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Y255RY3RZB;
+				DEVELOPMENT_TEAM = TEGLEE3UYA;
 				INFOPLIST_FILE = Prism/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -827,7 +840,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Y255RY3RZB;
+				DEVELOPMENT_TEAM = TEGLEE3UYA;
 				INFOPLIST_FILE = Prism/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

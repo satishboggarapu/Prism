@@ -19,12 +19,12 @@ public class PrismUser {
     public init(){ }
     
     public init(uid: String, username: String, fullName: String, profilePicture: ProfilePicture, followerCount: Int, followingCount: Int) {
-        self.uid = uid;
-        self.username = username;
-        self.fullName = fullName;
-        self.profilePicture = profilePicture;
-        self.followerCount = followerCount;
-        self.followingCount = followingCount;
+        self.uid = uid
+        self.username = username
+        self.fullName = fullName
+        self.profilePicture = profilePicture
+        self.followerCount = followerCount
+        self.followingCount = followingCount
     }
     
     public func getUid() -> String{
@@ -32,51 +32,47 @@ public class PrismUser {
     }
     
     public func getUsername() -> String {
-        return Helper.getFirebaseDecodedUsername(encodedUsername: username);
+        return Helper.getFirebaseDecodedUsername(encodedUsername: username)
     }
     
     public func getFullName() -> String {
-    return fullName
+        return fullName
     }
     
     public func getProfilePicture() -> ProfilePicture{
-    return profilePicture
+        return profilePicture
     }
     
     public func getFollowerCount() -> Int{
-    return followerCount
+        return followerCount
     }
     
     public func getFollowingCount() -> Int {
-    return followingCount
+        return followingCount
     }
     
     public func setUid(uid : String) {
-    self.uid = uid;
+        self.uid = uid;
     }
     
     public func setUsername(username : String) {
-    self.username = username;
+        self.username = username;
     }
     
     public func setFullName(fullName : String) {
-    self.fullName = fullName;
+        self.fullName = fullName;
     }
     
     public func setProfilePicture(profilePicture : ProfilePicture) {
-    self.profilePicture = profilePicture
+        self.profilePicture = profilePicture
     }
     
     public func setFollowerCount(followerCount : Int) {
-    self.followerCount = followerCount;
+        self.followerCount = followerCount;
     }
     
     public func setFollowingCount(followingCount : Int) {
-    self.followingCount = followingCount;
+        self.followingCount = followingCount;
     }
-    
-
-
-    
 }
 

@@ -159,22 +159,31 @@ static inline UIColor *MDCTextInputUnderlineColor() {
   if (self) {
     [self commonMDCTextInputCommonFundamentInit];
 
-    _borderPath = [aDecoder decodeObjectForKey:MDCTextInputFundamentBorderPathKey];
-    _borderView = [aDecoder decodeObjectForKey:MDCTextInputFundamentBorderViewKey];
-    _clearButton = [aDecoder decodeObjectForKey:MDCTextInputFundamentClearButtonKey];
+    _borderPath = [aDecoder decodeObjectOfClass:[UIBezierPath class]
+                                         forKey:MDCTextInputFundamentBorderPathKey];
+    _borderView = [aDecoder decodeObjectOfClass:[MDCTextInputBorderView class]
+                                         forKey:MDCTextInputFundamentBorderViewKey];
+    _clearButton = [aDecoder decodeObjectOfClass:[UIButton class]
+                                          forKey:MDCTextInputFundamentClearButtonKey];
     _hidesPlaceholderOnInput = [aDecoder decodeBoolForKey:MDCTextInputFundamentHidesPlaceholderKey];
-    _leadingUnderlineLabel = [aDecoder decodeObjectForKey:MDCTextInputFundamentLeadingLabelKey];
+    _leadingUnderlineLabel = [aDecoder decodeObjectOfClass:[UILabel class]
+                                                    forKey:MDCTextInputFundamentLeadingLabelKey];
     _mdc_adjustsFontForContentSizeCategory =
         [aDecoder decodeBoolForKey:MDCTextInputFundamentMDCAdjustsFontsKey];
-    _placeholderLabel = [aDecoder decodeObjectForKey:MDCTextInputFundamentPlaceholderLabelKey];
-    _textInput = [aDecoder decodeObjectForKey:MDCTextInputFundamentTextInputKey];
-    _textColor = [aDecoder decodeObjectForKey:MDCTextInputFundamentTextColorKey];
+    _placeholderLabel = [aDecoder decodeObjectOfClass:[UILabel class]
+                                               forKey:MDCTextInputFundamentPlaceholderLabelKey];
+    _textInput = [aDecoder decodeObjectOfClass:[UIView class]
+                                        forKey:MDCTextInputFundamentTextInputKey];
+    _textColor =
+        [aDecoder decodeObjectOfClass:[UIColor class] forKey:MDCTextInputFundamentTextColorKey];
     if ([aDecoder containsValueForKey:MDCTextInputFundamentTextInsetsModeKey]) {
       _textInsetsMode = (MDCTextInputTextInsetsMode)
           [aDecoder decodeIntegerForKey:MDCTextInputFundamentTextInsetsModeKey];
     }
-    _trailingUnderlineLabel = [aDecoder decodeObjectForKey:MDCTextInputFundamentTrailingLabelKey];
-    _underline = [aDecoder decodeObjectForKey:MDCTextInputFundamentUnderlineViewKey];
+    _trailingUnderlineLabel =
+        [aDecoder decodeObjectOfClass:[UILabel class] forKey:MDCTextInputFundamentTrailingLabelKey];
+    _underline = [aDecoder decodeObjectOfClass:[MDCTextInputUnderlineView class]
+                                        forKey:MDCTextInputFundamentUnderlineViewKey];
 
     [self setupBorder];
     [self setupPlaceholderLabel];
@@ -522,7 +531,8 @@ static inline UIColor *MDCTextInputUnderlineColor() {
   [self updatePlaceholderAlpha];
   [self.textInput sendSubviewToBack:_borderView];
 
-  if ([self needsUpdateConstraintsForPlaceholderToOverlayViewsPosition]) {
+  if ([self needsUpdateConstraintsForPlaceholderToTextInsets] ||
+      [self needsUpdateConstraintsForPlaceholderToOverlayViewsPosition]) {
     [self.textInput setNeedsUpdateConstraints];
   }
 
@@ -843,6 +853,12 @@ static inline UIColor *MDCTextInputUnderlineColor() {
   self.textInput.trailingViewMode = trailingViewMode;
 }
 
+#pragma mark - NSSecureCoding
+
++ (BOOL)supportsSecureCoding {
+  return YES;
+}
+
 #pragma mark - Layout
 
 - (void)updateTextColor {
@@ -857,6 +873,12 @@ static inline UIColor *MDCTextInputUnderlineColor() {
     self.trailingUnderlineLabel.font = textFont;
     self.placeholderLabel.font = textFont;
   }
+}
+
+- (BOOL)needsUpdateConstraintsForPlaceholderToTextInsets {
+  return (self.placeholderTop.constant != _textInput.textInsets.top ||
+          self.placeholderLeading.constant != _textInput.textInsets.left ||
+          self.placeholderTrailing.constant != -1 * _textInput.textInsets.right);
 }
 
 - (BOOL)needsUpdateConstraintsForPlaceholderToOverlayViewsPosition {

@@ -11,6 +11,7 @@ import Material
 import Firebase
 import Motion
 import MaterialComponents
+import SDWebImage
 
 class MainViewController: UIViewController{
 
@@ -23,7 +24,9 @@ class MainViewController: UIViewController{
     var onDoneBlock : ((Bool) -> Void)?
 
     let colors = [UIColor.white, UIColor.blue, UIColor.gray, UIColor.green]
-    
+
+    public var prismPostArrayList: [PrismPost]! = [PrismPost]()
+
     /*
      * Globals
      */
@@ -33,14 +36,17 @@ class MainViewController: UIViewController{
     private var databaseReferenceAllPosts: DatabaseReference!
     private var usersReference: DatabaseReference!
     private var userReference: DatabaseReference!
-
-    public var prismPostArrayList: [PrismPost]! = [PrismPost]()
     
     private var uploadedImageUri: String!
     private var uploadedImageDescription: String!
 
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+//        let notificationCenter = NotificationCenter.default
+//        notificationCenter.addObserver(self, selector: #selector(appWillTerminate(_:)), name: Notification.Name.UIApplicationWillTerminate, object: nil)
 
         setupNavigationBar()
         initializeMenuBar()
@@ -54,7 +60,27 @@ class MainViewController: UIViewController{
         userReference = Default.USERS_REFERENCE.child((auth.currentUser?.uid)!)
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
+
+        CurrentUser()
+        CurrentUser.refreshUserProfile()
+
+//        refreshData()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+    }
+    
+//    @objc func appWillTerminate(_ application: UIApplication) {
+//        let imageCache = SDImageCache()
+//        imageCache.clearDisk(onCompletion: nil)
+//        print("cache cleared")
+//    }
 
     private func setupNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false
@@ -66,7 +92,7 @@ class MainViewController: UIViewController{
         let navigationView = UIView()
         navigationView.frame = CGRect(x: 0, y: 0, width: 100, height: 44)
 
-        let iconImageView = UIImageView(image: UIImage(icon: .SPLASH_SCREEN_ICON))
+        let iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.frame = CGRect(x: 0, y: 8, width: 34, height: 34)
         navigationView.addSubview(iconImageView)
@@ -146,8 +172,8 @@ class MainViewController: UIViewController{
     }
 
     private func initializeMenuBar() {
+        // TODO: Hide navigationbar on swipe
 //        self.navigationController?.hidesBarsOnSwipe = true
-
         menuBar = MenuBar()
         menuBar.homeController = self
         menuBar.translatesAutoresizingMaskIntoConstraints = false
@@ -165,7 +191,7 @@ class MainViewController: UIViewController{
 
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView?.register(FeedPosts.self, forCellWithReuseIdentifier: "FeedPosts")
+        collectionView?.register(PrismPostCollectionView.self, forCellWithReuseIdentifier: "FeedPosts")
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.showsVerticalScrollIndicator = false
@@ -195,7 +221,7 @@ class MainViewController: UIViewController{
     @objc func newPostButtonAction(_ sender: FABButton) {
         print("newPostButton pressed")
 
-        setupNavigationBarForImageUpload(uploadImage: UIImage(icon: .SPLASH_SCREEN_ICON))
+        setupNavigationBarForImageUpload(uploadImage: Icons.SPLASH_SCREEN_ICON!)
 
     }
 
@@ -242,24 +268,22 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
      }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        print(prismPostArrayList.count)
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath) as! FeedPosts
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath) as! PrismPostCollectionView
             cell.viewController = self
+//            cell.prismPostArrayList = self.prismPostArrayList
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-//            cell.viewController = self
             return cell
         }
-
-//        cell.backgroundColor = colors[indexPath.item]
-//        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width, height: view.frame.height - 50)
     }
-    
+
     /**
      *  Clears the data structure and pulls ALL_POSTS info again from cloud
      *  Queries the ALL_POSTS data sorted by the post timestamp and pulls n
@@ -273,17 +297,18 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         query.observeSingleEvent(of: .value, with: {(snapshot) in
             if snapshot.exists() {
                 for postSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
-                    let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)  as! PrismPost
+                    let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)
                     self.prismPostArrayList.append(prismPost)
                 }
                 self.populateUserDetailsForAllPosts()
+                print(self.prismPostArrayList.count)
             }
             else{
                 print("No More Posts available")
             }
         })
     }
-    
+
     /**
      * Once all posts are loaded into the prismPostHashMap,
      * this method iterates over each post, grabs firebaseUser's details
@@ -295,7 +320,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         print("Inside populateUserDetailsForAllPosts")
         usersReference.observeSingleEvent(of: .value, with: {(snapshot) in
             if snapshot.exists(){
-                for post in self.prismPostArrayList as! [PrismPost]{
+                for post in self.prismPostArrayList{
                     let userSnapshot = snapshot.childSnapshot(forPath: post.getUid())
                     let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
                     post.setPrismUser(prismUser: prismUser)
@@ -306,10 +331,10 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
             }
         })
     }
-    
+
     private func fetchMorePosts() {
         print("Inside fetchMorePosts")
-        let lastPostTimestamp = prismPostArrayList.last?.getTimestamp() as! Int64
+        let lastPostTimestamp: Int64 = (prismPostArrayList.last?.getTimestamp())!
         let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryStarting(atValue: lastPostTimestamp + 1).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
         query.observeSingleEvent(of: .value, with: {(snapshot) in
             if snapshot.exists(){
@@ -323,6 +348,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
             }
         })
     }
+
     
     private func uploadImageToCloud(uploadImage : UIImage){
         let metadata = StorageMetadata()
@@ -335,10 +361,10 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
             print(uploadData)
             postImageRef.putData(uploadData, metadata: metadata, completion: { (metadata, error) in
                 if error != nil {
-                    print(error)
+                    print(error!)
                     return
                 }
-                let downloadUrl = metadata?.downloadURL()?.absoluteString as! String
+                let downloadUrl: String = (metadata?.downloadURL()?.absoluteString)!
                 let postReference = self.databaseReference.childByAutoId() as DatabaseReference
                 let prismPost = self.createPrismPostObjectForUpload(downloadUrl: downloadUrl) as PrismPost
                 
@@ -436,7 +462,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
      */
     private func createPrismPostObjectForUpload(downloadUrl: String) -> PrismPost{
         let imageUri = downloadUrl as String
-        let userId = auth.currentUser?.uid as! String
+        let userId: String = (auth.currentUser?.uid)!
         let timestamp = getNegativeCurrentTimeStampInMillis() as Int64
         let description = "Parth's new haircut>>>>>>>>>>>>>" as String
         return PrismPost(timestamp: timestamp, postDescription: description, imageURL: imageUri, uid: userId)
@@ -448,7 +474,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
     
     
     func getNegativeCurrentTimeStampInMillis() -> Int64 {
-        return (Date().toMillis()) * -1
+        return (Date().milliseconds()) * -1
     }
     
 }

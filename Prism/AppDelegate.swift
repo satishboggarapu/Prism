@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import SDWebImage
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -45,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = navigationController
         navigationController.view.backgroundColor = UIColor(hex: 0x2b2b2b)
 
-        let iconImageView = UIImageView(image: UIImage(icon: .SPLASH_SCREEN_ICON))
+        let iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
         iconImageView.bounds.origin = CGPoint(x: 0, y: 0)
         iconImageView.bounds.size = Constraints.LoginViewController.getIconSize()
         iconImageView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -91,6 +92,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        SDImageCache.shared().clearMemory()
+        SDImageCache.shared().clearDisk()
+        print("cache cleared")
     }
 
 
