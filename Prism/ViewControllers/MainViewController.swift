@@ -361,8 +361,10 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
 
         let postImageRef = storageReference.child(Key.STORAGE_POST_IMAGES_REF).child("\(imageName).jpeg") as StorageReference
         if let uploadData = UIImageJPEGRepresentation(uploadImage, 1){
-            print(uploadData)
             postImageRef.putData(uploadData, metadata: metadata, completion: { (metadata, error) in
+//                postImageRef.observe(.progress) { snapshot, a in
+//
+//                }
                 if error != nil {
                     print(error!)
                     return
@@ -377,12 +379,21 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
                 userPostRef.value(forKey: String(prismPost.getTimestamp()))
 
                 // Create the post in cloud and on success, add the image to local recycler view adapter
-//                postReference.setValue(, withCompletionBlock: )
+                postReference.setValue(prismPost, withCompletionBlock: { (error, ref ) in
+                    if error != nil {
+                        //updateLocalRecyclerViewWithNewPost(prismPost);
+
+                    }
+                    else {
+                        print("Image upload failed")
+                    }
+                })
+                
+                
 //                postReference.setValue(prismPost).addOnCompleteListener(new OnCompleteListener<Void>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<Void> task) {
 //                        if (task.isSuccessful()) {
-//                            updateLocalRecyclerViewWithNewPost(prismPost);
 //                        } else {
 //                            uploadingImageTextView.setText("Failed to make the post");
 //                            Log.wtf(Default.TAG_DB, Message.POST_UPLOAD_FAIL, task.getException());
