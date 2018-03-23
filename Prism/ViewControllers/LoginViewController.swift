@@ -14,6 +14,7 @@ import Material
 import Motion
 import Firebase
 import FirebaseAuth
+import SDWebImage
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 

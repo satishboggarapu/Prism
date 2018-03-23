@@ -45,8 +45,8 @@ class MainViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let notificationCenter = NotificationCenter.default
-//        notificationCenter.addObserver(self, selector: #selector(appWillTerminate(_:)), name: Notification.Name.UIApplicationWillTerminate, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appWillTerminate(_:)), name: Notification.Name.UIApplicationWillTerminate, object: nil)
 
         setupNavigationBar()
         initializeMenuBar()
@@ -68,7 +68,7 @@ class MainViewController: UIViewController{
     }
 
     override func viewWillAppear(_ animated: Bool) {
-
+        
 
     }
     
@@ -76,11 +76,14 @@ class MainViewController: UIViewController{
         
     }
     
-//    @objc func appWillTerminate(_ application: UIApplication) {
-//        let imageCache = SDImageCache()
-//        imageCache.clearDisk(onCompletion: nil)
-//        print("cache cleared")
-//    }
+    @objc func appWillTerminate(_ application: UIApplication) {
+//        SDImageCache.shared().clearMemory()
+//        SDImageCache.shared().clearDisk()
+//        CachedImages.clearCache() { (result) in
+//            print("cleared cache")
+//        }
+        print("cache cleared")
+    }
 
     private func setupNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false

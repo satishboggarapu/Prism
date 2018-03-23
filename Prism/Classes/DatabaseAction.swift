@@ -168,7 +168,6 @@ public class DatabaseAction {
         
         usersReference.observeSingleEvent(of: .value, with: { (usersSnapshot) in
             if usersSnapshot.exists() {
-                print("userSnapshot exists")
                 CurrentUser.prismUser = Helper.constructPrismUserObject(userSnapshot: usersSnapshot.childSnapshot(forPath: CurrentUser.firebaseUser.uid))
                 let currentUserSnapshot: DataSnapshot = usersSnapshot.childSnapshot(forPath: CurrentUser.prismUser.getUid())
                 
@@ -263,25 +262,3 @@ class DeleteHelper {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -9,6 +9,7 @@
 import Foundation
 
 public class PrismPost: Equatable {
+    
     public static func ==(lhs: PrismPost, rhs: PrismPost) -> Bool {
         return lhs.getPostId() == rhs.getPostId()
     }

@@ -22,9 +22,10 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         return cv
     }()
 
-    var imageSizes: [CGSize] = []
+    var imageSizes: [String: CGSize] = [String: CGSize]()
     var loadingSpinner = MDCActivityIndicator()
     var imagesLoaded: Int = 0
+    var pullingData: Bool = false
 
     private var lastCollectionViewContentOffset: CGFloat = 0
     var viewController = MainViewController()
@@ -61,13 +62,11 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
                 print(self.prismPostArrayList.count)
                 self.populateUserDetailsForAllPosts() { (result) in
                     if result {
-//                        self.loadProfilePictures()
                         self.loadImages()
                     } else {
                         print("error loading data")
                     }
                 }
-//                self.collectionView.reloadData()
             } else {
                 print("error loading data")
             }
@@ -78,13 +77,9 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         let imageManager = SDWebImageManager()
         let myGroup = DispatchGroup()
         
-//        myGroup.enter()
-//        loadProfilePictures() { (result) in
-//            myGroup.leave()
-//        }
-        
         for i in 0...prismPostArrayList.count-1 {
-            if !prismPostArrayList[i].getPrismUser().getProfilePicture().isDefault {
+            // Load the profile picture
+            if shouldLoadProfilePicture(prismPostArrayList[i]) {
                 myGroup.enter()
                 let profilePictureUrl = URL(string: prismPostArrayList[i].getPrismUser().getProfilePicture().profilePicUriString)
                 imageManager.loadImage(with: profilePictureUrl, options: .continueInBackground, progress: nil, completed: { (image, data, error, cacheType, finished, url) in
@@ -99,70 +94,50 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
                 })
             }
             // loads post image
-            let postImageUrl = URL(string: prismPostArrayList[i].getImage())
-            myGroup.enter()
-            imageManager.loadImage(with: postImageUrl, options: .continueInBackground, progress: nil, completed: { (image, data, error, cacheType, finished, url) in
-                if error != nil {
-                    print(error!, "error")
-                    return
-                }
-                self.imageSizes.append((UIImage(data: data!)?.size)!)
-                self.cacheImage(key: self.prismPostArrayList[i].getPostId(), data: data!) { (result) in
-//                    print("finished pulling and caching post picture \(i)")
-                    myGroup.leave()
-                }
-                
-            })
-        }
-        
-        myGroup.notify(queue: .main) {
-            print("finished all requests")
-            UIView.animate(withDuration: 0.2, animations: {
-                self.collectionView.reloadData()
-                self.loadingSpinner.stopAnimating()
-            })
-
-        }
-    }
-    
-    private func loadProfilePictures(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
-        let imageManager = SDWebImageManager()
-        let myGroup = DispatchGroup()
-        for i in 0...prismPostArrayList.count-1 {
-            if !prismPostArrayList[i].getPrismUser().getProfilePicture().isDefault {
+            if !SDWebImageHelper.isImageInCache(key: self.prismPostArrayList[i].getPostId()) {
+//                print("loading image \(self.prismPostArrayList[i].getPostId())")
                 myGroup.enter()
-                let profilePictureUrl = URL(string: prismPostArrayList[i].getPrismUser().getProfilePicture().profilePicUriString)
-                imageManager.loadImage(with: profilePictureUrl, options: .continueInBackground, progress: nil, completed: { (image, data, error, cacheType, finished, url) in
+                let postImageUrl = URL(string: prismPostArrayList[i].getImage())
+                imageManager.loadImage(with: postImageUrl, options: .continueInBackground, progress: nil, completed: { (image, data, error, cacheType, finished, url) in
                     if error != nil {
                         print(error!, "error")
                         return
                     }
-                    self.cacheImage(key: self.prismPostArrayList[i].getUid(), data: data!) { (result) in
-//                        print("finished pulling and caching profile picture \(i)")
+                    self.imageSizes[self.prismPostArrayList[i].getPostId()] = (UIImage(data: data!)?.size)!
+                    self.cacheImage(key: self.prismPostArrayList[i].getPostId(), data: data!) { (result) in
+                        //                    print("finished pulling and caching post picture \(i)")
                         myGroup.leave()
                     }
                 })
             }
         }
-        
         myGroup.notify(queue: .main) {
-            completionHandler(true)
+            print("finished all requests")
+            self.pullingData = false
+            UIView.animate(withDuration: 0.2, animations: {
+                self.collectionView.reloadData()
+                self.loadingSpinner.stopAnimating()
+            })
         }
+    }
+    
+    /**
+     *
+     */
+    private func shouldLoadProfilePicture(_ prismPost: PrismPost) -> Bool {
+        return !prismPost.getPrismUser().getProfilePicture().isDefault && !SDWebImageHelper.isImageInCache(key: prismPost.getPrismUser().getProfilePicture().profilePicUriString)
     }
     
     private func cacheImage(key: String, data: Data, completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         let imageCache = SDImageCache()
-        imageCache.store(UIImage(data: data), forKey: key, completion: {
+        imageCache.store(UIImage(data: data), forKey: key, toDisk: true, completion: {
             completionHandler(true)
-//            print("image cached")
         })
     }
     
     private func removeImageFromCache(key: String) {
         let imageCache = SDImageCache()
-        imageCache.removeImage(forKey: key, withCompletion: {
-//            print("Image removed from cache")
-        })
+        imageCache.removeImage(forKey: key, fromDisk: true, withCompletion: nil)
     }
 
     private func setupView() {
@@ -175,8 +150,6 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         collectionView.register(PrismPostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         
         loadingSpinner = MDCActivityIndicator()
-        //        loadingSpinner.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
-//        loadingSpinner.center = self.center
         loadingSpinner.indicatorMode = .indeterminate
         loadingSpinner.radius = 20
         loadingSpinner.strokeWidth = 4
@@ -194,6 +167,24 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // pull more posts if avaliable
+        let scrollViewOffsetValue: CGFloat = (scrollView.contentSize.height - scrollView.frame.size.height) * 0.95
+        if (scrollView.contentOffset.y >= scrollViewOffsetValue) && prismPostArrayList.count > 0 && !pullingData {
+            print("reached bottom of collectionView")
+            pullingData = true
+            fetchMorePosts() { (result) in
+                if result {
+                    self.populateUserDetailsForAllPosts() { (result) in
+                        if result {
+                            self.loadImages()
+                        } else {
+                            print("error loading data")
+                        }
+                    }
+                }
+            }
+        }
+        
         if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
             // scrolled up
             viewController.toggleNewPostButton(hide: false)
@@ -237,7 +228,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     func getCellSize(indexPath: IndexPath) -> CGSize {
         let maxWidthInPixels: CGFloat = Constraints.screenWidth() * 0.90 * UIScreen.main.scale
         let maxHeightInPixels: CGFloat = Constraints.screenHeight() * 0.6 * UIScreen.main.scale
-        let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[indexPath.item],
+        let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[prismPostArrayList[indexPath.item].getPostId()]!,
                                            insideRect: CGRect(origin: CGPoint.zero, size: CGSize(width: maxWidthInPixels, height: maxHeightInPixels)))
         let imageHeightInPoints = imageViewMaxFrame.height / UIScreen.main.scale
         let height: CGFloat = 16 + 48 + 8 + imageHeightInPoints + 8 + 28 + 16 + 1
@@ -281,21 +272,18 @@ extension PrismPostCollectionView {
         print("Inside refreshData")
         prismPostArrayList.removeAll()
         let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
-        query.observeSingleEvent(of: .value, with: {(snapshot) in
+        query.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for postSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
                     let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot)
                     self.prismPostArrayList.append(prismPost)
                 }
                 completionHandler(true)
-            }
-            else{
+            } else {
                 print("No More Posts available")
                 completionHandler(false)
             }
         })
-        
-        
     }
     
     /**
@@ -315,15 +303,14 @@ extension PrismPostCollectionView {
                     post.setPrismUser(prismUser: prismUser)
                 }
                 completionHandler(true)
-            }
-            else{
+            } else {
                 print("no data")
                 completionHandler(false)
             }
         })
     }
     
-    fileprivate func fetchMorePosts() {
+    fileprivate func fetchMorePosts(completionHandler: @escaping ((_ exit: Bool) -> Void)) {
         print("Inside fetchMorePosts")
         let lastPostTimestamp = prismPostArrayList.last?.getTimestamp()
         let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryStarting(atValue: lastPostTimestamp! + 1).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
@@ -333,9 +320,11 @@ extension PrismPostCollectionView {
                     let prismPost = Helper.constructPrismPostObject(postSnapshot: postSnapshot as! DataSnapshot)
                     self.prismPostArrayList.append(prismPost)
                 }
+                completionHandler(true)
 //                self.populateUserDetailsForAllPosts()
             }else{
                 print("no data")
+                completionHandler(false)
             }
         })
     }
