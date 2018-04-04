@@ -43,9 +43,9 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var boldFont: UIFont = RobotoFont.bold(with: 17)
     var mediumFont: UIFont = RobotoFont.light(with: 15)
     var thinFont: UIFont = RobotoFont.thin(with: 12)
-    let imageMaxWidth: CGFloat = Constraints.screenWidth() * 0.9
-    let imageMaxHeight: CGFloat = Constraints.screenHeight() * 0.6
-    let postImageEdgeOffset: CGFloat = Constraints.screenWidth() * 0.05
+    let imageMaxWidth: CGFloat = Constraints.screenWidth() * 0.925
+    let imageMaxHeight: CGFloat = Constraints.screenHeight() * 0.75
+    let postImageEdgeOffset: CGFloat = Constraints.screenWidth() * 0.0375
 
 
     override init(frame: CGRect) {

@@ -34,6 +34,7 @@
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
 		192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E406B8694AA1A663C7AFC /* DatabaseAction.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
+		192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40A7ADA16934A87DB9F3 /* ImageManager.swift */; };
 		4F23015A2053A88200B5F794 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2301592053A88200B5F794 /* DataExtensions.swift */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
 		4F9C95812050C5A800C08C9E /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C95802050C5A800C08C9E /* Key.swift */; };
@@ -98,6 +99,7 @@
 		10E3F55A204659EE00C82F3F /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfilePicture.swift; sourceTree = "<group>"; };
 		192E406B8694AA1A663C7AFC /* DatabaseAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseAction.swift; sourceTree = "<group>"; };
+		192E40A7ADA16934A87DB9F3 /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +236,7 @@
 				1091E1FF203E838500C282BA /* Info.plist */,
 				4F4A1808204381C6002DAA54 /* MyUser.swift */,
 				192E4711142E676DC6844EDA /* GoogleService-Info.plist */,
+				192E4931D6F045281CD1E3A3 /* ImageCaching */,
 			);
 			path = Prism;
 			sourceTree = "<group>";
@@ -273,6 +276,14 @@
 				10ADF6BC2050D33500060A19 /* NavigationBar.swift */,
 			);
 			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		192E4931D6F045281CD1E3A3 /* ImageCaching */ = {
+			isa = PBXGroup;
+			children = (
+				192E40A7ADA16934A87DB9F3 /* ImageManager.swift */,
+			);
+			path = ImageCaching;
 			sourceTree = "<group>";
 		};
 		4F9C957F2050C59000C08C9E /* Constants */ = {
@@ -383,7 +394,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Satish Boggarapu";
 				TargetAttributes = {
 					1091E1EF203E838500C282BA = {
@@ -660,6 +671,7 @@
 				4F9C958A2050D6F400C08C9E /* PrismPost.swift in Sources */,
 				4F9C958B2050D6F400C08C9E /* PrismUser.swift in Sources */,
 				192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */,
+				192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -728,6 +740,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -735,6 +748,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -785,6 +799,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -792,6 +807,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
