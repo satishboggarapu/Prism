@@ -98,23 +98,9 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // pull more posts if avaliable
-        let scrollViewOffsetValue: CGFloat = (scrollView.contentSize.height - scrollView.frame.size.height) * 0.80
-        if (scrollView.contentOffset.y >= scrollViewOffsetValue) && prismPostArrayList.count > 0 && !pullingData {
-//            print("reached bottom of collectionView")
-//            pullingData = true
-//            fetchMorePosts() { (result) in
-//                if result {
-//                    self.populateUserDetailsForAllPosts() { (result) in
-//                        if result {
-//                            self.loadImages()
-//                        } else {
-//                            print("error loading data")
-//                        }
-//                    }
-//                }
-//            }
-        }
+//        // pull more posts if available
+//        let scrollViewOffsetValue: CGFloat = (scrollView.contentSize.height - scrollView.frame.size.height) * 0.80
+//        if (scrollView.contentOffset.y >= scrollViewOffsetValue) && prismPostArrayList.count > 0 && !pullingData { }
         
         if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
             // scrolled up
@@ -146,52 +132,37 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.toggleShareButton()
         cell.viewController = viewController
 
-        /*
-        if indexPath.item == prismPostArrayList.count - 4 && !pullingData {
+        
+        if indexPath.item == prismPostArrayList.count - 1 && !pullingData {
             pullingData = true
             fetchMorePosts() { (result) in
                 if result {
                     self.populateUserDetailsForAllPosts() { (result) in
                         if result {
-                            self.loadImages()
+                            let count = self.prismPostArrayList.count - indexPath.item
+                            var indexPaths = [IndexPath]()
+                            for i in stride(from: 1, to: count, by: 1) {
+                                indexPaths.append(IndexPath(item: indexPath.item + i, section: 0))
+                            }
+                            self.collectionView.performBatchUpdates({ () -> Void in
+                                self.collectionView.insertItems(at: indexPaths)
+
+                            }, completion: nil)
                         } else {
-                            print("error loading data")
+                            // TODO: Error
                         }
+
                     }
+                } else {
+                    // TODO: Error
                 }
             }
         }
-        */
 
         return cell
     }
 
-    /*
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionElementKindSectionFooter:
-            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath as IndexPath)
-//            footerView.backgroundColor = Color.white
-            footerView.layer.shadowColor = UIColor(hex: 0xDEDEDE).cgColor
-            footerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-            footerView.layer.shadowOpacity = 0.4
-            footerView.layer.shadowRadius = 1
-            footerView.layer.cornerRadius = 1.5
-
-            return footerView
-        default:
-            assert(false, "Unexpected element kind")
-        }
-        return UICollectionReusableView()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 35)
-    }
-*/
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: Constraints.screenWidth(), height: Constraints.screenHeight()*0.60)
         return getCellSize(indexPath: indexPath)
     }
 
@@ -201,7 +172,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 
     func getCellSize(indexPath: IndexPath) -> CGSize {
         let postID: String = prismPostArrayList[indexPath.item].getPostId()
-        var imageHeightInPoints: CGFloat = 100
+        var imageHeightInPoints: CGFloat = 150
         if imageSizes.keys.contains(postID) {
             let maxWidthInPixels: CGFloat = Constraints.screenWidth() * 0.925 * UIScreen.main.scale
             let maxHeightInPixels: CGFloat = Constraints.screenHeight() * 0.65 * UIScreen.main.scale
@@ -313,3 +284,29 @@ extension PrismPostCollectionView {
         })
     }
 }
+
+
+// CollectionView Footer
+/*
+  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+      switch kind {
+      case UICollectionElementKindSectionFooter:
+          let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath as IndexPath)
+//            footerView.backgroundColor = Color.white
+          footerView.layer.shadowColor = UIColor(hex: 0xDEDEDE).cgColor
+          footerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+          footerView.layer.shadowOpacity = 0.4
+          footerView.layer.shadowRadius = 1
+          footerView.layer.cornerRadius = 1.5
+
+          return footerView
+      default:
+          assert(false, "Unexpected element kind")
+      }
+      return UICollectionReusableView()
+  }
+
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+      return CGSize(width: collectionView.frame.width, height: 35)
+  }
+*/

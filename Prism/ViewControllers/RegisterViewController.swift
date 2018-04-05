@@ -332,6 +332,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                     // TODO: UI for general error
                     return
                 }
+                // TODO: Set FirebaseAuth.displayName
                 let uid = user!.uid
                 let email = user!.email
                 

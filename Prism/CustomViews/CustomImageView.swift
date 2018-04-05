@@ -39,12 +39,13 @@ class CustomImageView: UIImageView {
 
         if let imageFromCache = imageCache.object(forKey: postID as NSString) {
             self.image = imageFromCache
+            self.delegate?.imageLoaded(postID: postID, imageSize: imageFromCache.size)
             activityIndicator.stopAnimating()
             completionHandler(true, imageFromCache)
             return
         }
 
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, respones, error) in
+        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
             if error != nil {
                 print(error)
                 self.activityIndicator.stopAnimating()
@@ -87,7 +88,7 @@ class CustomImageView: UIImageView {
             return
         }
         
-        URLSession.shared.dataTask(with: url!, completionHandler: { (data, respones, error) in
+        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
             if error != nil {
                 print(error)
                 self.activityIndicator.stopAnimating()
