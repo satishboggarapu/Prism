@@ -186,7 +186,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
     
     func imageLoaded(postID: String, imageSize: CGSize) {
-        print("Image loaded for url \(postID)")
+//        print("Image loaded for url \(postID)")
         imageSizes[postID] = imageSize
         collectionView.collectionViewLayout.invalidateLayout()
     }
