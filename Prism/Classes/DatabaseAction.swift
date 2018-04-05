@@ -170,7 +170,7 @@ public class DatabaseAction {
             if usersSnapshot.exists() {
                 CurrentUser.prismUser = Helper.constructPrismUserObject(userSnapshot: usersSnapshot.childSnapshot(forPath: CurrentUser.firebaseUser.uid))
                 let currentUserSnapshot: DataSnapshot = usersSnapshot.childSnapshot(forPath: CurrentUser.prismUser.getUid())
-                
+
                 if currentUserSnapshot.hasChild(Key.DB_REF_USER_LIKES) {
                     likedPostMap.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_LIKES).value as! [String : Int64])
                 }
@@ -181,7 +181,8 @@ public class DatabaseAction {
                     uploadedPostsMap.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_UPLOADS).value as! [String: Int64])
                 }
                 if currentUserSnapshot.hasChild(Key.DB_REF_USER_FOLLOWERS) {
-                    CurrentUser.followers.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWERS).value as! [String: String])
+                    // had a problem with casting json to [String: String], so I changed it to [String: Any]
+                    CurrentUser.followers.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWERS).value as! [String: Int64])
                 }
                 if currentUserSnapshot.hasChild(Key.DB_REF_USER_FOLLOWINGS) {
                     CurrentUser.followings.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWINGS).value as! [String: String])
