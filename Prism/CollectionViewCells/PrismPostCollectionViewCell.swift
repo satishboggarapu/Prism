@@ -9,17 +9,16 @@
 import UIKit
 import Material
 import AVFoundation
-import SDWebImage
 
 class PrismPostCollectionViewCell: UICollectionViewCell {
 
     // MARK: UIElements
     var profileView: UIView!
     var bottomView: UIView!
-    var profileImage: UIImageView!
+    var profileImage: CustomImageView!
     var userName: UILabel!
     var postDate: UILabel!
-    var postImage: UIImageView!
+    var postImage: CustomImageView!
     var likes: UILabel!
     var likeButton: UIButton!
     var shareButton: UIButton!
@@ -44,7 +43,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var mediumFont: UIFont = RobotoFont.light(with: 15)
     var thinFont: UIFont = RobotoFont.thin(with: 12)
     let imageMaxWidth: CGFloat = Constraints.screenWidth() * 0.925
-    let imageMaxHeight: CGFloat = Constraints.screenHeight() * 0.75
+    let imageMaxHeight: CGFloat = Constraints.screenHeight() * 0.65
     let postImageEdgeOffset: CGFloat = Constraints.screenWidth() * 0.0375
 
 
@@ -154,7 +153,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     private func initializeProfilePicture() {
-        profileImage = UIImageView()
+        profileImage = CustomImageView()
 //        profilePicture.image = Icons.SPLASH_SCREEN_ICON
         profileImage.contentMode = .scaleAspectFit
         profileImage.layer.cornerRadius = profilePictureSize/2
@@ -179,7 +178,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     private func initializePostImage() {
-        postImage = UIImageView()
+        postImage = CustomImageView()
 //        postImage.image = UIImage(named: "image1.jpeg")
         postImage.contentMode = .scaleAspectFit
         postImage.clipsToBounds = true
@@ -267,33 +266,24 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     // MARK: Setter Methods
 
     public func loadProfileImage() {
-        let imageCache = SDImageCache()
         let profilePicture = prismPost.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
         if profilePicture != nil {
             profileImage.image = profilePicture
         } else {
-            imageCache.queryCacheOperation(forKey: prismPost.getUid(), done: { (image, data, cacheType) in
-                if image == nil {
-                    print("profile image not found")
-                    return
-                }
-                self.profileImage.image = image
-                self.addBorderToProfilePic()
-            })
+            let imageUrl = prismPost.getPrismUser().getProfilePicture().profilePicUriString
+            profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
+            self.addBorderToProfilePic()
         }
     }
 
     public func loadPostImage() {
+        let imageUrl = prismPost.getImage()
         let postId = prismPost.getPostId()
-        let imageCache = SDImageCache()
-        imageCache.queryCacheOperation(forKey: postId, done: { (image, data, cacheType) in
-            if image == nil {
-                print("post image not found for postId=\(postId)")
-                return
+        postImage.loadImageUsingUrlString(imageUrl, postID: postId) { (result, image) in
+            if result {
+                self.backgroundImageView.image = image
             }
-            self.postImage.image = image
-            self.backgroundImageView.image = image
-        })
+        }
     }
 
     public func setUsernameText() {

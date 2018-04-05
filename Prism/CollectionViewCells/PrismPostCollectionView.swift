@@ -8,9 +8,9 @@ import AVFoundation
 import Material
 import MaterialComponents
 import Firebase
-import SDWebImage
 
-class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate {
+    
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -22,7 +22,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 //        cv.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "footer")
         return cv
     }()
-//    var tableView: UITableView!
+
     var imageSizes: [String: CGSize] = [String: CGSize]()
     var loadingSpinner = MDCActivityIndicator()
     var imagesLoaded: Int = 0
@@ -34,7 +34,8 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 
     // Database shit
     public var prismPostArrayList: [PrismPost]! = [PrismPost]()
-    
+
+    var validate = false
 
     /*
      * Globals
@@ -57,17 +58,14 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         userReference = Default.USERS_REFERENCE.child((auth.currentUser?.uid)!)
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
-        
+
         loadingSpinner.startAnimating()
         refreshData() { (result) in
             if result {
                 print(self.prismPostArrayList.count)
                 self.populateUserDetailsForAllPosts() { (result) in
-                    if result {
-                        self.loadImages()
-                    } else {
-                        print("error loading data")
-                    }
+                    self.loadingSpinner.stopAnimating()
+                    self.collectionView.reloadData()
                 }
             } else {
                 print("error loading data")
@@ -75,88 +73,12 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         }
     }
 
-    private func loadImages() {
-        let imageManager = SDWebImageManager()
-        let myGroup = DispatchGroup()
-        
-        for i in 0...prismPostArrayList.count-1 {
-            // Load the profile picture
-            if shouldLoadProfilePicture(prismPostArrayList[i]) {
-                myGroup.enter()
-                let profilePictureUrl = URL(string: prismPostArrayList[i].getPrismUser().getProfilePicture().profilePicUriString)
-                imageManager.loadImage(with: profilePictureUrl, options: .continueInBackground, progress: nil, completed: { (image, data, error, cacheType, finished, url) in
-                    if error != nil {
-                        print(error!, "error")
-                        return
-                    }
-//                    self.cacheImage(key: self.prismPostArrayList[i].getUid(), data: data!) { (result) in
-//                        print("finished pulling and caching profile picture \(i)")
-                        myGroup.leave()
-//                    }
-                })
-            }
-            // loads post image
-            if !SDWebImageHelper.isImageInCache(key: self.prismPostArrayList[i].getPostId()) {
-//                print("loading image \(self.prismPostArrayList[i].getPostId())")
-                myGroup.enter()
-                let postImageUrl = URL(string: prismPostArrayList[i].getImage())
-                imageManager.loadImage(with: postImageUrl, options: .continueInBackground, progress: nil, completed: { (image, data, error, cacheType, finished, url) in
-                    if error != nil {
-                        print(error!, "error")
-                        return
-                    }
-                    self.imageSizes[self.prismPostArrayList[i].getPostId()] = (UIImage(data: data!)?.size)!
-                    self.images[self.prismPostArrayList[i].getPostId()] = UIImage(data: data!)
-//                    self.cacheImage(key: self.prismPostArrayList[i].getPostId(), data: data!) { (result) in
-                        //                    print("finished pulling and caching post picture \(i)")
-                        myGroup.leave()
-//                    }
-                })
-            }
-        }
-        myGroup.notify(queue: .main) {
-            print("finished all requests")
-            self.pullingData = false
-            UIView.animate(withDuration: 0.2, animations: {
-//                self.collectionView.reloadData()
-                self.loadingSpinner.stopAnimating()
-            })
-        }
-    }
-    
-    /**
-     *
-     */
-    private func shouldLoadProfilePicture(_ prismPost: PrismPost) -> Bool {
-        return !prismPost.getPrismUser().getProfilePicture().isDefault && !SDWebImageHelper.isImageInCache(key: prismPost.getPrismUser().getProfilePicture().profilePicUriString)
-    }
-    
-    private func cacheImage(key: String, data: Data, completionHandler: @escaping ((_ exist : Bool) -> Void)) {
-        let imageCache = SDImageCache()
-        imageCache.store(UIImage(data: data), forKey: key, toDisk: true, completion: {
-            completionHandler(true)
-        })
-    }
-    
-    private func removeImageFromCache(key: String) {
-        let imageCache = SDImageCache()
-        imageCache.removeImage(forKey: key, fromDisk: true, withCompletion: nil)
-    }
-
     private func setupView() {
         backgroundColor = .collectionViewBackground
-
-//        tableView = UITableView()
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//        tableView.rowHeight = UITableViewAutomaticDimension
-//        tableView.register(PrismPostCollectionViewCell.self, forCellReuseIdentifier: "cell")
-
+        collectionView.register(PrismPostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         addSubview(collectionView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
-
-        collectionView.register(PrismPostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         
         loadingSpinner = MDCActivityIndicator()
         loadingSpinner.indicatorMode = .indeterminate
@@ -179,7 +101,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         // pull more posts if avaliable
         let scrollViewOffsetValue: CGFloat = (scrollView.contentSize.height - scrollView.frame.size.height) * 0.80
         if (scrollView.contentOffset.y >= scrollViewOffsetValue) && prismPostArrayList.count > 0 && !pullingData {
-            print("reached bottom of collectionView")
+//            print("reached bottom of collectionView")
 //            pullingData = true
 //            fetchMorePosts() { (result) in
 //                if result {
@@ -213,10 +135,9 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         let prismPost = prismPostArrayList[indexPath.item]
 
         cell.prismPost = prismPost
-        cell.postImage.image = images[prismPost.getPostId()]
-        cell.backgroundImageView.image = images[prismPost.getPostId()]
-//        cell.loadPostImage()
-//        cell.loadProfileImage()
+        cell.postImage.delegate = self
+        cell.loadPostImage()
+        cell.loadProfileImage()
         cell.setUsernameText()
         cell.setPostDateText()
         cell.setLikesText()
@@ -224,48 +145,53 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.toggleLikeButton()
         cell.toggleShareButton()
         cell.viewController = viewController
-        
-//        if indexPath.item == prismPostArrayList.count - 4 && !pullingData {
-//            pullingData = true
-//            fetchMorePosts() { (result) in
-//                if result {
-//                    self.populateUserDetailsForAllPosts() { (result) in
-//                        if result {
-//                            self.loadImages()
-//                        } else {
-//                            print("error loading data")
-//                        }
-//                    }
-//                }
-//            }
-//        }
+
+        /*
+        if indexPath.item == prismPostArrayList.count - 4 && !pullingData {
+            pullingData = true
+            fetchMorePosts() { (result) in
+                if result {
+                    self.populateUserDetailsForAllPosts() { (result) in
+                        if result {
+                            self.loadImages()
+                        } else {
+                            print("error loading data")
+                        }
+                    }
+                }
+            }
+        }
+        */
 
         return cell
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        switch kind {
-//        case UICollectionElementKindSectionFooter:
-//            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath as IndexPath)
-////            footerView.backgroundColor = Color.white
-//            footerView.layer.shadowColor = UIColor(hex: 0xDEDEDE).cgColor
-//            footerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-//            footerView.layer.shadowOpacity = 0.4
-//            footerView.layer.shadowRadius = 1
-//            footerView.layer.cornerRadius = 1.5
-//
-//            return footerView
-//        default:
-//            assert(false, "Unexpected element kind")
-//        }
-//        return UICollectionReusableView()
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-//        return CGSize(width: collectionView.frame.width, height: 35)
-//    }
+
+    /*
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionElementKindSectionFooter:
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath as IndexPath)
+//            footerView.backgroundColor = Color.white
+            footerView.layer.shadowColor = UIColor(hex: 0xDEDEDE).cgColor
+            footerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+            footerView.layer.shadowOpacity = 0.4
+            footerView.layer.shadowRadius = 1
+            footerView.layer.cornerRadius = 1.5
+
+            return footerView
+        default:
+            assert(false, "Unexpected element kind")
+        }
+        return UICollectionReusableView()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 35)
+    }
+*/
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: Constraints.screenWidth(), height: Constraints.screenHeight()*0.60)
         return getCellSize(indexPath: indexPath)
     }
 
@@ -274,14 +200,24 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func getCellSize(indexPath: IndexPath) -> CGSize {
-        let maxWidthInPixels: CGFloat = Constraints.screenWidth() * 0.925 * UIScreen.main.scale
-        let maxHeightInPixels: CGFloat = Constraints.screenHeight() * 0.75 * UIScreen.main.scale
-        let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[prismPostArrayList[indexPath.item].getPostId()]!,
-                                           insideRect: CGRect(origin: CGPoint.zero, size: CGSize(width: maxWidthInPixels, height: maxHeightInPixels)))
-        let imageHeightInPoints = imageViewMaxFrame.height / UIScreen.main.scale
+        let postID: String = prismPostArrayList[indexPath.item].getPostId()
+        var imageHeightInPoints: CGFloat = 100
+        if imageSizes.keys.contains(postID) {
+            let maxWidthInPixels: CGFloat = Constraints.screenWidth() * 0.925 * UIScreen.main.scale
+            let maxHeightInPixels: CGFloat = Constraints.screenHeight() * 0.65 * UIScreen.main.scale
+            let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[postID]!,
+                    insideRect: CGRect(origin: CGPoint.zero, size: CGSize(width: maxWidthInPixels, height: maxHeightInPixels)))
+            imageHeightInPoints = imageViewMaxFrame.height / UIScreen.main.scale
+        }
         let height: CGFloat = 16 + 48 + 8 + imageHeightInPoints + 8 + 28 + 16 + 1
         let width: CGFloat = Constraints.screenWidth()
         return CGSize(width: width, height: height)
+    }
+    
+    func imageLoaded(postID: String, imageSize: CGSize) {
+        print("Image loaded for url \(postID)")
+        imageSizes[postID] = imageSize
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 
 
