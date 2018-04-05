@@ -39,7 +39,7 @@ public class CurrentUser {
      * Key: String username
      * Value: String uid
      */
-    public static var followers: [String : String]!
+    public static var followers: [String : Int64]!
     public static var followings: [String : String]!
 
     init() {
@@ -187,7 +187,7 @@ public class CurrentUser {
         reposted_posts_map = [String: Int64]()
         uploaded_posts_map = [String: Int64]()
         
-        followers = [String : String]()
+        followers = [String : Int64]()
         followings = [String : String]()
         
         DatabaseAction.fetchUserProfile()

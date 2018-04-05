@@ -181,7 +181,7 @@ public class DatabaseAction {
                     uploadedPostsMap.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_UPLOADS).value as! [String: Int64])
                 }
                 if currentUserSnapshot.hasChild(Key.DB_REF_USER_FOLLOWERS) {
-                    CurrentUser.followers.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWERS).value as! [String: String])
+                    CurrentUser.followers.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWERS).value as! [String: Int64])
                 }
                 if currentUserSnapshot.hasChild(Key.DB_REF_USER_FOLLOWINGS) {
                     CurrentUser.followings.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWINGS).value as! [String: String])
