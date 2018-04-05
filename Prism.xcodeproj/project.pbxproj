@@ -105,7 +105,7 @@
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F2301592053A88200B5F794 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		4F2301592053A88200B5F794 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
 		4F9C95802050C5A800C08C9E /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		4F9C95822050CBC700C08C9E /* Default.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Default.swift; sourceTree = "<group>"; };
@@ -193,7 +193,7 @@
 				10ADF6C02050D36000060A19 /* UIViewExtensions.swift */,
 				10863A4D203FD57800FA851B /* UIColorExtensions.swift */,
 				192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */,
-				4F2301592053A88200B5F794 /* DataExtensions.swift */,
+				4F2301592053A88200B5F794 /* DateExtensions.swift */,
 				103399152061DFE000E105EC /* DictionaryExtensions.swift */,
 			);
 			path = Extensions;
@@ -662,7 +662,7 @@
 				10ADF6C22050D36000060A19 /* UIViewExtensions.swift in Sources */,
 				1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */,
 				10E3F557204659DF00C82F3F /* RegisterViewController.swift in Sources */,
-				4F23015A2053A88200B5F794 /* DataExtensions.swift in Sources */,
+				4F23015A2053A88200B5F794 /* DateExtensions.swift in Sources */,
 				1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */,
 				4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */,
 				10ADF6B92050D30B00060A19 /* MenuCell.swift in Sources */,
