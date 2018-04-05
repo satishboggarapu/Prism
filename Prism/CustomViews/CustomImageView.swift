@@ -41,6 +41,7 @@ class CustomImageView: UIImageView {
             self.image = imageFromCache
             self.delegate?.imageLoaded(postID: postID, imageSize: imageFromCache.size)
             activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
             completionHandler(true, imageFromCache)
             return
         }
@@ -49,6 +50,7 @@ class CustomImageView: UIImageView {
             if error != nil {
                 print(error)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
                 completionHandler(false, UIImage())
                 return
             }
@@ -61,6 +63,7 @@ class CustomImageView: UIImageView {
                 }
                 imageCache.setObject(imageToCache!, forKey: postID as NSString)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
             })
         }).resume()
     }
@@ -85,6 +88,7 @@ class CustomImageView: UIImageView {
         if let imageFromCache = imageCache.object(forKey: postID as NSString) {
             self.image = imageFromCache
             activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
             return
         }
         
@@ -92,6 +96,7 @@ class CustomImageView: UIImageView {
             if error != nil {
                 print(error)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
                 return
             }
             DispatchQueue.main.async(execute: {
@@ -101,6 +106,7 @@ class CustomImageView: UIImageView {
                 }
                 imageCache.setObject(imageToCache!, forKey: postID as NSString)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
             })
         }).resume()
     }
