@@ -168,18 +168,16 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func getCellSize(indexPath: IndexPath) -> CGSize {
-        // TODO: Clean this up
-        // TODO: Create enum for the UIElements size
-        let postID: String = prismPostArrayList[indexPath.item].getPostId()
+        let postId: String = prismPostArrayList[indexPath.item].getPostId()
         var imageHeightInPoints: CGFloat = 150
-        if imageSizes.keys.contains(postID) {
-            let maxWidthInPixels: CGFloat = Constraints.screenWidth() * 0.925 * UIScreen.main.scale
-            let maxHeightInPixels: CGFloat = Constraints.screenHeight() * 0.65 * UIScreen.main.scale
-            let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[postID]!,
+        if imageSizes.keys.contains(postId) {
+            let maxWidthInPixels: CGFloat = PrismPostConstraints.IMAGE_MAX_WIDTH * UIScreen.main.scale
+            let maxHeightInPixels: CGFloat = PrismPostConstraints.IMAGE_MAX_HEIGHT * UIScreen.main.scale
+            let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[postId]!,
                     insideRect: CGRect(origin: CGPoint.zero, size: CGSize(width: maxWidthInPixels, height: maxHeightInPixels)))
             imageHeightInPoints = imageViewMaxFrame.height / UIScreen.main.scale
         }
-        let height: CGFloat = 16 + 48 + 8 + imageHeightInPoints + 8 + 28 + 16 + 1
+        let height: CGFloat = PrismPostConstraints.CELL_HEIGHT_WITHOUT_POST_IMAGE + imageHeightInPoints
         let width: CGFloat = Constraints.screenWidth()
         return CGSize(width: width, height: height)
     }

@@ -33,6 +33,7 @@
 		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
 		10FCD82A205F03E8001E0C1F /* DefaultProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */; };
 		192E41801618B460A2483C95 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4678BF58B239D159B832 /* CustomImageView.swift */; };
+		192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
 		192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E406B8694AA1A663C7AFC /* DatabaseAction.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
@@ -104,6 +105,7 @@
 		192E40A7ADA16934A87DB9F3 /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		192E4678BF58B239D159B832 /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostConstraints.swift; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				10E3F559204659EE00C82F3F /* Icons.swift */,
 				10E3F558204659EE00C82F3F /* ScreenType.swift */,
 				106EAD9E2062E97C008E41B0 /* SDWebImageHelper.swift */,
+				192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 				192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */,
 				192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */,
 				192E41801618B460A2483C95 /* CustomImageView.swift in Sources */,
+				192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
