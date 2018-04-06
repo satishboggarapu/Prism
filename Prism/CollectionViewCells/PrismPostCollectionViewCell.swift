@@ -346,6 +346,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         // TODO: Scale down the heartImageView so that is looks good for panorama pictures also
         animateLikeButton()
         animateHeartImageView(isSelected: !sender.isSelected)
+        // TODO: Attach backend
     }
 
     @objc func shareButtonAction(_ sender: UIButton) {
@@ -354,10 +355,8 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     @objc func moreButtonAction(_ sender: UIButton) {
         print("Tapped on More Button")
-//        sender.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.35, initialSpringVelocity: 6.0, options: .allowUserInteraction, animations: { [weak self] in
-//            sender.transform = .identity
-//        }, completion: nil)
+        animateMoreButton()
+        // TODO: Popup view
     }
 
     // MARK: Animation Functions
@@ -450,6 +449,44 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
         heartImageView.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
         CATransaction.commit()
+    }
+
+    private func animateMoreButton() {
+        let scaleAnimation1: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation1.fromValue = 1.0
+        scaleAnimation1.toValue = 0.25
+        scaleAnimation1.beginTime = CACurrentMediaTime()
+        scaleAnimation1.duration = 0.15
+        scaleAnimation1.isRemovedOnCompletion = true
+        scaleAnimation1.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        moreButton.layer.add(scaleAnimation1, forKey: "scaleAnimation1")
+
+        let scaleAnimation2: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation2.fromValue = 0.25
+        scaleAnimation2.toValue = 1.25
+        scaleAnimation2.beginTime = CACurrentMediaTime() + 0.15
+        scaleAnimation2.duration = 0.1
+        scaleAnimation2.isRemovedOnCompletion = true
+        scaleAnimation2.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        moreButton.layer.add(scaleAnimation2, forKey: "scaleAnimation2")
+
+        let scaleAnimation3: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation3.fromValue = 1.25
+        scaleAnimation3.toValue = 0.75
+        scaleAnimation3.beginTime = CACurrentMediaTime() + 0.25
+        scaleAnimation3.duration = 0.1
+        scaleAnimation3.isRemovedOnCompletion = true
+        scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        moreButton.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
+
+        let scaleAnimation4: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation4.fromValue = 0.75
+        scaleAnimation4.toValue = 1.0
+        scaleAnimation4.beginTime = CACurrentMediaTime() + 0.35
+        scaleAnimation4.duration = 0.05
+        scaleAnimation4.isRemovedOnCompletion = true
+        scaleAnimation4.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        moreButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
     }
 }
 
