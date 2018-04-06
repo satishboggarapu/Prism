@@ -7,6 +7,7 @@ import Foundation
 import UIKit
 import MaterialComponents
 
+// TODO: Clean this up
 protocol CustomImageViewDelegate: class {
     func imageLoaded(postID: String, imageSize: CGSize)
 }

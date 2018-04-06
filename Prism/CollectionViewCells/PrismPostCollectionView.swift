@@ -55,6 +55,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
                 }
             } else {
                 print("error loading data")
+                // TODO: Log Error
             }
         }
     }

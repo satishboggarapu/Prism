@@ -3,9 +3,6 @@
 // Copyright (c) 2018 Satish Boggarapu. All rights reserved.
 //
 
-// Image - max height 60%
-//       - max width 90%
-
 import UIKit
 import Material
 import AVFoundation
@@ -152,7 +149,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         // tap gesture
         let profileTapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTapGestureAction(_:)))
         profileView.addGestureRecognizer(profileTapGesture)
-
     }
 
     private func initializeProfilePicture() {
@@ -196,7 +192,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeHeartImageView() {
         heartImageView = UIImageView()
-        heartImageView.image = Icons.LIKE_FILL_36?.withRenderingMode(.alwaysTemplate)
+        heartImageView.image = Icons.LIKE_FILL_48?.withRenderingMode(.alwaysTemplate)
         heartImageView.tintColor = UIColor.white
         heartImageView.contentMode = .scaleAspectFit
         heartImageView.clipsToBounds = true
@@ -346,22 +342,10 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     @objc func likesButtonAction(_ sender: UIButton) {
         print("Tapped on Like Button")
-//        sender.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
-//        sender.isSelected = !sender.isSelected
-//        sender.tintColor = (sender.isSelected) ? UIColor.materialBlue : UIColor.white
-//        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.35, initialSpringVelocity: 6.0, options: .allowUserInteraction, animations: { [weak self] in
-//            sender.transform = .identity
-//        }, completion: nil)
-//        if let indexPath = getTappedCellIndexForButton(button: sender) {
-//            let cell = collectionView.cellForItem(at: indexPath) as! PrismPostCollectionViewCell
-//            cell.heartImageView.alpha = 0.75
-//            cell.heartImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-//            UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.35, initialSpringVelocity: 6.0, options: .allowUserInteraction, animations: { [weak self] in
-//                cell.heartImageView.transform = .identity
-//            }, completion: { (finished) in
-//                cell.heartImageView.alpha = 0
-//            })
-//        }
+        // TODO; Disable user interaction while animating so the user doesnt spam  the button and make a lot of firebase requests
+        // TODO: Scale down the heartImageView so that is looks good for panorama pictures also
+        animateLikeButton()
+        animateHeartImageView(isSelected: !sender.isSelected)
     }
 
     @objc func shareButtonAction(_ sender: UIButton) {
@@ -374,6 +358,98 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 //        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.35, initialSpringVelocity: 6.0, options: .allowUserInteraction, animations: { [weak self] in
 //            sender.transform = .identity
 //        }, completion: nil)
+    }
+
+    // MARK: Animation Functions
+
+    private func animateLikeButton() {
+
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            self.likeButton.isSelected = !self.likeButton.isSelected
+            self.likeButton.tintColor = (self.likeButton.isSelected) ? UIColor.materialBlue : UIColor.white
+        })
+
+        let scaleAnimation1: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation1.fromValue = 1
+        scaleAnimation1.toValue = 0
+        scaleAnimation1.beginTime = CACurrentMediaTime()
+        scaleAnimation1.duration = 0.1
+        scaleAnimation1.isRemovedOnCompletion = true
+        scaleAnimation1.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        likeButton.layer.add(scaleAnimation1, forKey: "scaleAnimation1")
+        CATransaction.commit()
+
+        let scaleAnimation2: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation2.fromValue = 0
+        scaleAnimation2.toValue = 1
+        scaleAnimation2.beginTime = CACurrentMediaTime() + 0.1
+        scaleAnimation2.duration = 0.1
+        scaleAnimation2.isRemovedOnCompletion = true
+        scaleAnimation2.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        self.likeButton.layer.add(scaleAnimation2, forKey: "scaleAnimation2")
+
+        let scaleAnimation3: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation3.fromValue = 1
+        scaleAnimation3.toValue = 0.75
+        scaleAnimation3.beginTime = CACurrentMediaTime() + 0.2
+        scaleAnimation3.duration = 0.1
+        scaleAnimation3.isRemovedOnCompletion = true
+        scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        self.likeButton.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
+
+        let scaleAnimation4: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation4.fromValue = 0.75
+        scaleAnimation4.toValue = 1
+        scaleAnimation4.beginTime = CACurrentMediaTime() + 0.3
+        scaleAnimation4.duration = 0.1
+        scaleAnimation4.isRemovedOnCompletion = true
+        scaleAnimation4.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        self.likeButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
+    }
+
+    private func animateHeartImageView(isSelected: Bool) {
+        if isSelected {
+            heartImageView.image = Icons.LIKE_FILL_48?.withRenderingMode(.alwaysTemplate)
+        } else {
+            heartImageView.image = Icons.LIKE_OUTLINE_48?.withRenderingMode(.alwaysTemplate)
+        }
+        heartImageView.tintColor = UIColor.white
+        heartImageView.alpha = 0.75
+
+        CATransaction.begin()
+        CATransaction.setCompletionBlock ({
+            UIView.animate(withDuration: 0.1, delay: 0.1, animations: {
+                self.heartImageView.alpha = 0
+            })
+        })
+        let scaleAnimation1: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation1.fromValue = 0.75
+        scaleAnimation1.toValue = 1.25
+        scaleAnimation1.beginTime = CACurrentMediaTime()
+        scaleAnimation1.duration = 0.15
+        scaleAnimation1.isRemovedOnCompletion = true
+        scaleAnimation1.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        heartImageView.layer.add(scaleAnimation1, forKey: "scaleAnimation1")
+
+        let scaleAnimation2: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation2.fromValue = 1.25
+        scaleAnimation2.toValue = 0.75
+        scaleAnimation2.beginTime = CACurrentMediaTime() + 0.15
+        scaleAnimation2.duration = 0.15
+        scaleAnimation2.isRemovedOnCompletion = true
+        scaleAnimation2.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        heartImageView.layer.add(scaleAnimation2, forKey: "scaleAnimation2")
+
+        let scaleAnimation3: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation3.fromValue = 0.75
+        scaleAnimation3.toValue = 1.0
+        scaleAnimation3.beginTime = CACurrentMediaTime() + 0.3
+        scaleAnimation3.duration = 0.1
+        scaleAnimation3.isRemovedOnCompletion = true
+        scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        heartImageView.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
+        CATransaction.commit()
     }
 }
 
