@@ -351,6 +351,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     @objc func shareButtonAction(_ sender: UIButton) {
         print("Tapped on Share Button")
+        animateShareButton()
     }
 
     @objc func moreButtonAction(_ sender: UIButton) {
@@ -449,6 +450,51 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
         heartImageView.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
         CATransaction.commit()
+    }
+
+    private func animateShareButton() {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            self.shareButton.isSelected = !self.shareButton.isSelected
+            self.shareButton.tintColor = (self.shareButton.isSelected) ? UIColor.materialBlue : UIColor.white
+        })
+
+        let scaleAnimation1: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation1.fromValue = 1
+        scaleAnimation1.toValue = 0
+        scaleAnimation1.beginTime = CACurrentMediaTime()
+        scaleAnimation1.duration = 0.1
+        scaleAnimation1.isRemovedOnCompletion = true
+        scaleAnimation1.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        shareButton.layer.add(scaleAnimation1, forKey: "scaleAnimation1")
+        CATransaction.commit()
+
+        let scaleAnimation2: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation2.fromValue = 0
+        scaleAnimation2.toValue = 1
+        scaleAnimation2.beginTime = CACurrentMediaTime() + 0.1
+        scaleAnimation2.duration = 0.1
+        scaleAnimation2.isRemovedOnCompletion = true
+        scaleAnimation2.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        self.shareButton.layer.add(scaleAnimation2, forKey: "scaleAnimation2")
+
+        let scaleAnimation3: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation3.fromValue = 1
+        scaleAnimation3.toValue = 0.75
+        scaleAnimation3.beginTime = CACurrentMediaTime() + 0.2
+        scaleAnimation3.duration = 0.1
+        scaleAnimation3.isRemovedOnCompletion = true
+        scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        self.shareButton.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
+
+        let scaleAnimation4: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation4.fromValue = 0.75
+        scaleAnimation4.toValue = 1
+        scaleAnimation4.beginTime = CACurrentMediaTime() + 0.3
+        scaleAnimation4.duration = 0.1
+        scaleAnimation4.isRemovedOnCompletion = true
+        scaleAnimation4.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
+        self.shareButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
     }
 
     private func animateMoreButton() {
