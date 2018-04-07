@@ -41,6 +41,10 @@ public struct Icons {
     public static var LIKE_FILL_24 = Icons.icon("ic_heart_24dp")
     public static var LIKE_FILL_36 = Icons.icon("ic_heart_36dp")
     public static var LIKE_FILL_48 = Icons.icon("ic_heart_48dp")
+
+    public static var SHARE_24 = Icons.icon("ic_camera_iris_24dp")
+    public static var SHARE_36 = Icons.icon("ic_camera_iris_36dp")
+    public static var SHARE_48 = Icons.icon("ic_camera_iris_48dp")
     
     public static var MORE_VERTICAL_DOTS_24 = Icons.icon("ic_dots_vertical_24dp")
     public static var MORE_VERTICAL_DOTS_36 = Icons.icon("ic_dots_vertical_36dp")

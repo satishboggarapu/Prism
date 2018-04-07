@@ -14,7 +14,9 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 
     var viewController = MainViewController()
     private var collectionView: UICollectionView!
-    private var activityIndicator = MDCActivityIndicator()
+    private var activityIndicator: MDCActivityIndicator!
+    private var refreshControl: UIRefreshControl!
+    private var reloadVisibleCells: Bool = true
 
     private var imageSizes: [String: CGSize] = [String: CGSize]()
     private var pullingData: Bool = false
@@ -45,31 +47,20 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
 
-        activityIndicator.startAnimating()
-        refreshData() { (result) in
-            if result {
-                print(self.prismPostArrayList.count)
-                self.populateUserDetailsForAllPosts() { (result) in
-                    self.activityIndicator.stopAnimating()
-                    self.collectionView.reloadData()
-                }
-            } else {
-                print("error loading data")
-                // TODO: Log Error
-            }
-        }
+        refreshData(false)
     }
 
     private func setupView() {
-        backgroundColor = .collectionViewBackground
+        backgroundColor = .collectionViewBackground1
+
 
         // initialize collectionView
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor.collectionViewBackground
+        collectionView.backgroundColor = UIColor.collectionViewBackground1
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.bounces = false
+        collectionView.bounces = true
         collectionView.register(PrismPostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         addSubview(collectionView)
         // collectionView constraints
@@ -88,6 +79,23 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+
+        // initialize refresh control
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
+        collectionView.addSubview(refreshControl)
+        collectionView.alwaysBounceVertical = true
+//        collectionView.refreshControl = refreshControl
+
+    }
+
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        print("refreshed")
+        CurrentUser.refreshUserProfile()
+        prismPostArrayList.removeAll()
+        refreshData(true)
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -126,7 +134,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.setPostDateText()
         cell.setLikesText()
         cell.setRepostsText()
-        cell.toggleLikeButton()
+        cell.toggleLikeButton(CurrentUser.hasLiked(prismPost))
         cell.toggleShareButton()
         cell.viewController = viewController
 
@@ -186,6 +194,28 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     func imageLoaded(postID: String, imageSize: CGSize) {
         imageSizes[postID] = imageSize
         collectionView.collectionViewLayout.invalidateLayout()
+        if reloadVisibleCells {
+            reloadVisibleCells = false
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+        }
+
+    }
+
+    func refreshData(_ isRefreshing: Bool) {
+        activityIndicator.startAnimating()
+        refreshData() { (result) in
+            if result {
+                print(self.prismPostArrayList.count)
+                self.populateUserDetailsForAllPosts() { (result) in
+                    self.activityIndicator.stopAnimating()
+                    self.collectionView.reloadData()
+                    if isRefreshing { self.refreshControl.endRefreshing() }
+                }
+            } else {
+                print("error loading data")
+                // TODO: Log Error
+            }
+        }
     }
 }
 

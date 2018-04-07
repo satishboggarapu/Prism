@@ -55,7 +55,7 @@ public class DatabaseAction {
      * Adds userId to prismPost's REPOSTED_USERS section
      * Performs repost locally on CurrentUser
      */
-    public static func perfromRepost(_ prismPost: PrismPost) {
+    public static func performRepost(_ prismPost: PrismPost) {
         let postId: String = prismPost.getPostId()
         let timestamp: Int64 = Date().milliseconds()
         let postReference: DatabaseReference = allPostRefernece.child(postId)

@@ -57,12 +57,13 @@ class CustomImageView: UIImageView {
             }
             DispatchQueue.main.async(execute: {
                 let imageToCache = UIImage(data: data!)
-                if self.imageUrlString == urlString {
+                if self.imageUrlString == urlString && imageToCache != nil{
                     self.image = imageToCache
                     completionHandler(true, imageToCache!)
                     self.delegate?.imageLoaded(postID: postID, imageSize: (imageToCache?.size)!)
+                    imageCache.setObject(imageToCache!, forKey: postID as NSString)
                 }
-                imageCache.setObject(imageToCache!, forKey: postID as NSString)
+                
                 self.activityIndicator.stopAnimating()
                 self.activityIndicator.removeFromSuperview()
             })

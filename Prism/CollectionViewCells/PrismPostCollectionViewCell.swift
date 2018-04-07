@@ -21,7 +21,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var shareButton: UIButton!
     var moreButton: UIButton!
     var reposts: UILabel!
-    var backgroundImageView = UIImageView()
+    var backgroundImageView: UIImageView!
     var heartImageView: UIImageView!
     var separatorView: UIView!
 
@@ -131,12 +131,14 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeBackgroundImageView() {
         // cell background
+        backgroundImageView = UIImageView()
+        backgroundImageView.contentMode = .scaleAspectFit
         self.insertSubview(backgroundImageView, at: 0)
         addConstraintsWithFormat(format: "H:|[v0]|", views: backgroundImageView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: backgroundImageView)
 
         // blur effect
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         backgroundImageView.addSubview(blurEffectView)
@@ -225,7 +227,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeShareButton() {
         shareButton = UIButton()
-        shareButton.setImage(Icons.SPLASH_SCREEN_ICON?.withRenderingMode(.alwaysTemplate), for: .normal)
+        shareButton.setImage(Icons.SHARE_36?.withRenderingMode(.alwaysTemplate), for: .normal)
         shareButton.imageView?.contentMode = .scaleAspectFit
         shareButton.tintColor = UIColor.white
         shareButton.setTitle("", for: .normal)
@@ -301,9 +303,10 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         reposts.text = Helper.getRepostsCountString(count: prismPost.getReposts())
     }
 
-    public func toggleLikeButton() {
-        likeButton.isSelected = CurrentUser.hasLiked(prismPost)
-        likeButton.tintColor = (likeButton.isSelected) ? UIColor.materialBlue : UIColor.white
+    public func toggleLikeButton(_ isSelected: Bool) {
+        likeButton.isSelected = isSelected
+        likeButton.tintColor = (isSelected) ? UIColor.materialBlue : UIColor.white
+
     }
     
     public func toggleShareButton() {
@@ -346,12 +349,23 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         // TODO: Scale down the heartImageView so that is looks good for panorama pictures also
         animateLikeButton()
         animateHeartImageView(isSelected: !sender.isSelected)
-        // TODO: Attach backend
+        if CurrentUser.hasLiked(prismPost) {
+            DatabaseAction.performUnlike(prismPost)
+            CurrentUser.unlikePost(prismPost)
+            prismPost.setLikes(likes: prismPost.getLikes()-1)
+        } else {
+            DatabaseAction.performLike(prismPost)
+            CurrentUser.likePost(prismPost)
+            prismPost.setLikes(likes: prismPost.getLikes()+1)
+        }
+        setLikesText()
+
     }
 
     @objc func shareButtonAction(_ sender: UIButton) {
         print("Tapped on Share Button")
         animateShareButton()
+        // TODO: Attach backend
     }
 
     @objc func moreButtonAction(_ sender: UIButton) {
