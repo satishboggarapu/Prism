@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Icon rotation animation for the splash screen
         CATransaction.begin()
         CATransaction.setCompletionBlock({
-            // seque to the LoginViewController
+            // segue to the LoginViewController
             self.window!.rootViewController! = UINavigationController(rootViewController: viewController)
         })
         let rotationAnimation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")

@@ -10,35 +10,23 @@ import MaterialComponents
 import Firebase
 
 class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate {
-    
 
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = UIColor.collectionViewBackground
-        cv.dataSource = self
-        cv.delegate = self
-        cv.bounces = false
-//        cv.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "footer")
-        return cv
-    }()
 
-    var imageSizes: [String: CGSize] = [String: CGSize]()
-    var loadingSpinner = MDCActivityIndicator()
-    var imagesLoaded: Int = 0
-    var pullingData: Bool = false
-    var images = [String: UIImage]()
-    
-    private var lastCollectionViewContentOffset: CGFloat = 0
     var viewController = MainViewController()
+    private var collectionView: UICollectionView!
+    private var activityIndicator: MDCActivityIndicator!
+    private var refreshControl: UIRefreshControl!
+    private var reloadVisibleCells: Bool = true
+
+    private var imageSizes: [String: CGSize] = [String: CGSize]()
+    private var pullingData: Bool = false
+    private var lastCollectionViewContentOffset: CGFloat = 0
 
     // Database shit
     public var prismPostArrayList: [PrismPost]! = [PrismPost]()
 
-    var validate = false
-
     /*
-     * Globals
+     * Database References
      */
     private var auth: Auth!
     private var databaseReference: DatabaseReference!
@@ -59,38 +47,55 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
 
-        loadingSpinner.startAnimating()
-        refreshData() { (result) in
-            if result {
-                print(self.prismPostArrayList.count)
-                self.populateUserDetailsForAllPosts() { (result) in
-                    self.loadingSpinner.stopAnimating()
-                    self.collectionView.reloadData()
-                }
-            } else {
-                print("error loading data")
-            }
-        }
+        refreshData(false)
     }
 
     private func setupView() {
-        backgroundColor = .collectionViewBackground
+        backgroundColor = .collectionViewBackground1
+
+
+        // initialize collectionView
+        let layout = UICollectionViewFlowLayout()
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.collectionViewBackground1
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.bounces = true
         collectionView.register(PrismPostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         addSubview(collectionView)
+        // collectionView constraints
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
-        
-        loadingSpinner = MDCActivityIndicator()
-        loadingSpinner.indicatorMode = .indeterminate
-        loadingSpinner.radius = 20
-        loadingSpinner.strokeWidth = 4
-        loadingSpinner.sizeToFit()
-        loadingSpinner.cycleColors = [UIColor.materialBlue]
-        self.insertSubview(loadingSpinner, aboveSubview: collectionView)
-        addConstraintsWithFormat(format: "H:[v0(40)]", views: loadingSpinner)
-        addConstraint(NSLayoutConstraint(item: loadingSpinner, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-        addConstraintsWithFormat(format: "V:[v0(40)]", views: loadingSpinner)
-        addConstraint(NSLayoutConstraint(item: loadingSpinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
+
+        // initialize activity indicator
+        activityIndicator = MDCActivityIndicator()
+        activityIndicator.indicatorMode = .indeterminate
+        activityIndicator.radius = 20
+        activityIndicator.strokeWidth = 4
+        activityIndicator.sizeToFit()
+        activityIndicator.cycleColors = [UIColor.materialBlue]
+        self.insertSubview(activityIndicator, aboveSubview: collectionView)
+        // activityIndicator constraints
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+
+        // initialize refresh control
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
+        collectionView.addSubview(refreshControl)
+        collectionView.alwaysBounceVertical = true
+//        collectionView.refreshControl = refreshControl
+
+    }
+
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        print("refreshed")
+        CurrentUser.refreshUserProfile()
+        prismPostArrayList.removeAll()
+        refreshData(true)
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -101,7 +106,8 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 //        // pull more posts if available
 //        let scrollViewOffsetValue: CGFloat = (scrollView.contentSize.height - scrollView.frame.size.height) * 0.80
 //        if (scrollView.contentOffset.y >= scrollViewOffsetValue) && prismPostArrayList.count > 0 && !pullingData { }
-        
+
+        // TODO: optimize the newPostButton animation
         if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
             // scrolled up
             viewController.toggleNewPostButton(hide: false)
@@ -128,11 +134,12 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.setPostDateText()
         cell.setLikesText()
         cell.setRepostsText()
-        cell.toggleLikeButton()
+        cell.toggleLikeButton(CurrentUser.hasLiked(prismPost))
         cell.toggleShareButton()
         cell.viewController = viewController
 
-        
+        // load more posts
+        // TODO: Create a function for this
         if indexPath.item == prismPostArrayList.count - 1 && !pullingData {
             pullingData = true
             fetchMorePosts() { (result) in
@@ -151,7 +158,6 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
                         } else {
                             // TODO: Error
                         }
-
                     }
                 } else {
                     // TODO: Error
@@ -171,44 +177,45 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func getCellSize(indexPath: IndexPath) -> CGSize {
-        let postID: String = prismPostArrayList[indexPath.item].getPostId()
+        let postId: String = prismPostArrayList[indexPath.item].getPostId()
         var imageHeightInPoints: CGFloat = 150
-        if imageSizes.keys.contains(postID) {
-            let maxWidthInPixels: CGFloat = Constraints.screenWidth() * 0.925 * UIScreen.main.scale
-            let maxHeightInPixels: CGFloat = Constraints.screenHeight() * 0.65 * UIScreen.main.scale
-            let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[postID]!,
+        if imageSizes.keys.contains(postId) {
+            let maxWidthInPixels: CGFloat = PrismPostConstraints.IMAGE_MAX_WIDTH * UIScreen.main.scale
+            let maxHeightInPixels: CGFloat = PrismPostConstraints.IMAGE_MAX_HEIGHT * UIScreen.main.scale
+            let imageViewMaxFrame = AVMakeRect(aspectRatio: imageSizes[postId]!,
                     insideRect: CGRect(origin: CGPoint.zero, size: CGSize(width: maxWidthInPixels, height: maxHeightInPixels)))
             imageHeightInPoints = imageViewMaxFrame.height / UIScreen.main.scale
         }
-        let height: CGFloat = 16 + 48 + 8 + imageHeightInPoints + 8 + 28 + 16 + 1
+        let height: CGFloat = PrismPostConstraints.CELL_HEIGHT_WITHOUT_POST_IMAGE + imageHeightInPoints
         let width: CGFloat = Constraints.screenWidth()
         return CGSize(width: width, height: height)
     }
     
     func imageLoaded(postID: String, imageSize: CGSize) {
-//        print("Image loaded for url \(postID)")
         imageSizes[postID] = imageSize
         collectionView.collectionViewLayout.invalidateLayout()
+        if reloadVisibleCells {
+            reloadVisibleCells = false
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+        }
+
     }
 
-
-    // MARK: Accessory Methods for TapGesture's
-    
-    private func getTappedCellIndexForGesture(gesture: UITapGestureRecognizer) -> IndexPath? {
-        let position = gesture.location(in: collectionView)
-        if let indexPath = collectionView.indexPathForItem(at: position) {
-            return indexPath
+    func refreshData(_ isRefreshing: Bool) {
+        activityIndicator.startAnimating()
+        refreshData() { (result) in
+            if result {
+                print(self.prismPostArrayList.count)
+                self.populateUserDetailsForAllPosts() { (result) in
+                    self.activityIndicator.stopAnimating()
+                    self.collectionView.reloadData()
+                    if isRefreshing { self.refreshControl.endRefreshing() }
+                }
+            } else {
+                print("error loading data")
+                // TODO: Log Error
+            }
         }
-        return nil
-    }
-
-    private func getTappedCellIndexForButton(button: UIButton) -> IndexPath? {
-        var position = button.convert(button.frame.origin, from: collectionView)
-        position = CGPoint(x: (-1*position.x), y: (-1*position.y))
-        if let indexPath = collectionView.indexPathForItem(at: position) {
-            return indexPath
-        }
-        return nil
     }
 }
 
@@ -276,7 +283,6 @@ extension PrismPostCollectionView {
                     self.prismPostArrayList.append(prismPost)
                 }
                 completionHandler(true)
-//                self.populateUserDetailsForAllPosts()
             }else{
                 print("no data")
                 completionHandler(false)
@@ -284,29 +290,3 @@ extension PrismPostCollectionView {
         })
     }
 }
-
-
-// CollectionView Footer
-/*
-  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-      switch kind {
-      case UICollectionElementKindSectionFooter:
-          let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath as IndexPath)
-//            footerView.backgroundColor = Color.white
-          footerView.layer.shadowColor = UIColor(hex: 0xDEDEDE).cgColor
-          footerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-          footerView.layer.shadowOpacity = 0.4
-          footerView.layer.shadowRadius = 1
-          footerView.layer.cornerRadius = 1.5
-
-          return footerView
-      default:
-          assert(false, "Unexpected element kind")
-      }
-      return UICollectionReusableView()
-  }
-
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-      return CGSize(width: collectionView.frame.width, height: 35)
-  }
-*/

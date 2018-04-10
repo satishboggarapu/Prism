@@ -7,6 +7,7 @@ import Foundation
 import UIKit
 import MaterialComponents
 
+// TODO: Clean this up
 protocol CustomImageViewDelegate: class {
     func imageLoaded(postID: String, imageSize: CGSize)
 }
@@ -41,6 +42,7 @@ class CustomImageView: UIImageView {
             self.image = imageFromCache
             self.delegate?.imageLoaded(postID: postID, imageSize: imageFromCache.size)
             activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
             completionHandler(true, imageFromCache)
             return
         }
@@ -49,18 +51,21 @@ class CustomImageView: UIImageView {
             if error != nil {
                 print(error)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
                 completionHandler(false, UIImage())
                 return
             }
             DispatchQueue.main.async(execute: {
                 let imageToCache = UIImage(data: data!)
-                if self.imageUrlString == urlString {
+                if self.imageUrlString == urlString && imageToCache != nil{
                     self.image = imageToCache
                     completionHandler(true, imageToCache!)
                     self.delegate?.imageLoaded(postID: postID, imageSize: (imageToCache?.size)!)
+                    imageCache.setObject(imageToCache!, forKey: postID as NSString)
                 }
-                imageCache.setObject(imageToCache!, forKey: postID as NSString)
+                
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
             })
         }).resume()
     }
@@ -85,6 +90,7 @@ class CustomImageView: UIImageView {
         if let imageFromCache = imageCache.object(forKey: postID as NSString) {
             self.image = imageFromCache
             activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
             return
         }
         
@@ -92,6 +98,7 @@ class CustomImageView: UIImageView {
             if error != nil {
                 print(error)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
                 return
             }
             DispatchQueue.main.async(execute: {
@@ -101,6 +108,7 @@ class CustomImageView: UIImageView {
                 }
                 imageCache.setObject(imageToCache!, forKey: postID as NSString)
                 self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
             })
         }).resume()
     }
