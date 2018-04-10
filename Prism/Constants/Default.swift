@@ -32,4 +32,11 @@ public class Default {
     public static let USERNAME_PERIOD = "."
     public static let USERNAME_PERIOD_REPLACE = "-"
 
+    // Button Strings
+    public static let BUTTON_CANCEL = "CANCEL"
+    public static let BUTTON_REPOST = "REPOST"
+
+    // Alert View Dialog Title
+    public static let REPOST_MESSAGE = "This post will be shown on your profile, do you want to repost?"
+
 }

@@ -9,7 +9,7 @@ import Material
 import MaterialComponents
 import Firebase
 
-class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate {
+class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate, PrismPostCollectionViewCellDelegate {
 
 
     var viewController = MainViewController()
@@ -52,7 +52,6 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 
     private func setupView() {
         backgroundColor = .collectionViewBackground1
-
 
         // initialize collectionView
         let layout = UICollectionViewFlowLayout()
@@ -127,6 +126,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         let prismPost = prismPostArrayList[indexPath.item]
 
         cell.prismPost = prismPost
+        cell.delegate = self
         cell.postImage.delegate = self
         cell.loadPostImage()
         cell.loadProfileImage()
@@ -135,7 +135,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.setLikesText()
         cell.setRepostsText()
         cell.toggleLikeButton(CurrentUser.hasLiked(prismPost))
-        cell.toggleShareButton()
+        cell.toggleRepostButton()
         cell.viewController = viewController
 
         // load more posts
@@ -215,6 +215,16 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
                 print("error loading data")
                 // TODO: Log Error
             }
+        }
+    }
+
+
+    func deletePost(_ prismPost: PrismPost) {
+        print("delete post from collectionView")
+        let index = prismPostArrayList.index(of: prismPost)
+        if index != nil {
+            prismPostArrayList.remove(at: index!)
+            collectionView.deleteItems(at: [IndexPath(item: index!, section: 0)])
         }
     }
 }

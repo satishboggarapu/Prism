@@ -32,10 +32,12 @@
 		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
 		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
 		10FCD82A205F03E8001E0C1F /* DefaultProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */; };
+		192E40E74CF1F2D5D23C3973 /* CustomAlertDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */; };
 		192E41801618B460A2483C95 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4678BF58B239D159B832 /* CustomImageView.swift */; };
 		192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
 		192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E406B8694AA1A663C7AFC /* DatabaseAction.swift */; };
+		192E475921D261AF8321C298 /* MoreDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2B1DDAB32382236D47 /* MoreDialog.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
 		192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40A7ADA16934A87DB9F3 /* ImageManager.swift */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
@@ -106,7 +108,9 @@
 		192E4678BF58B239D159B832 /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostConstraints.swift; sourceTree = "<group>"; };
+		192E4A2B1DDAB32382236D47 /* MoreDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreDialog.swift; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertDialog.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
 		4F9C95802050C5A800C08C9E /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
@@ -280,6 +284,8 @@
 				10ADF6BB2050D33500060A19 /* MenuBar.swift */,
 				10ADF6BC2050D33500060A19 /* NavigationBar.swift */,
 				192E4678BF58B239D159B832 /* CustomImageView.swift */,
+				192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */,
+				192E4A2B1DDAB32382236D47 /* MoreDialog.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -680,6 +686,8 @@
 				192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */,
 				192E41801618B460A2483C95 /* CustomImageView.swift in Sources */,
 				192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */,
+				192E40E74CF1F2D5D23C3973 /* CustomAlertDialog.swift in Sources */,
+				192E475921D261AF8321C298 /* MoreDialog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,4 +17,6 @@ extension UIColor {
     static var collectionViewBackground: UIColor { return  UIColor(hex: 0x2A2A2A) }
     static var collectionViewBackground1: UIColor { return UIColor(hex: 0x363636) }
     static var collectionViewCellDivider: UIColor { return UIColor(hex: 0x828282, alpha: 1) }
+    static var customAlertDialogBackground: UIColor { return UIColor(hex: 0x2B2B2B) }
+    static var customAlertDialogButtonTitleColor: UIColor { return UIColor(hex: 0x296fe2) }
 }

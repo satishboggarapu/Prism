@@ -3,6 +3,8 @@
 // Copyright (c) 2018 Satish Boggarapu. All rights reserved.
 //
 
+// TODO: Clean this up
+
 import UIKit
 
 class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

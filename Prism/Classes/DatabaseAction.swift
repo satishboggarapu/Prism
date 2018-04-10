@@ -11,7 +11,7 @@ public class DatabaseAction {
     private static var currentUserId: String = CurrentUser.firebaseUser.uid
     private static var currentUsername: String = CurrentUser.firebaseUser.displayName!
     private static var currentUserReference: DatabaseReference = Default.USERS_REFERENCE.child(DatabaseAction.currentUserId)
-    private static var allPostRefernece: DatabaseReference = Default.ALL_POSTS_REFERENCE
+    private static var allPostReference: DatabaseReference = Default.ALL_POSTS_REFERENCE
     private static var usersReference: DatabaseReference = Default.USERS_REFERENCE
     
     /**
@@ -22,7 +22,7 @@ public class DatabaseAction {
     public static func performLike(_ prismPost: PrismPost) {
         let postId: String = prismPost.getPostId()
         let actionTimestamp: Int64 = Date().milliseconds()
-        let postReference: DatabaseReference = allPostRefernece.child(postId)
+        let postReference: DatabaseReference = allPostReference.child(postId)
         
         postReference.child(Key.DB_REF_POST_LIKED_USERS).child(currentUserId).setValue(actionTimestamp)
         currentUserReference.child(Key.DB_REF_USER_LIKES).child(postId).setValue(actionTimestamp)
@@ -40,7 +40,7 @@ public class DatabaseAction {
      */
     public static func performUnlike(_ prismPost: PrismPost) {
         let postId: String = prismPost.getPostId()
-        let postReference: DatabaseReference = allPostRefernece.child(postId)
+        let postReference: DatabaseReference = allPostReference.child(postId)
         let timerstamp: Int64 = Date().milliseconds()
         
         postReference.child(Key.DB_REF_POST_LIKED_USERS).child(currentUserId).removeValue()
@@ -58,7 +58,7 @@ public class DatabaseAction {
     public static func performRepost(_ prismPost: PrismPost) {
         let postId: String = prismPost.getPostId()
         let timestamp: Int64 = Date().milliseconds()
-        let postReference: DatabaseReference = allPostRefernece.child(postId)
+        let postReference: DatabaseReference = allPostReference.child(postId)
         
         postReference.child(Key.DB_REF_POST_REPOSTED_USERS).child(currentUserId).setValue(timestamp)
         currentUserReference.child(Key.DB_REF_USER_REPOSTS).child(postId).setValue(timestamp)
@@ -74,7 +74,7 @@ public class DatabaseAction {
      */
     public static func performUnrepost(_ prismPost: PrismPost) {
         let postId: String = prismPost.getPostId()
-        let postReference: DatabaseReference = allPostRefernece.child(postId)
+        let postReference: DatabaseReference = allPostReference.child(postId)
         
         postReference.child(Key.DB_REF_POST_REPOSTED_USERS).child(currentUserId).removeValue()
         currentUserReference.child(Key.DB_REF_USER_REPOSTS).child(postId).removeValue()
@@ -89,29 +89,33 @@ public class DatabaseAction {
      * USER_UPLOADS for the post owner. And then the post itself is
      * deleted from ALL_POSTS. Finally, the mainRecyclerViewAdapter is refreshed
      */
-    public static func deletePost(_ prismPost: PrismPost) {
+    public static func deletePost(_ prismPost: PrismPost, completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         // TODO: Delete post
         Storage.storage().reference(forURL: prismPost.getImage()).delete(completion: { (error) in
             if error == nil {
                 let postId: String = prismPost.getPostId()
-                allPostRefernece.child(postId).observeSingleEvent(of: .value, with: { (postSnapshot) in
+                allPostReference.child(postId).observeSingleEvent(of: .value, with: { (postSnapshot) in
                     if postSnapshot.exists() {
                         DeleteHelper.deleteLikedUsers(postSnapshot: postSnapshot, post: prismPost)
                         DeleteHelper.deleteRepostedUsers(postSnapshot: postSnapshot, prismPost: prismPost)
                         usersReference.child(prismPost.getPrismUser().getUid()).child(Key.DB_REF_USER_UPLOADS).child(postId).removeValue()
-                        allPostRefernece.child(postId).removeValue()
+                        allPostReference.child(postId).removeValue()
                         
                         CurrentUser.deletePost(prismPost)
                         
                         // TODO: Update UI
+                        completionHandler(true)
                     } else {
                         // TODO: Log Error
+                        completionHandler(false)
                     }
                 }, withCancel : { (error) in
                     // TODO: Log Error
+                    completionHandler(false)
                 })
             } else {
-                // TODO: Log Error
+//                 TODO: Log Error
+                completionHandler(false)
             }
         })
     }
@@ -188,7 +192,7 @@ public class DatabaseAction {
                     CurrentUser.followings.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWINGS).value as! [String: String])
                 }
                 
-                allPostRefernece.observeSingleEvent(of: .value, with: { (dataSnapshot) in
+                allPostReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
                     let userLikes: [PrismPost] = getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: likedPostMap)
                     let userReposts: [PrismPost] = getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
                     let userUploads: [PrismPost] = getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: uploadedPostsMap)
@@ -240,9 +244,9 @@ class DeleteHelper {
      * prismPost and deletes the postId under their USER_LIKES section
      */
     static func deleteLikedUsers(postSnapshot: DataSnapshot, post: PrismPost) {
-        var likedUsers: [String: String] = [String: String]()
+        var likedUsers: [String: Int64] = [String: Int64]()
         if postSnapshot.childSnapshot(forPath: Key.DB_REF_POST_LIKED_USERS).childrenCount > 0 {
-            likedUsers.update(other: postSnapshot.childSnapshot(forPath: Key.DB_REF_POST_LIKED_USERS).value as! [String: String])
+            likedUsers.update(other: postSnapshot.childSnapshot(forPath: Key.DB_REF_POST_LIKED_USERS).value as! [String: Int64])
             for userId in likedUsers.keys {
                 usersReference.child(userId).child(Key.DB_REF_USER_LIKES).child(post.getPostId()).removeValue()
             }
@@ -254,9 +258,9 @@ class DeleteHelper {
      * prismPost and deletes the postId under their USER_REPOSTS section
      */
     static func deleteRepostedUsers(postSnapshot: DataSnapshot, prismPost: PrismPost) {
-        var repostedUsers: [String: String] = [String: String]()
+        var repostedUsers: [String: Int64] = [String: Int64]()
         if postSnapshot.childSnapshot(forPath: Key.DB_REF_POST_REPOSTED_USERS).childrenCount > 0 {
-            repostedUsers.update(other: postSnapshot.childSnapshot(forPath: Key.DB_REF_POST_REPOSTED_USERS).value as! [String: String])
+            repostedUsers.update(other: postSnapshot.childSnapshot(forPath: Key.DB_REF_POST_REPOSTED_USERS).value as! [String: Int64])
             for userId in repostedUsers.keys {
                 usersReference.child(userId).child(Key.DB_REF_USER_REPOSTS).child(prismPost.getPostId()).removeValue()
             }

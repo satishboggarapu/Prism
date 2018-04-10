@@ -5,7 +5,12 @@
 
 import UIKit
 import Material
+import MaterialComponents
 import AVFoundation
+
+protocol PrismPostCollectionViewCellDelegate: class {
+    func deletePost(_ prismPost: PrismPost)
+}
 
 class PrismPostCollectionViewCell: UICollectionViewCell {
 
@@ -18,7 +23,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var postImage: CustomImageView!
     var likes: UILabel!
     var likeButton: UIButton!
-    var shareButton: UIButton!
+    var repostButton: UIButton!
     var moreButton: UIButton!
     var reposts: UILabel!
     var backgroundImageView: UIImageView!
@@ -26,6 +31,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var separatorView: UIView!
 
     // MARK: Attributes
+    weak var delegate: PrismPostCollectionViewCellDelegate?
     var viewController = MainViewController()
     var prismPost: PrismPost!
     var isPostLiked: Bool!
@@ -67,7 +73,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         initializeHeartImageView()
         initializeLikes()
         initializeLikeButton()
-        initializeShareButton()
+        initializeRepostButton()
         initializeMoreButton()
         initializeReposts()
         initializeSeparatorView()
@@ -89,15 +95,15 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         bottomView = UIView()
         bottomView.addSubview(likes)
         bottomView.addSubview(likeButton)
-        bottomView.addSubview(shareButton)
+        bottomView.addSubview(repostButton)
         bottomView.addSubview(moreButton)
         bottomView.addSubview(reposts)
         bottomView.addConstraintsWithFormat(format: "V:|[v0]|", views: likes)
         bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: likeButton)
-        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: shareButton)
+        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: repostButton)
         bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: moreButton)
         bottomView.addConstraintsWithFormat(format: "V:|[v0]|", views: reposts)
-        bottomView.addConstraintsWithFormat(format: "H:|[v0]-\(defaultMargin)-[v1(\(buttonSize))]-\(defaultMargin)-[v2(\(buttonSize))]-\(defaultMargin)-[v3(\(buttonSize))]-\(topMargin)-[v4]|", views: likes, likeButton, shareButton, moreButton, reposts)
+        bottomView.addConstraintsWithFormat(format: "H:|[v0]-\(defaultMargin)-[v1(\(buttonSize))]-\(defaultMargin)-[v2(\(buttonSize))]-\(defaultMargin)-[v3(\(buttonSize))]-\(topMargin)-[v4]|", views: likes, likeButton, repostButton, moreButton, reposts)
 
         // Add elements to the cell view
         self.addSubview(profileView)
@@ -194,7 +200,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeHeartImageView() {
         heartImageView = UIImageView()
-        heartImageView.image = Icons.LIKE_FILL_48?.withRenderingMode(.alwaysTemplate)
+        heartImageView.image = Icons.LIKE_HEART?.withRenderingMode(.alwaysTemplate)
         heartImageView.tintColor = UIColor.white
         heartImageView.contentMode = .scaleAspectFit
         heartImageView.clipsToBounds = true
@@ -225,14 +231,14 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         likeButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    private func initializeShareButton() {
-        shareButton = UIButton()
-        shareButton.setImage(Icons.SHARE_36?.withRenderingMode(.alwaysTemplate), for: .normal)
-        shareButton.imageView?.contentMode = .scaleAspectFit
-        shareButton.tintColor = UIColor.white
-        shareButton.setTitle("", for: .normal)
-        shareButton.addTarget(self, action: #selector(shareButtonAction(_:)), for: .touchUpInside)
-        shareButton.translatesAutoresizingMaskIntoConstraints = false
+    private func initializeRepostButton() {
+        repostButton = UIButton()
+        repostButton.setImage(Icons.REPOST_36?.withRenderingMode(.alwaysTemplate), for: .normal)
+        repostButton.imageView?.contentMode = .scaleAspectFit
+        repostButton.tintColor = UIColor.white
+        repostButton.setTitle("", for: .normal)
+        repostButton.addTarget(self, action: #selector(repostButtonAction(_:)), for: .touchUpInside)
+        repostButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializeMoreButton() {
@@ -309,9 +315,9 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     }
     
-    public func toggleShareButton() {
-        shareButton.isSelected = CurrentUser.hasReposted(prismPost)
-        shareButton.tintColor = (shareButton.isSelected) ? UIColor.materialBlue : UIColor.white
+    public func toggleRepostButton() {
+        repostButton.isSelected = CurrentUser.hasReposted(prismPost)
+        repostButton.tintColor = (repostButton.isSelected) ? UIColor.materialBlue : UIColor.white
     }
 
     private func addBorderToProfilePic() {
@@ -359,25 +365,77 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
             prismPost.setLikes(likes: prismPost.getLikes()+1)
         }
         setLikesText()
+    }
+
+    @objc func repostButtonAction(_ sender: UIButton) {
+        print("Tapped on Repost Button")
+
+        if !CurrentUser.hasReposted(prismPost) {
+            let alertController = CustomAlertDialog(title: Default.REPOST_MESSAGE, cancelButtonText: Default.BUTTON_CANCEL, okayButtonText: Default.BUTTON_REPOST)
+            alertController.okayButton.addTarget(self, action: #selector(repostAlertDialogButtonAction), for: .touchUpInside)
+            alertController.providesPresentationContextTransitionStyle = true
+            alertController.definesPresentationContext = true
+            alertController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+            alertController.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+        } else {
+            animateRepostButton()
+            // repost post
+            DatabaseAction.performUnrepost(prismPost)
+            CurrentUser.unrepostPost(prismPost)
+            prismPost.setReposts(reposts: prismPost.getReposts() - 1)
+            setRepostsText()
+        }
 
     }
 
-    @objc func shareButtonAction(_ sender: UIButton) {
-        print("Tapped on Share Button")
-        animateShareButton()
-        // TODO: Attach backend
+    @objc func repostAlertDialogButtonAction() {
+        animateRepostButton()
+        // unrepost post
+        DatabaseAction.performRepost(prismPost)
+        CurrentUser.repostPost(prismPost)
+        prismPost.setReposts(reposts: prismPost.getReposts() + 1)
+        setRepostsText()
     }
 
     @objc func moreButtonAction(_ sender: UIButton) {
         print("Tapped on More Button")
+
         animateMoreButton()
-        // TODO: Popup view
+
+        let moreDialog = MoreDialog(prismPost: prismPost)
+        moreDialog.reportButton.addTarget(self, action: #selector(reportPostButtonAction), for: .touchUpInside)
+        moreDialog.shareButton.addTarget(self, action: #selector(sharePostButtonAction), for: .touchUpInside)
+        if prismPost.getUid() == CurrentUser.prismUser.getUid() {
+            moreDialog.deleteButton.addTarget(self, action: #selector(deletePostButtonAction), for: .touchUpInside)
+        }
+        moreDialog.providesPresentationContextTransitionStyle = true
+        moreDialog.definesPresentationContext = true
+        moreDialog.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        moreDialog.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+        self.window?.rootViewController?.present(moreDialog, animated: true, completion: nil)
+    }
+
+    @objc func reportPostButtonAction() {
+        print("report post button")
+    }
+
+    @objc func sharePostButtonAction() {
+        print("share post button")
+    }
+
+    @objc func deletePostButtonAction() {
+        print("delete post button")
+        DatabaseAction.deletePost(prismPost, completionHandler: { (result) in
+            if result {
+                self.delegate?.deletePost(self.prismPost)
+            }
+        })
     }
 
     // MARK: Animation Functions
 
     private func animateLikeButton() {
-
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             self.likeButton.isSelected = !self.likeButton.isSelected
@@ -424,9 +482,9 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func animateHeartImageView(isSelected: Bool) {
         if isSelected {
-            heartImageView.image = Icons.LIKE_FILL_48?.withRenderingMode(.alwaysTemplate)
+            heartImageView.image = Icons.LIKE_HEART?.withRenderingMode(.alwaysTemplate)
         } else {
-            heartImageView.image = Icons.LIKE_OUTLINE_48?.withRenderingMode(.alwaysTemplate)
+            heartImageView.image = Icons.UNLIKE_HEART?.withRenderingMode(.alwaysTemplate)
         }
         heartImageView.tintColor = UIColor.white
         heartImageView.alpha = 0.75
@@ -466,11 +524,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         CATransaction.commit()
     }
 
-    private func animateShareButton() {
+    private func animateRepostButton() {
         CATransaction.begin()
         CATransaction.setCompletionBlock({
-            self.shareButton.isSelected = !self.shareButton.isSelected
-            self.shareButton.tintColor = (self.shareButton.isSelected) ? UIColor.materialBlue : UIColor.white
+            self.repostButton.isSelected = !self.repostButton.isSelected
+            self.repostButton.tintColor = (self.repostButton.isSelected) ? UIColor.materialBlue : UIColor.white
         })
 
         let scaleAnimation1: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
@@ -480,7 +538,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation1.duration = 0.1
         scaleAnimation1.isRemovedOnCompletion = true
         scaleAnimation1.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
-        shareButton.layer.add(scaleAnimation1, forKey: "scaleAnimation1")
+        repostButton.layer.add(scaleAnimation1, forKey: "scaleAnimation1")
         CATransaction.commit()
 
         let scaleAnimation2: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
@@ -490,7 +548,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation2.duration = 0.1
         scaleAnimation2.isRemovedOnCompletion = true
         scaleAnimation2.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
-        self.shareButton.layer.add(scaleAnimation2, forKey: "scaleAnimation2")
+        self.repostButton.layer.add(scaleAnimation2, forKey: "scaleAnimation2")
 
         let scaleAnimation3: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation3.fromValue = 1
@@ -499,7 +557,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation3.duration = 0.1
         scaleAnimation3.isRemovedOnCompletion = true
         scaleAnimation3.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
-        self.shareButton.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
+        self.repostButton.layer.add(scaleAnimation3, forKey: "scaleAnimation3")
 
         let scaleAnimation4: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation4.fromValue = 0.75
@@ -508,7 +566,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation4.duration = 0.1
         scaleAnimation4.isRemovedOnCompletion = true
         scaleAnimation4.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
-        self.shareButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
+        self.repostButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
     }
 
     private func animateMoreButton() {
@@ -547,32 +605,5 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation4.isRemovedOnCompletion = true
         scaleAnimation4.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
         moreButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
-    }
-}
-
-extension UIImageView {
-    public func imageFromURL(urlString: String) {
-
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        activityIndicator.frame = CGRect.init(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
-        activityIndicator.startAnimating()
-        if self.image == nil{
-            self.addSubview(activityIndicator)
-        }
-
-        URLSession.shared.dataTask(with: NSURL(string: urlString)! as URL, completionHandler: { (data, response, error) -> Void in
-            print("getting image")
-            if error != nil {
-                print(error ?? "No Error")
-                return
-            }
-            DispatchQueue.main.async(execute: { () -> Void in
-                print("setting image")
-                let image = UIImage(data: data!)
-                activityIndicator.removeFromSuperview()
-                self.image = image
-            })
-
-        }).resume()
     }
 }
