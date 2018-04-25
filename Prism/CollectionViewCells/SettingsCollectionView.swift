@@ -21,8 +21,7 @@ class SettingsCollectionView: UICollectionViewCell {
     var profileImage: CustomImageView!
     var fullName: UILabel!
     var viewYourProfileText: UILabel!
-    
-    var profilePictureSize: CGFloat = 48
+    var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
     var boldFont: UIFont = RobotoFont.bold(with: 17)
     var mediumFont: UIFont = RobotoFont.light(with: 15)
     var thinFont: UIFont = RobotoFont.thin(with: 12)
@@ -54,8 +53,10 @@ class SettingsCollectionView: UICollectionViewCell {
         profileView.addConstraintsWithFormat(format: "H:|[v0(\(profilePictureSize))]-8-[v1]|", views: profileImage, topRightView)
         profileView.addConstraintsWithFormat(format: "V:|[v0(\(profilePictureSize))]|", views: profileImage)
         profileView.addConstraintsWithFormat(format: "V:|-4-[v0]-4-|", views: topRightView)
-        
-        
+        profileView.backgroundColor = UIColor(hex: #1a1a1a)
+        self.addSubview(profileView)
+        addConstraintsWithFormat(format: "H:[v0]", views: profileView)
+        addConstraint(NSLayoutConstraint(item: profileView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
     }
     
     private func initializeProfileView() {
@@ -84,6 +85,7 @@ class SettingsCollectionView: UICollectionViewCell {
     
     private func initializeProfilePicture() {
         profileImage = CustomImageView()
+        loadProfileImage()
         profileImage.contentMode = .scaleAspectFit
         profileImage.layer.cornerRadius = profilePictureSize/2
         profileImage.clipsToBounds = true
@@ -95,6 +97,16 @@ class SettingsCollectionView: UICollectionViewCell {
         print("Tapped on profile View")
     }
     
+    public func loadProfileImage() {
+        let profilePicture = CurrentUser.prismUser.getProfilePicture().getLowResDefaultProfilePic()
+//        if profilePicture != nil {
+            profileImage.image = profilePicture
+//        } else {
+//            let imageUrl = CurrentUser.prismUser.getProfilePicture().profilePicUriString
+//            profileImage.loadImageUsingUrlString
+//            self.addBorderToProfilePic()
+//        }
+    }
     
 
 
