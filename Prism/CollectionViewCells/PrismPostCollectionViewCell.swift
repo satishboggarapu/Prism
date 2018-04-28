@@ -314,10 +314,9 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         reposts.text = Helper.getRepostsCountString(count: prismPost.getReposts())
     }
 
-    public func toggleLikeButton(_ isSelected: Bool) {
-        likeButton.isSelected = isSelected
-        likeButton.tintColor = (isSelected) ? UIColor.materialBlue : UIColor.white
-
+    public func toggleLikeButton() {
+        likeButton.isSelected = CurrentUser.hasLiked(prismPost)
+        likeButton.tintColor = (likeButton.isSelected) ? UIColor.materialBlue : UIColor.white
     }
     
     public func toggleRepostButton() {
@@ -360,7 +359,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func likesButtonAction(_ sender: UIButton) {
-        print("Tapped on Like Button")
         // TODO; Disable user interaction while animating so the user doesnt spam  the button and make a lot of firebase requests
         // TODO: Scale down the heartImageView so that is looks good for panorama pictures also
         animateLikeButton()
@@ -378,8 +376,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func repostButtonAction(_ sender: UIButton) {
-        print("Tapped on Repost Button")
-
         if !CurrentUser.hasReposted(prismPost) {
             let alertController = CustomAlertDialog(title: Default.REPOST_MESSAGE, cancelButtonText: Default.BUTTON_CANCEL, okayButtonText: Default.BUTTON_REPOST)
             alertController.okayButton.addTarget(self, action: #selector(repostAlertDialogButtonAction), for: .touchUpInside)
@@ -409,8 +405,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func moreButtonAction(_ sender: UIButton) {
-        print("Tapped on More Button")
-
         animateMoreButton()
 
         let moreDialog = MoreDialog(prismPost: prismPost)

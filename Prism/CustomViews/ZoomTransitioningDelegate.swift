@@ -123,11 +123,9 @@ extension ZoomTransitioningDelegate: UIViewControllerAnimatedTransitioning {
 extension ZoomTransitioningDelegate: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if fromVC is ZoomingViewController && toVC is ZoomingViewController {
-            print("yes")
             self.operation = operation
             return self
         } else {
-            print("no")
             return nil
         }
     }

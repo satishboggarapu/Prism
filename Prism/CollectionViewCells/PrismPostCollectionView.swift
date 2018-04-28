@@ -138,7 +138,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.setPostDateText()
         cell.setLikesText()
         cell.setRepostsText()
-        cell.toggleLikeButton(CurrentUser.hasLiked(prismPost))
+        cell.toggleLikeButton()
         cell.toggleRepostButton()
         cell.viewController = viewController
 

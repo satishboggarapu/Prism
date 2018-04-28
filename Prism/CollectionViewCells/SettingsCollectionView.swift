@@ -53,7 +53,7 @@ class SettingsCollectionView: UICollectionViewCell {
         profileView.addConstraintsWithFormat(format: "H:|[v0(\(profilePictureSize))]-8-[v1]|", views: profileImage, topRightView)
         profileView.addConstraintsWithFormat(format: "V:|[v0(\(profilePictureSize))]|", views: profileImage)
         profileView.addConstraintsWithFormat(format: "V:|-4-[v0]-4-|", views: topRightView)
-        profileView.backgroundColor = UIColor(hex: #1a1a1a)
+        profileView.backgroundColor = UIColor(hex: 0x1a1a1a)
         self.addSubview(profileView)
         addConstraintsWithFormat(format: "H:[v0]", views: profileView)
         addConstraint(NSLayoutConstraint(item: profileView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))

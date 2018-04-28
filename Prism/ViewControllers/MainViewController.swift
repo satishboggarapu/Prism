@@ -285,17 +285,15 @@ extension MainViewController: PrismPostCollectionViewDelegate {
         selectedPrismPostIndexPath = indexPath
         let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! PrismPostCollectionView
         let prismPostCell = cell.collectionView.cellForItem(at: indexPath) as! PrismPostCollectionViewCell
-//        print(prismPostCell.prismPost.getPostId())
 
         let viewController = PrismPostDetailViewController()
         viewController.image = prismPostCell.postImage.image
         viewController.prismPost = prismPostCell.prismPost
+        viewController.prismPostCell = prismPostCell
 
         self.navigationController?.delegate = zoomTransitioningDelegate
         resetNavigationBar = true
         self.navigationController?.pushViewController(viewController, animated: true)
-
-
     }
 }
 
