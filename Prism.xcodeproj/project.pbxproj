@@ -43,6 +43,7 @@
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
 		192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40A7ADA16934A87DB9F3 /* ImageManager.swift */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
+		4F8A41B42076904200E65E01 /* SettingsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */; };
 		4F9C95812050C5A800C08C9E /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C95802050C5A800C08C9E /* Key.swift */; };
 		4F9C95832050CBC700C08C9E /* Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C95822050CBC700C08C9E /* Default.swift */; };
 		4F9C95852050D5BF00C08C9E /* MyTimeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C95842050D5BF00C08C9E /* MyTimeUnit.swift */; };
@@ -117,6 +118,7 @@
 		192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertDialog.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
+		4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCollectionView.swift; sourceTree = "<group>"; };
 		4F9C95802050C5A800C08C9E /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		4F9C95822050CBC700C08C9E /* Default.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Default.swift; sourceTree = "<group>"; };
 		4F9C95842050D5BF00C08C9E /* MyTimeUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTimeUnit.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */,
 				10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */,
 				10ADF6B62050D30B00060A19 /* MenuCell.swift */,
+				4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -685,6 +688,7 @@
 				10ADF6B72050D30B00060A19 /* PrismPostCollectionView.swift in Sources */,
 				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
 				10ADF6C42050D52000060A19 /* MainViewController.swift in Sources */,
+				4F8A41B42076904200E65E01 /* SettingsCollectionView.swift in Sources */,
 				4F9C95902050D71C00C08C9E /* Helper.swift in Sources */,
 				4F9C958A2050D6F400C08C9E /* PrismPost.swift in Sources */,
 				4F9C958B2050D6F400C08C9E /* PrismUser.swift in Sources */,
@@ -867,7 +871,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TEGLEE3UYA;
+				DEVELOPMENT_TEAM = Y255RY3RZB;
 				INFOPLIST_FILE = Prism/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -884,7 +888,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TEGLEE3UYA;
+				DEVELOPMENT_TEAM = Y255RY3RZB;
 				INFOPLIST_FILE = Prism/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
