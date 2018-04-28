@@ -148,4 +148,14 @@ public class Helper {
     public static func isPostReposted(prismPost: PrismPost, prismUser: PrismUser) -> Bool {
         return !prismPost.getUid().elementsEqual(prismUser.getUid())
     }
+
+    /**
+     */
+    public static func getImageHeightForPrismPostDetailViewController(_ image: UIImage) -> CGFloat {
+        let imageWidthInPixels = Constraints.screenWidth() * UIScreen.main.scale
+        let imageHeightInPixels = Constraints.screenHeight() * UIScreen.main.scale
+        let imageRatio = image.size.width / image.size.height
+        let imageHeight = ((imageWidthInPixels * image.size.height) / image.size.width) / UIScreen.main.scale
+        return imageHeight
+    }
 }

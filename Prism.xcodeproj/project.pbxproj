@@ -32,7 +32,9 @@
 		10E3F55C204659EF00C82F3F /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F559204659EE00C82F3F /* Icons.swift */; };
 		10E3F55D204659EF00C82F3F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E3F55A204659EE00C82F3F /* Colors.swift */; };
 		10FCD82A205F03E8001E0C1F /* DefaultProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */; };
+		192E40D5CF4CC660CDDA1106 /* PrismPostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */; };
 		192E40E74CF1F2D5D23C3973 /* CustomAlertDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */; };
+		192E410D9F27B1D4982139A3 /* ZoomTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */; };
 		192E41801618B460A2483C95 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4678BF58B239D159B832 /* CustomImageView.swift */; };
 		192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
@@ -105,8 +107,10 @@
 		10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfilePicture.swift; sourceTree = "<group>"; };
 		192E406B8694AA1A663C7AFC /* DatabaseAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseAction.swift; sourceTree = "<group>"; };
 		192E40A7ADA16934A87DB9F3 /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostDetailViewController.swift; sourceTree = "<group>"; };
 		192E4678BF58B239D159B832 /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomTransitioningDelegate.swift; sourceTree = "<group>"; };
 		192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostConstraints.swift; sourceTree = "<group>"; };
 		192E4A2B1DDAB32382236D47 /* MoreDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreDialog.swift; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -189,6 +193,7 @@
 				1091E1F5203E838500C282BA /* LoginViewController.swift */,
 				10E3F556204659DF00C82F3F /* RegisterViewController.swift */,
 				10ADF6C32050D52000060A19 /* MainViewController.swift */,
+				192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -286,6 +291,7 @@
 				192E4678BF58B239D159B832 /* CustomImageView.swift */,
 				192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */,
 				192E4A2B1DDAB32382236D47 /* MoreDialog.swift */,
+				192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -688,6 +694,8 @@
 				192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */,
 				192E40E74CF1F2D5D23C3973 /* CustomAlertDialog.swift in Sources */,
 				192E475921D261AF8321C298 /* MoreDialog.swift in Sources */,
+				192E410D9F27B1D4982139A3 /* ZoomTransitioningDelegate.swift in Sources */,
+				192E40D5CF4CC660CDDA1106 /* PrismPostDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,11 +9,15 @@ import Material
 import MaterialComponents
 import Firebase
 
+protocol PrismPostCollectionViewDelegate: class {
+    func prismPostSelected(_ indexPath: IndexPath)
+}
+
 class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate, PrismPostCollectionViewCellDelegate {
 
-
+    var delegate: PrismPostCollectionViewDelegate?
     var viewController = MainViewController()
-    private var collectionView: UICollectionView!
+    var collectionView: UICollectionView!
     private var activityIndicator: MDCActivityIndicator!
     private var refreshControl: UIRefreshControl!
     private var reloadVisibleCells: Bool = true
@@ -226,6 +230,14 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
             prismPostArrayList.remove(at: index!)
             collectionView.deleteItems(at: [IndexPath(item: index!, section: 0)])
         }
+    }
+
+    func postImageSelected(_ prismPost: PrismPost) {
+        let index = prismPostArrayList.index(of: prismPost)
+        if index != nil {
+            delegate?.prismPostSelected(IndexPath(item: index!, section: 0))
+        }
+
     }
 }
 

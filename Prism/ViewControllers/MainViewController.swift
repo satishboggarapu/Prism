@@ -13,13 +13,16 @@ import Motion
 import MaterialComponents
 import SDWebImage
 
-class MainViewController: UIViewController{
+class MainViewController: UIViewController {
 
     var navigationBar: NavigationBar!
     var menuBar: MenuBar!
     var collectionView: UICollectionView!
     var newPostButton: FABButton!
     var newPostButtonHidden: Bool = false
+    var selectedPrismPostIndexPath: IndexPath!
+    let zoomTransitioningDelegate  = ZoomTransitioningDelegate()
+    var resetNavigationBar: Bool = false
 
     var onDoneBlock : ((Bool) -> Void)?
 
@@ -68,7 +71,22 @@ class MainViewController: UIViewController{
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        
+        if resetNavigationBar {
+//            self.navigationController?.setNavigationBarHidden(false, animated: false)
+//            self.navigationController?.navigationBar.barTintColor = UIColor.statusBarBackground
+//            self.navigationController?.navigationBar.isTranslucent = false
+//            self.navigationItem.setHidesBackButton(true, animated: false)
+//
+////            view.removeConstraints(view.constraints)
+//            view.addConstraintsWithFormat(format: "H:|[v0]|", views: menuBar)
+//            view.addConstraintsWithFormat(format: "V:|[v0(50)]", views: menuBar)
+
+
+            resetNavigationBar = false
+        }
+//        setupNavigationBar()
+//        initializeMenuBar()
+
 
     }
     
@@ -86,7 +104,6 @@ class MainViewController: UIViewController{
     }
 
     private func setupNavigationBar() {
-        navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.navigationBar.barTintColor = UIColor.statusBarBackground
         self.navigationController?.navigationBar.isTranslucent = false
@@ -179,7 +196,7 @@ class MainViewController: UIViewController{
 //        self.navigationController?.hidesBarsOnSwipe = true
         menuBar = MenuBar()
         menuBar.homeController = self
-        menuBar.translatesAutoresizingMaskIntoConstraints = false
+        menuBar.translatesAutoresizingMaskIntoConstraints = true
         self.view.addSubview(menuBar)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: menuBar)
         view.addConstraintsWithFormat(format: "V:|[v0(50)]", views: menuBar)
@@ -261,6 +278,41 @@ class MainViewController: UIViewController{
     }
 }
 
+extension MainViewController: PrismPostCollectionViewDelegate {
+    func prismPostSelected(_ indexPath: IndexPath) {
+        print("post image selected")
+        selectedPrismPostIndexPath = indexPath
+        let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! PrismPostCollectionView
+        let prismPostCell = cell.collectionView.cellForItem(at: indexPath) as! PrismPostCollectionViewCell
+//        print(prismPostCell.prismPost.getPostId())
+
+        let viewController = PrismPostDetailViewController()
+        viewController.image = prismPostCell.postImage.image
+        viewController.prismPost = prismPostCell.prismPost
+
+        self.navigationController?.delegate = zoomTransitioningDelegate
+        resetNavigationBar = true
+        self.navigationController?.pushViewController(viewController, animated: true)
+
+
+    }
+}
+
+extension MainViewController: ZoomingViewController {
+    func zoomingBackgroundView(for transition: ZoomTransitioningDelegate) -> UIView? {
+        return nil
+    }
+
+    func zoomingImageView(for transition: ZoomTransitioningDelegate) -> CustomImageView? {
+        if let indexPath = selectedPrismPostIndexPath {
+            let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! PrismPostCollectionView
+            let prismPostCell = cell.collectionView.cellForItem(at: indexPath) as! PrismPostCollectionViewCell
+            return prismPostCell.postImage
+        }
+        return nil
+    }
+}
+
 extension MainViewController: UICollectionViewDataSource,  UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -275,6 +327,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath) as! PrismPostCollectionView
             cell.viewController = self
+            cell.delegate = self
 //            cell.prismPostArrayList = self.prismPostArrayList
             return cell
         } else {

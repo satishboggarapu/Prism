@@ -10,6 +10,7 @@ import AVFoundation
 
 protocol PrismPostCollectionViewCellDelegate: class {
     func deletePost(_ prismPost: PrismPost)
+    func postImageSelected(_ prismPost: PrismPost)
 }
 
 class PrismPostCollectionViewCell: UICollectionViewCell {
@@ -194,8 +195,12 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
         // tap gesture
         let postImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(postImageTapGestureAction(_:)))
-        postImageTapGesture.numberOfTapsRequired = 2
+        postImageTapGesture.numberOfTapsRequired = 1
         postImage.addGestureRecognizer(postImageTapGesture)
+
+        let postImageDoubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(postImageDoubleTapGestureAction(_:)))
+        postImageDoubleTapGesture.numberOfTapsRequired = 2
+        postImage.addGestureRecognizer(postImageDoubleTapGesture)
     }
 
     private func initializeHeartImageView() {
@@ -339,6 +344,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     @objc func postImageTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Post Image View")
+        delegate?.postImageSelected(prismPost)
+    }
+
+    @objc func postImageDoubleTapGestureAction(_ sender: UITapGestureRecognizer) {
+        print("Double Tapped on Post Image View")
     }
 
     @objc func likesLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
@@ -404,33 +414,12 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         animateMoreButton()
 
         let moreDialog = MoreDialog(prismPost: prismPost)
-        moreDialog.reportButton.addTarget(self, action: #selector(reportPostButtonAction), for: .touchUpInside)
-        moreDialog.shareButton.addTarget(self, action: #selector(sharePostButtonAction), for: .touchUpInside)
-        if prismPost.getUid() == CurrentUser.prismUser.getUid() {
-            moreDialog.deleteButton.addTarget(self, action: #selector(deletePostButtonAction), for: .touchUpInside)
-        }
+        moreDialog.delegate = self
         moreDialog.providesPresentationContextTransitionStyle = true
         moreDialog.definesPresentationContext = true
         moreDialog.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
         moreDialog.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         self.window?.rootViewController?.present(moreDialog, animated: true, completion: nil)
-    }
-
-    @objc func reportPostButtonAction() {
-        print("report post button")
-    }
-
-    @objc func sharePostButtonAction() {
-        print("share post button")
-    }
-
-    @objc func deletePostButtonAction() {
-        print("delete post button")
-        DatabaseAction.deletePost(prismPost, completionHandler: { (result) in
-            if result {
-                self.delegate?.deletePost(self.prismPost)
-            }
-        })
     }
 
     // MARK: Animation Functions
@@ -605,5 +594,23 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         scaleAnimation4.isRemovedOnCompletion = true
         scaleAnimation4.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 0.01, 0.69, 1.37)
         moreButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
+    }
+}
+
+extension PrismPostCollectionViewCell: MoreDialogDelegate {
+    func moreDialogReportButtonAction() {
+
+    }
+
+    func moreDialogShareButtonAction() {
+
+    }
+
+    func moreDialogDeleteButtonAction() {
+        DatabaseAction.deletePost(prismPost, completionHandler: { (result) in
+            if result {
+                self.delegate?.deletePost(self.prismPost)
+            }
+        })
     }
 }

@@ -4,17 +4,25 @@
 //
 
 import UIKit
+import MaterialComponents
 import Material
+
+protocol MoreDialogDelegate: class {
+    func moreDialogReportButtonAction()
+    func moreDialogShareButtonAction()
+    func moreDialogDeleteButtonAction()
+}
 
 class MoreDialog: UIViewController {
 
     // UIElements
     private var backgroundView: UIView!
     private var dialogView: UIView!
-    var reportButton: UIButton!
-    var shareButton: UIButton!
-    var deleteButton: UIButton!
+    private var reportButton: MDCFlatButton!
+    private var shareButton: MDCFlatButton!
+    private var deleteButton: MDCFlatButton!
 
+    weak var delegate: MoreDialogDelegate?
     private var shouldDisplayDeleteButton: Bool!
 
     convenience init(prismPost: PrismPost) {
@@ -96,35 +104,47 @@ class MoreDialog: UIViewController {
     }
 
     private func initializeReportButton() {
-        reportButton = UIButton()
+        reportButton = MDCFlatButton()
         reportButton.setTitle("Report post", for: .normal)
         reportButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
         reportButton.titleLabel?.font = RobotoFont.medium(with: 16)
         reportButton.contentHorizontalAlignment = .left
-//        reportButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonAction), for: .touchUpInside)
         dialogView.addSubview(reportButton)
     }
 
     private func initializeShareButton() {
-        shareButton = UIButton()
+        shareButton = MDCFlatButton()
         shareButton.setTitle("Share", for: .normal)
         shareButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
         shareButton.titleLabel?.font = RobotoFont.medium(with: 16)
         shareButton.contentHorizontalAlignment = .left
-//        shareButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(shareButtonAction), for: .touchUpInside)
         dialogView.addSubview(shareButton)
     }
 
     private  func initializeDeleteButton() {
-        deleteButton = UIButton()
+        deleteButton = MDCFlatButton()
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
         deleteButton.titleLabel?.font = RobotoFont.medium(with: 16)
         deleteButton.contentHorizontalAlignment = .left
-        deleteButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
+        deleteButton.addTarget(self, action: #selector(deleteButtonAction), for: .touchUpInside)
         dialogView.addSubview(deleteButton)
     }
 
+    @objc private func reportButtonAction() {
+        delegate?.moreDialogReportButtonAction()
+    }
+
+    @objc private func shareButtonAction() {
+        delegate?.moreDialogShareButtonAction()
+    }
+
+    @objc private func deleteButtonAction() {
+        dismissView()
+        delegate?.moreDialogDeleteButtonAction()
+    }
 
     @objc func dismissView() {
         self.dismiss(animated: true)
