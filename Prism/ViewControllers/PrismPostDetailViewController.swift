@@ -28,6 +28,9 @@ class PrismPostDetailViewController: UIViewController {
     private var likesLabel: UILabel!
     private var repostsLabel: UILabel!
 
+    private var lastCollectionViewContentOffset: CGFloat = 0
+    private var offset: CGFloat = 0
+
     var profilePictureSize: CGFloat = 48
     var boldFont: UIFont = RobotoFont.bold(with: 17)
     var mediumFont: UIFont = RobotoFont.light(with: 15)
@@ -45,7 +48,7 @@ class PrismPostDetailViewController: UIViewController {
         initializeImageView()
         initializeProfileView()
 
-        scrollView.contentSize = CGSize(width: self.view.frame.width, height: imageView.frame.height + 72)
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: imageView.frame.height + 22)
 
         initializeBackButton()
         initializeMoreButton()
@@ -63,6 +66,7 @@ class PrismPostDetailViewController: UIViewController {
 
     private func initializeScrollView() {
         scrollView = UIScrollView()
+        scrollView.delegate = self
         scrollView.bounces = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
@@ -107,8 +111,7 @@ class PrismPostDetailViewController: UIViewController {
     private func initializeProfileView() {
         profileView = UIView()
         profileView.frame = CGRect(x: 0, y: imageView.frame.maxY, width: self.view.frame.width, height: 72)
-        profileView.backgroundColor = .navigationBarColor
-//        profileView.translatesAutoresizingMaskIntoConstraints = false
+        profileView.backgroundColor = .statusBarBackground
         scrollView.addSubview(profileView)
 
         initializeProfileImage()
@@ -216,6 +219,8 @@ class PrismPostDetailViewController: UIViewController {
 
         toggleRepostButton()
     }
+
+
     
     @objc func backButtonAction() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -398,6 +403,36 @@ class PrismPostDetailViewController: UIViewController {
         self.repostButton.layer.add(scaleAnimation4, forKey: "scaleAnimation4")
     }
 
+}
+
+extension PrismPostDetailViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.y
+
+        if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
+            // scrolled up
+//            if offset < 50 {
+//                profileView.frame = CGRect(x: 0, y: (imageView.frame.maxY - 10), width: self.view.frame.width, height: 72)
+//            }
+        } else if self.lastCollectionViewContentOffset < scrollView.contentOffset.y {
+            // scrolled down
+//            if offset > scrollView.contentSize.height - self.view.frame.height - 20 - 30 {
+//                profileView.frame.origin = CGPoint(x: 0, y: imageView.frame.maxY + offset)
+//            }
+            if offset < 54 && profileView != nil {
+                profileView.frame = CGRect(x: 0, y: (imageView.frame.maxY - offset), width: self.view.frame.width, height: 72)
+            }
+        }
+        self.lastCollectionViewContentOffset = scrollView.contentOffset.y
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if profileView != nil {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.profileView.frame = CGRect(x: 0, y: (self.imageView.frame.maxY - 53), width: self.view.frame.width, height: 72)
+            })
+        }
+    }
 }
 
 extension PrismPostDetailViewController: MoreDialogDelegate {

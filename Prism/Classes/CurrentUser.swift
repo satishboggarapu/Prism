@@ -40,7 +40,7 @@ public class CurrentUser {
      * Value: String uid
      */
     public static var followers: [String : Int64]!
-    public static var followings: [String : String]!
+    public static var followings: [String : Int64]!
 
     init() {
         CurrentUser.auth = Auth.auth()
@@ -63,7 +63,7 @@ public class CurrentUser {
      * Adds given prismUser to CurrentUser's followings HashMap
      */
     static func followUser(_ prismUser: PrismUser) {
-        followings[prismUser.getUid()] = prismUser.getUsername()
+        followings[prismUser.getUid()] = Date().milliseconds()
     }
     
     /**
@@ -188,7 +188,7 @@ public class CurrentUser {
         uploaded_posts_map = [String: Int64]()
         
         followers = [String : Int64]()
-        followings = [String : String]()
+        followings = [String : Int64]()
         
         DatabaseAction.fetchUserProfile()
     }

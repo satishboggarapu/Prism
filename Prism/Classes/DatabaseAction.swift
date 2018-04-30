@@ -188,8 +188,9 @@ public class DatabaseAction {
                     // had a problem with casting json to [String: String], so I changed it to [String: Any]
                     CurrentUser.followers.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWERS).value as! [String: Int64])
                 }
+                
                 if currentUserSnapshot.hasChild(Key.DB_REF_USER_FOLLOWINGS) {
-                    CurrentUser.followings.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWINGS).value as! [String: String])
+                    CurrentUser.followings.update(other: currentUserSnapshot.childSnapshot(forPath: Key.DB_REF_USER_FOLLOWINGS).value as! [String: Int64])
                 }
                 
                 allPostReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
