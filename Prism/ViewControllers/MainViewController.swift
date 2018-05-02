@@ -295,6 +295,12 @@ extension MainViewController: PrismPostCollectionViewDelegate {
         resetNavigationBar = true
         self.navigationController?.pushViewController(viewController, animated: true)
     }
+
+    func profileViewSelected(_ prismPost: PrismPost) {
+        let viewController = ProfileViewController()
+        viewController.prismPost = prismPost
+        navigationController?.pushViewController(viewController, animated: false)
+    }
 }
 
 extension MainViewController: ZoomingViewController {

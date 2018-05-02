@@ -39,6 +39,7 @@
 		192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
 		192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E406B8694AA1A663C7AFC /* DatabaseAction.swift */; };
+		192E471389C6ED6C0578FCB0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4E71BDD094785EA8DE44 /* ProfileViewController.swift */; };
 		192E475921D261AF8321C298 /* MoreDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2B1DDAB32382236D47 /* MoreDialog.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
 		192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40A7ADA16934A87DB9F3 /* ImageManager.swift */; };
@@ -115,6 +116,7 @@
 		192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostConstraints.swift; sourceTree = "<group>"; };
 		192E4A2B1DDAB32382236D47 /* MoreDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreDialog.swift; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		192E4E71BDD094785EA8DE44 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertDialog.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				10E3F556204659DF00C82F3F /* RegisterViewController.swift */,
 				10ADF6C32050D52000060A19 /* MainViewController.swift */,
 				192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */,
+				192E4E71BDD094785EA8DE44 /* ProfileViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -700,6 +703,7 @@
 				192E475921D261AF8321C298 /* MoreDialog.swift in Sources */,
 				192E410D9F27B1D4982139A3 /* ZoomTransitioningDelegate.swift in Sources */,
 				192E40D5CF4CC660CDDA1106 /* PrismPostDetailViewController.swift in Sources */,
+				192E471389C6ED6C0578FCB0 /* ProfileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

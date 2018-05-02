@@ -11,6 +11,7 @@ import AVFoundation
 protocol PrismPostCollectionViewCellDelegate: class {
     func deletePost(_ prismPost: PrismPost)
     func postImageSelected(_ prismPost: PrismPost)
+    func profileViewSelected(_ prismPost: PrismPost)
 }
 
 class PrismPostCollectionViewCell: UICollectionViewCell {
@@ -338,7 +339,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     // MARK: Tap Gesture Methods
 
     @objc func profileTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on profile View")
+        delegate?.profileViewSelected(prismPost)
     }
 
     @objc func postImageTapGestureAction(_ sender: UITapGestureRecognizer) {

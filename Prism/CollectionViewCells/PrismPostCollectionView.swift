@@ -11,9 +11,10 @@ import Firebase
 
 protocol PrismPostCollectionViewDelegate: class {
     func prismPostSelected(_ indexPath: IndexPath)
+    func profileViewSelected(_ prismPost: PrismPost)
 }
 
-class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate, PrismPostCollectionViewCellDelegate {
+class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate {
 
     var delegate: PrismPostCollectionViewDelegate?
     var viewController = MainViewController()
@@ -221,8 +222,9 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
             }
         }
     }
+}
 
-
+extension PrismPostCollectionView: PrismPostCollectionViewCellDelegate {
     func deletePost(_ prismPost: PrismPost) {
         print("delete post from collectionView")
         let index = prismPostArrayList.index(of: prismPost)
@@ -239,8 +241,11 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         }
 
     }
-}
 
+    func profileViewSelected(_ prismPost: PrismPost) {
+        delegate?.profileViewSelected(prismPost)
+    }
+}
 
 
 // MARK: Firebase Functions
