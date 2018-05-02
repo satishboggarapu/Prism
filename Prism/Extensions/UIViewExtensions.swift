@@ -19,4 +19,32 @@ extension UIView {
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(),
                 metrics: nil, views: viewsDictionary))
     }
+
+    // OUTPUT 1
+    func dropShadow(scale: Bool = true) {
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = UIColor.white.cgColor
+//        self.layer.shadowOpacity =
+        self.layer.shadowOffset = CGSize(width: 4, height: 4)
+        self.layer.shadowRadius = 4
+        self.layer.cornerRadius = 2
+        
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        self.layer.shouldRasterize = true
+        self.layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+    }
+    
+    // OUTPUT 2
+    func dropShadow(color: UIColor, opacity: Float = 0.5, offSet: CGSize, shadowRadius: CGFloat = 1, cornerRadius: CGFloat, scale: Bool = true) {
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOpacity = opacity
+        self.layer.shadowOffset = offSet
+        self.layer.shadowRadius = shadowRadius
+        self.layer.cornerRadius = cornerRadius
+        
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        self.layer.shouldRasterize = true
+        self.layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+    }
 }

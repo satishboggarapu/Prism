@@ -78,5 +78,9 @@ public struct Icons {
     public static var ARROW_BACK_24 = Icons.icon("ic_arrow_back_white")
     public static var ACCOUNT_EDIT_24 = Icons.icon("ic_account_edit_24dp")
     
+    
+    public static var SETTINGS_24 = Icons.icon("ic_settings_24dp")
+
+    
 }
 
