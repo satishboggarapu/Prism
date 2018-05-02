@@ -75,5 +75,9 @@ public struct Icons {
     public static var DEFAULT_PROFILE_PIC_8_HI = Icons.icon("default_prof_8_hi")
     public static var DEFAULT_PROFILE_PIC_9_HI = Icons.icon("default_prof_9_hi")
     
+    
+    public static var SETTINGS_24 = Icons.icon("ic_settings_24dp")
+
+    
 }
 
