@@ -16,7 +16,7 @@ import SDWebImage
 class MainViewController: UIViewController {
 
     var navigationBar: NavigationBar!
-    var menuBar: MenuBar!
+    var menuBar: MainViewMenuBar!
     var collectionView: UICollectionView!
     var newPostButton: FABButton!
     var newPostButtonHidden: Bool = false
@@ -194,7 +194,7 @@ class MainViewController: UIViewController {
     private func initializeMenuBar() {
         // TODO: Hide navigationbar on swipe
 //        self.navigationController?.hidesBarsOnSwipe = true
-        menuBar = MenuBar()
+        menuBar = MainViewMenuBar()
         menuBar.homeController = self
         menuBar.translatesAutoresizingMaskIntoConstraints = true
         self.view.addSubview(menuBar)

@@ -21,8 +21,8 @@
 		1091E214203E838500C282BA /* PrismUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E213203E838500C282BA /* PrismUITests.swift */; };
 		10ADF6B72050D30B00060A19 /* PrismPostCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */; };
 		10ADF6B82050D30B00060A19 /* PrismPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */; };
-		10ADF6B92050D30B00060A19 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B62050D30B00060A19 /* MenuCell.swift */; };
-		10ADF6BD2050D33500060A19 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BB2050D33500060A19 /* MenuBar.swift */; };
+		10ADF6B92050D30B00060A19 /* ImageMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6B62050D30B00060A19 /* ImageMenuCell.swift */; };
+		10ADF6BD2050D33500060A19 /* MainViewMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BB2050D33500060A19 /* MainViewMenuBar.swift */; };
 		10ADF6BE2050D33500060A19 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BC2050D33500060A19 /* NavigationBar.swift */; };
 		10ADF6C12050D36000060A19 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6BF2050D36000060A19 /* UIViewControllerExtensions.swift */; };
 		10ADF6C22050D36000060A19 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10ADF6C02050D36000060A19 /* UIViewExtensions.swift */; };
@@ -35,6 +35,7 @@
 		192E40D5CF4CC660CDDA1106 /* PrismPostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */; };
 		192E40E74CF1F2D5D23C3973 /* CustomAlertDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */; };
 		192E410D9F27B1D4982139A3 /* ZoomTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */; };
+		192E413E1DF0AAD825A95ADA /* ProfileViewMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E44A288763762AEF945E3 /* ProfileViewMenuBar.swift */; };
 		192E41801618B460A2483C95 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4678BF58B239D159B832 /* CustomImageView.swift */; };
 		192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */; };
 		192E43E16641725F17286B02 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */; };
@@ -42,6 +43,7 @@
 		192E471389C6ED6C0578FCB0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4E71BDD094785EA8DE44 /* ProfileViewController.swift */; };
 		192E475921D261AF8321C298 /* MoreDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4A2B1DDAB32382236D47 /* MoreDialog.swift */; };
 		192E479FAC15A1B6A5C0CF65 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 192E4711142E676DC6844EDA /* GoogleService-Info.plist */; };
+		192E4C1277313C3406F4FD11 /* LabelMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4E032ABD9200A979DE31 /* LabelMenuCell.swift */; };
 		192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40A7ADA16934A87DB9F3 /* ImageManager.swift */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
 		4F8A41B42076904200E65E01 /* SettingsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */; };
@@ -96,8 +98,8 @@
 		1091E215203E838500C282BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrismPostCollectionView.swift; path = Prism/CollectionViewCells/PrismPostCollectionView.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrismPostCollectionViewCell.swift; path = Prism/CollectionViewCells/PrismPostCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
-		10ADF6B62050D30B00060A19 /* MenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuCell.swift; path = Prism/CollectionViewCells/MenuCell.swift; sourceTree = SOURCE_ROOT; };
-		10ADF6BB2050D33500060A19 /* MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuBar.swift; path = Prism/CustomViews/MenuBar.swift; sourceTree = SOURCE_ROOT; };
+		10ADF6B62050D30B00060A19 /* ImageMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageMenuCell.swift; path = Prism/CollectionViewCells/ImageMenuCell.swift; sourceTree = SOURCE_ROOT; };
+		10ADF6BB2050D33500060A19 /* MainViewMenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewMenuBar.swift; path = Prism/CustomViews/MainViewMenuBar.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6BC2050D33500060A19 /* NavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NavigationBar.swift; path = Prism/CustomViews/NavigationBar.swift; sourceTree = SOURCE_ROOT; };
 		10ADF6BF2050D36000060A19 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		10ADF6C02050D36000060A19 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
@@ -110,12 +112,14 @@
 		192E406B8694AA1A663C7AFC /* DatabaseAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseAction.swift; sourceTree = "<group>"; };
 		192E40A7ADA16934A87DB9F3 /* ImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostDetailViewController.swift; sourceTree = "<group>"; };
+		192E44A288763762AEF945E3 /* ProfileViewMenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewMenuBar.swift; sourceTree = "<group>"; };
 		192E4678BF58B239D159B832 /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomTransitioningDelegate.swift; sourceTree = "<group>"; };
 		192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrismPostConstraints.swift; sourceTree = "<group>"; };
 		192E4A2B1DDAB32382236D47 /* MoreDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreDialog.swift; sourceTree = "<group>"; };
 		192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		192E4E032ABD9200A979DE31 /* LabelMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelMenuCell.swift; sourceTree = "<group>"; };
 		192E4E71BDD094785EA8DE44 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertDialog.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -283,8 +287,9 @@
 			children = (
 				10ADF6B52050D30B00060A19 /* PrismPostCollectionViewCell.swift */,
 				10ADF6B42050D30A00060A19 /* PrismPostCollectionView.swift */,
-				10ADF6B62050D30B00060A19 /* MenuCell.swift */,
+				10ADF6B62050D30B00060A19 /* ImageMenuCell.swift */,
 				4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */,
+				192E4E032ABD9200A979DE31 /* LabelMenuCell.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -292,12 +297,13 @@
 		10ADF6BA2050D32000060A19 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				10ADF6BB2050D33500060A19 /* MenuBar.swift */,
+				10ADF6BB2050D33500060A19 /* MainViewMenuBar.swift */,
 				10ADF6BC2050D33500060A19 /* NavigationBar.swift */,
 				192E4678BF58B239D159B832 /* CustomImageView.swift */,
 				192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */,
 				192E4A2B1DDAB32382236D47 /* MoreDialog.swift */,
 				192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */,
+				192E44A288763762AEF945E3 /* ProfileViewMenuBar.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -667,7 +673,7 @@
 				10ADF6BE2050D33500060A19 /* NavigationBar.swift in Sources */,
 				100763C22041B106005093C5 /* Constraints.swift in Sources */,
 				10ADF6B82050D30B00060A19 /* PrismPostCollectionViewCell.swift in Sources */,
-				10ADF6BD2050D33500060A19 /* MenuBar.swift in Sources */,
+				10ADF6BD2050D33500060A19 /* MainViewMenuBar.swift in Sources */,
 				106EAD9F2062E97C008E41B0 /* SDWebImageHelper.swift in Sources */,
 				1011FAE02075BF3800468D82 /* DateExtensions.swift in Sources */,
 				4F9C958C2050D6F400C08C9E /* ProfilePicture.swift in Sources */,
@@ -686,7 +692,7 @@
 				10E3F557204659DF00C82F3F /* RegisterViewController.swift in Sources */,
 				1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */,
 				4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */,
-				10ADF6B92050D30B00060A19 /* MenuCell.swift in Sources */,
+				10ADF6B92050D30B00060A19 /* ImageMenuCell.swift in Sources */,
 				10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */,
 				10ADF6B72050D30B00060A19 /* PrismPostCollectionView.swift in Sources */,
 				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
@@ -704,6 +710,8 @@
 				192E410D9F27B1D4982139A3 /* ZoomTransitioningDelegate.swift in Sources */,
 				192E40D5CF4CC660CDDA1106 /* PrismPostDetailViewController.swift in Sources */,
 				192E471389C6ED6C0578FCB0 /* ProfileViewController.swift in Sources */,
+				192E4C1277313C3406F4FD11 /* LabelMenuCell.swift in Sources */,
+				192E413E1DF0AAD825A95ADA /* ProfileViewMenuBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
