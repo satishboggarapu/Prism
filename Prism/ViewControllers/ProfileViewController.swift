@@ -17,6 +17,7 @@ class ProfileViewController: UIViewController {
     private var profileNavigationView: UIView!
     private var profileView: UIView!
     private var menuBar: ProfileViewMenuBar!
+    private var collectionView: UICollectionView!
 
     var prismPost: PrismPost!
 
@@ -27,10 +28,12 @@ class ProfileViewController: UIViewController {
         setupNavigationBar()
         initializeProfileView()
         initializeMenuBar()
+        initializeCollectionView()
 
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: profileView)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: menuBar)
-        view.addConstraintsWithFormat(format: "V:|[v0][v1(50)]|", views: profileView, menuBar)
+        view.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
+        view.addConstraintsWithFormat(format: "V:|[v0][v1(50)][v2]|", views: profileView, menuBar, collectionView)
     }
     
     private func setupNavigationBar() {
@@ -85,7 +88,7 @@ class ProfileViewController: UIViewController {
         let username = UILabel()
         username.textColor = UIColor.white
         username.text = prismPost.getPrismUser().getUsername()
-        username.font = RobotoFont.bold(with: 17)
+        username.font = SourceSansFont.bold(with: 17)
         username.translatesAutoresizingMaskIntoConstraints = false
 
         profileNavigationView.addSubview(profileImage)
@@ -109,7 +112,7 @@ class ProfileViewController: UIViewController {
         let username = UILabel()
         username.text = prismPost.getPrismUser().getUsername()
         username.textColor = .white
-        username.font = RobotoFont.bold(with: 20)
+        username.font = SourceSansFont.bold(with: 20)
         username.textAlignment = .center
         username.translatesAutoresizingMaskIntoConstraints = false
         profileView.addSubview(username)
@@ -117,7 +120,7 @@ class ProfileViewController: UIViewController {
         let fullName = UILabel()
         fullName.text = prismPost.getPrismUser().getFullName()
         fullName.textColor = .white
-        fullName.font = RobotoFont.light(with: 15)
+        fullName.font = SourceSansFont.light(with: 15)
         fullName.textAlignment = .center
         fullName.translatesAutoresizingMaskIntoConstraints = false
         profileView.addSubview(fullName)
@@ -143,37 +146,37 @@ class ProfileViewController: UIViewController {
         followersCount.text = String(prismPost.getPrismUser().getFollowerCount())
         followersCount.textColor = .white
         followersCount.textAlignment = .center
-        followersCount.font = RobotoFont.bold(with: 16)
+        followersCount.font = SourceSansFont.bold(with: 16)
 
         let postsCount = UILabel()
         postsCount.text = "--"
         postsCount.textColor = .white
         postsCount.textAlignment = .center
-        postsCount.font = RobotoFont.bold(with: 16)
+        postsCount.font = SourceSansFont.bold(with: 16)
 
         let followingCount = UILabel()
         followingCount.text = String(prismPost.getPrismUser().getFollowingCount())
         followingCount.textColor = .white
         followingCount.textAlignment = .center
-        followingCount.font = RobotoFont.bold(with: 16)
+        followingCount.font = SourceSansFont.bold(with: 16)
 
         let followersLabel = UILabel()
         followersLabel.text = "followers"
         followersLabel.textColor = .white
         followersLabel.textAlignment = .center
-        followersLabel.font = RobotoFont.light(with: 14)
+        followersLabel.font = SourceSansFont.light(with: 14)
 
         let postsLabel = UILabel()
         postsLabel.text = "posts"
         postsLabel.textColor = .white
         postsLabel.textAlignment = .center
-        postsLabel.font = RobotoFont.light(with: 14)
+        postsLabel.font = SourceSansFont.light(with: 14)
 
         let followingLabel = UILabel()
         followingLabel.text = "following"
         followingLabel.textColor = .white
         followingLabel.textAlignment = .center
-        followingLabel.font = RobotoFont.light(with: 14)
+        followingLabel.font = SourceSansFont.light(with: 14)
 
         let countView = UIView()
         countView.backgroundColor = .clear
@@ -202,7 +205,7 @@ class ProfileViewController: UIViewController {
         profileView.addConstraintsWithFormat(format: "H:[v0(125)]", views: profileImage)
         profileView.addConstraintsWithFormat(format: "H:[v0]", views: countView)
         profileView.addConstraintsWithFormat(format: "H:[v0]", views: labelView)
-        profileView.addConstraintsWithFormat(format: "V:|-[v0]-4-[v1]-[v2(125)]-[v3]-4-[v4]", views: username, fullName, profileImage, countView, labelView)
+        profileView.addConstraintsWithFormat(format: "V:|-[v0]-4-[v1]-[v2(125)]-[v3]-4-[v4]|", views: username, fullName, profileImage, countView, labelView)
         profileView.addConstraint(NSLayoutConstraint(item: profileImage, attribute: .centerX, relatedBy: .equal, toItem: profileView, attribute: .centerX, multiplier: 1, constant: 0))
         profileView.addConstraint(NSLayoutConstraint(item: countView, attribute: .centerX, relatedBy: .equal, toItem: profileView, attribute: .centerX, multiplier: 1, constant: 0))
         profileView.addConstraint(NSLayoutConstraint(item: labelView, attribute: .centerX, relatedBy: .equal, toItem: profileView, attribute: .centerX, multiplier: 1, constant: 0))
@@ -217,6 +220,23 @@ class ProfileViewController: UIViewController {
         view.addSubview(menuBar)
     }
 
+    private func initializeCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+
+        collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.showsVerticalScrollIndicator = false
+        collectionView?.bounces = false
+        collectionView?.backgroundColor = .blue
+        collectionView?.isPagingEnabled = true
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView!)
+    }
+
     @objc private func backButtonAction() {
         navigationController?.popViewController(animated: false)
     }
@@ -225,5 +245,57 @@ class ProfileViewController: UIViewController {
 
     }
 
+}
 
+extension ProfileViewController {
+    func scrollToMenuIndex(_ menuIndex: Int) {
+        let indexPath = IndexPath(item: menuIndex, section: 0)
+        collectionView?.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition(), animated: true)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / 2
+    }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition())
+    }
+}
+
+extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 2
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        print(prismPostArrayList.count)
+//        if indexPath.item == 0 {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedPosts", for: indexPath) as! PrismPostCollectionView
+//            cell.viewController = self
+//            cell.delegate = self
+////            cell.prismPostArrayList = self.prismPostArrayList
+//            return cell
+//        }
+//        else if indexPath.item == 3 {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Settings", for: indexPath) as!
+//                    SettingsCollectionView
+//            return cell
+//        }
+//        else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+            cell.backgroundColor = .loginBackground
+//            cell.backgroundColor = (indexPath.item == 0) ? .red : .blue
+            return cell
+//        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.view.frame.width, height: view.frame.height - 50)
+    }
 }

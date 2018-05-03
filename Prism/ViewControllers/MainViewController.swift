@@ -120,7 +120,7 @@ class MainViewController: UIViewController {
         let titleLabel =  UILabel()
         titleLabel.frame = CGRect(x: 44, y: 8, width: 100, height: 34)
         titleLabel.text = "Prism"
-        titleLabel.font = RobotoFont.bold(with: 22)
+        titleLabel.font = SourceSansFont.bold(with: 22)
         titleLabel.textColor = UIColor.white
         navigationView.addSubview(titleLabel)
 
@@ -151,7 +151,7 @@ class MainViewController: UIViewController {
         let label = UILabel()
         label.text = "Uploading image ..."
         label.textColor = UIColor.white
-        label.font = RobotoFont.thin(with: 13)
+        label.font = SourceSansFont.light(with: 13)
 
         let progress = UIProgressView()
 
@@ -216,6 +216,7 @@ class MainViewController: UIViewController {
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView?.bounces = false
         collectionView?.backgroundColor = UIColor.loginBackground
 //        collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
@@ -266,6 +267,12 @@ class MainViewController: UIViewController {
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexPath = IndexPath(item: Int(index), section: 0)
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition())
+
+        if indexPath.item == 0 {
+            toggleNewPostButton(hide: false)
+        } else {
+            toggleNewPostButton(hide: true)
+        }
     }
 
     func toggleNewPostButton(hide: Bool) {
@@ -350,6 +357,8 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width, height: view.frame.height - 50)
     }
+
+
 
     /**
      *  Clears the data structure and pulls ALL_POSTS info again from cloud

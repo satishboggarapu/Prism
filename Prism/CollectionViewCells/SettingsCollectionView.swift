@@ -22,9 +22,9 @@ class SettingsCollectionView: UICollectionViewCell {
     var fullName: UILabel!
     var viewYourProfileText: UILabel!
     var profilePictureSize: CGFloat = 64
-    var boldFont: UIFont = RobotoFont.bold(with: 17)
-    var mediumFont: UIFont = RobotoFont.light(with: 17)
-    var thinFont: UIFont = RobotoFont.thin(with: 12)
+    var boldFont: UIFont = SourceSansFont.bold(with: 17)
+    var mediumFont: UIFont = SourceSansFont.light(with: 17)
+    var thinFont: UIFont = SourceSansFont.extraLight(with: 12)
     var tableView: UITableView!
     var settingsLabelTexts: [String]!
     

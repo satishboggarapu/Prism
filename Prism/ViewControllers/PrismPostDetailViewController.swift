@@ -32,9 +32,9 @@ class PrismPostDetailViewController: UIViewController {
     private var offset: CGFloat = 0
 
     var profilePictureSize: CGFloat = 48
-    var boldFont: UIFont = RobotoFont.bold(with: 17)
-    var mediumFont: UIFont = RobotoFont.light(with: 15)
-    var thinFont: UIFont = RobotoFont.thin(with: 12)
+    var boldFont: UIFont = SourceSansFont.bold(with: 17)
+    var mediumFont: UIFont = SourceSansFont.light(with: 15)
+    var thinFont: UIFont = SourceSansFont.light(with: 12)
 
     override func viewDidLoad() {
         super.viewDidLoad()

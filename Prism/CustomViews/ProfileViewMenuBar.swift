@@ -56,7 +56,7 @@ class ProfileViewMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        homeController?.scrollToMenuIndex(indexPath.item)
+        homeController?.scrollToMenuIndex(indexPath.item)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -66,7 +66,6 @@ class ProfileViewMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! LabelMenuCell
         cell.label.text = labels[indexPath.item]
-//        cell.tintColor = UIColor.white
         return cell
     }
 

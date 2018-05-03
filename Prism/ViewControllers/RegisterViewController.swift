@@ -44,8 +44,8 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     private let textFieldNormalDividerHeight: CGFloat = 1
     private var defaultWidth: CGFloat!
 
-    private let textFieldFont: UIFont = RobotoFont.regular(with: 18)
-    private let buttonFont: UIFont = RobotoFont.regular(with: 18)
+    private let textFieldFont: UIFont = SourceSansFont.regular(with: 18)
+    private let buttonFont: UIFont = SourceSansFont.regular(with: 18)
 
 
     override func viewDidLoad() {

@@ -12,7 +12,7 @@ class LabelMenuCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
-        label.font = RobotoFont.bold(with: 17)
+        label.font = SourceSansFont.bold(with: 17)
         return label
     }()
 
