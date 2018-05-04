@@ -20,11 +20,19 @@ class ProfileViewController: UIViewController {
     private var collectionView: UICollectionView!
 
     var prismPost: PrismPost!
+    private var lastPanGesturePosition: CGPoint!
+    private var fadeProfileView: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .statusBarBackground
+        fadeProfileView = false
+
         // Do any additional setup after loading the view.
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
+        view.addGestureRecognizer(panGesture)
+
         setupNavigationBar()
         initializeProfileView()
         initializeMenuBar()
@@ -235,6 +243,48 @@ class ProfileViewController: UIViewController {
         collectionView?.isPagingEnabled = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView!)
+    }
+
+    @objc private func panGestureAction(_ gesture: UIPanGestureRecognizer) {
+        let point = gesture.location(in: self.view)
+        let maxHeight = Constraints.statusBarHeight() + Constraints.navigationBarHeight()
+        let maxY = profileView.frame.height
+
+        switch gesture.state {
+            case .began:
+                break
+            case .changed:
+                let newY = menuBar.frame.origin.y + (point.y - lastPanGesturePosition.y)
+
+                if newY >= 0 && newY <= maxY {
+                    menuBar.frame.origin.y += (point.y - lastPanGesturePosition.y)
+                    collectionView.frame.origin.y += (point.y - lastPanGesturePosition.y)
+                    collectionView.frame.size.height += (lastPanGesturePosition.y - point.y)
+
+                    profileView.frame.origin.y += (point.y - lastPanGesturePosition.y)/2
+                }
+
+                let alpha = 1 - (newY/maxY)
+                profileNavigationView.alpha = alpha
+
+                if newY <= 50 && !fadeProfileView {
+                    fadeProfileView = true
+                    UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
+                        self.profileView.alpha = 0
+                    }, completion: nil)
+                } else if newY > 50 && fadeProfileView {
+                    fadeProfileView = false
+                    UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
+                        self.profileView.alpha = 1
+                    }, completion: nil)
+                }
+
+            default:
+                break
+        }
+
+        lastPanGesturePosition = point
+
     }
 
     @objc private func backButtonAction() {
