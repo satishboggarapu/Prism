@@ -47,9 +47,10 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
     var buttonSize: CGFloat = PrismPostConstraints.BUTTON_HEIGHT.rawValue
     var dividerHeight: CGFloat = PrismPostConstraints.DIVIDER_HEIGHT.rawValue
-    var boldFont: UIFont = RobotoFont.bold(with: 17)
-    var mediumFont: UIFont = RobotoFont.light(with: 15)
-    var thinFont: UIFont = RobotoFont.thin(with: 12)
+    var boldFont: UIFont = SourceSansFont.bold(with: 17)
+    var mediumFont: UIFont = SourceSansFont.light(with: 15)
+    var thinFont: UIFont = SourceSansFont.light(with: 12)
+
     let imageMaxWidth: CGFloat = PrismPostConstraints.IMAGE_MAX_WIDTH
     let imageMaxHeight: CGFloat = PrismPostConstraints.IMAGE_MAX_HEIGHT
     let leftMargin: CGFloat = PrismPostConstraints.LEFT_MARGIN

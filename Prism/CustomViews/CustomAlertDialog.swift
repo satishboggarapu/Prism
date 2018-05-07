@@ -109,7 +109,7 @@ class CustomAlertDialog: UIViewController {
         textLabel = UILabel()
         textLabel.text = titleText
         textLabel.textColor = UIColor.white
-        textLabel.font = RobotoFont.medium(with: 17)
+        textLabel.font = SourceSansFont.light(with: 17)
         textLabel.numberOfLines = 0
         alertView.addSubview(textLabel)
     }
@@ -118,7 +118,7 @@ class CustomAlertDialog: UIViewController {
         cancelButton = UIButton()
         cancelButton.setTitle(cancelButtonText, for: .normal)
         cancelButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
-        cancelButton.titleLabel?.font = RobotoFont.medium(with: 15)
+        cancelButton.titleLabel?.font = SourceSansFont.light(with: 15)
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         cancelButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         buttonView.addSubview(cancelButton)
@@ -128,7 +128,7 @@ class CustomAlertDialog: UIViewController {
         okayButton = UIButton()
         okayButton.setTitle(okayButtonText, for: .normal)
         okayButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
-        okayButton.titleLabel?.font = RobotoFont.medium(with: 15)
+        okayButton.titleLabel?.font = SourceSansFont.light(with: 15)
         okayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         okayButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         buttonView.addSubview(okayButton)

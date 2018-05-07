@@ -64,7 +64,7 @@ class NavigationBar: UIView {
 
         titleLabel = UILabel()
         titleLabel.text = "Prism"
-        titleLabel.font = RobotoFont.bold(with: 22)
+        titleLabel.font = SourceSansFont.bold(with: 22)
         titleLabel.textColor = UIColor.white
         self.addSubview(titleLabel)
 

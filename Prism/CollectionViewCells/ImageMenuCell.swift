@@ -5,7 +5,7 @@
 
 import UIKit
 
-class MenuCell: UICollectionViewCell {
+class ImageMenuCell: UICollectionViewCell {
 
     let imageView: UIImageView = {
         let image = UIImageView()

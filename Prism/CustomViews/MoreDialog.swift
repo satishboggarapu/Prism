@@ -107,7 +107,7 @@ class MoreDialog: UIViewController {
         reportButton = MDCFlatButton()
         reportButton.setTitle("Report post", for: .normal)
         reportButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
-        reportButton.titleLabel?.font = RobotoFont.medium(with: 16)
+        reportButton.titleLabel?.font = SourceSansFont.light(with: 16)
         reportButton.contentHorizontalAlignment = .left
         reportButton.addTarget(self, action: #selector(reportButtonAction), for: .touchUpInside)
         dialogView.addSubview(reportButton)
@@ -117,7 +117,7 @@ class MoreDialog: UIViewController {
         shareButton = MDCFlatButton()
         shareButton.setTitle("Share", for: .normal)
         shareButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
-        shareButton.titleLabel?.font = RobotoFont.medium(with: 16)
+        shareButton.titleLabel?.font = SourceSansFont.light(with: 16)
         shareButton.contentHorizontalAlignment = .left
         shareButton.addTarget(self, action: #selector(shareButtonAction), for: .touchUpInside)
         dialogView.addSubview(shareButton)
@@ -127,7 +127,7 @@ class MoreDialog: UIViewController {
         deleteButton = MDCFlatButton()
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(.customAlertDialogButtonTitleColor, for: .normal)
-        deleteButton.titleLabel?.font = RobotoFont.medium(with: 16)
+        deleteButton.titleLabel?.font = SourceSansFont.light(with: 16)
         deleteButton.contentHorizontalAlignment = .left
         deleteButton.addTarget(self, action: #selector(deleteButtonAction), for: .touchUpInside)
         dialogView.addSubview(deleteButton)
