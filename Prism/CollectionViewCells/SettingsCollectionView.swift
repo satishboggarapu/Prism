@@ -62,11 +62,13 @@ class SettingsCollectionView: UICollectionViewCell {
         self.addSubview(profileView)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-|", views: profileView)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-|", views: tableView)
-        addConstraintsWithFormat(format: "V:|-8-[v0]-[v1]|", views: profileView, tableView)
+        tableView.layoutIfNeeded()
+        addConstraintsWithFormat(format: "V:|-8-[v0]-8-[v1(\(tableView.contentSize.height))]", views: profileView, tableView)
     }
     
     private func initializeProfileView() {
         profileView = UIView()
+        profileView.dropShadow()
         // tap gesture
         let profileTapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTapGestureAction(_:)))
         profileView.addGestureRecognizer(profileTapGesture)
@@ -107,6 +109,11 @@ class SettingsCollectionView: UICollectionViewCell {
         tableView.showsHorizontalScrollIndicator = false
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = UIColor(hex: 0x1a1a1a)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.estimatedRowHeight = 0
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.dropShadow()
         addSubview(tableView)
         settingsLabelTexts = ["App Settings", "Notification Settings", "Account Settings", "Help", "About", "Logout"]
     }
@@ -118,13 +125,14 @@ class SettingsCollectionView: UICollectionViewCell {
     
     public func loadProfileImage() {
         let profilePicture = CurrentUser.prismUser.getProfilePicture().getLowResDefaultProfilePic()
-//        if profilePicture != nil {
+        print(profilePicture)
+        if profilePicture != nil {
             profileImage.image = profilePicture
-//        } else {
-//            let imageUrl = CurrentUser.prismUser.getProfilePicture().profilePicUriString
+        } else {
+            let imageUrl = CurrentUser.prismUser.getProfilePicture().profilePicUriString
 //            profileImage.loadImageUsingUrlString
 //            self.addBorderToProfilePic()
-//        }
+        }
     }
 }
 
@@ -140,6 +148,7 @@ extension SettingsCollectionView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SettingsTableViewCell(style: .default, reuseIdentifier: "cell")
         cell.settingsLabel.text = settingsLabelTexts[indexPath.item]
+        
         return cell
     }
     
@@ -147,6 +156,17 @@ extension SettingsCollectionView: UITableViewDelegate, UITableViewDataSource {
         return 48
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("row: \(indexPath.row)")
+        self.ripple(view: tableView.cellForRow(at: indexPath)!)
+    }
+    
+    func ripple(view:UIView){
+        let ripple = CATransition()
+        ripple.type = "rippleEffect"
+        ripple.duration = 0.5
+        view.layer.add(ripple, forKey: nil)
+    }
     
 }
 
