@@ -11,13 +11,15 @@ import UIKit
 import Material
 
 
-class SettingsTableViewCell: UITableViewCell {
+class SettingsTableViewCell: TableViewCell {
     
     var settingsIcon: UIImageView!
     var settingsLabel: UILabel!
     var boldFont: UIFont = SourceSansFont.bold(with: 17)
     var mediumFont: UIFont = SourceSansFont.light(with: 17)
     var thinFont: UIFont = SourceSansFont.extraLight(with: 12)
+    
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,7 +38,7 @@ class SettingsTableViewCell: UITableViewCell {
         contentView.addConstraintsWithFormat(format: "H:|-16-[v0(24)]-16-[v1]|", views: settingsIcon, settingsLabel)
         contentView.addConstraintsWithFormat(format: "V:|-12-[v0(24)]-12-|", views: settingsIcon)
         contentView.addConstraintsWithFormat(format: "V:|-12-[v0]-12-|", views: settingsLabel)
-        contentView.backgroundColor = UIColor(hex: 0x1a1a1a)
+        contentView.backgroundColor = .statusBarBackground
     }
     
     private func initializeSettingsLabel() {
@@ -52,7 +54,6 @@ class SettingsTableViewCell: UITableViewCell {
         settingsIcon.contentMode = .scaleAspectFit
         settingsIcon.clipsToBounds = true
         settingsIcon.translatesAutoresizingMaskIntoConstraints = false
-        settingsIcon.image = Icons.NOTIFICATIONS_24?.withRenderingMode(.alwaysTemplate)
         settingsIcon.tintColor = .white
         contentView.addSubview(settingsIcon)
         

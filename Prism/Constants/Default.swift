@@ -15,6 +15,8 @@ public class Default {
     public static let ALL_POSTS_REFERENCE = databaseReference.child(Key.DB_REF_ALL_POSTS)
     public static let USERS_REFERENCE = databaseReference.child(Key.DB_REF_USER_PROFILES)
     public static let ACCOUNT_REFERENCE = databaseReference.child(Key.DB_REF_ACCOUNTS)
+    public static let NOTIFICATIONS_REFERENCE = databaseReference.child(Key.DB_REF_USER_PROFILES).child(CurrentUser.prismUser.getUid()).child(Key.DB_REF_USER_NOTIFICATIONS)
+
     
     public static let STORAGE_REFERENCE = Storage.storage().reference()
 

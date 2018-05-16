@@ -17,7 +17,6 @@ class SettingsCollectionView: UICollectionViewCell {
 
     // MARK: UIElements
     var profileView: UIView!
-    var bottomView: UIView!
     var profileImage: CustomImageView!
     var fullName: UILabel!
     var viewYourProfileText: UILabel!
@@ -27,6 +26,7 @@ class SettingsCollectionView: UICollectionViewCell {
     var thinFont: UIFont = SourceSansFont.extraLight(with: 12)
     var tableView: UITableView!
     var settingsLabelTexts: [String]!
+    var settingsPageIcons: [UIImage]!
     
     override init(frame: CGRect){
         super.init(frame: frame)
@@ -58,16 +58,18 @@ class SettingsCollectionView: UICollectionViewCell {
         profileView.addConstraintsWithFormat(format: "H:|-16-[v0(\(profilePictureSize))]-16-[v1]|", views: profileImage, topRightView)
         profileView.addConstraintsWithFormat(format: "V:|-16-[v0(\(profilePictureSize))]-16-|", views: profileImage)
         profileView.addConstraintsWithFormat(format: "V:|-24-[v0]-24-|", views: topRightView)
-        profileView.backgroundColor = UIColor(hex: 0x1a1a1a)
+
         self.addSubview(profileView)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-|", views: profileView)
         addConstraintsWithFormat(format: "H:|-8-[v0]-8-|", views: tableView)
         tableView.layoutIfNeeded()
+        
         addConstraintsWithFormat(format: "V:|-8-[v0]-8-[v1(\(tableView.contentSize.height))]", views: profileView, tableView)
     }
     
     private func initializeProfileView() {
         profileView = UIView()
+        profileView.backgroundColor = .statusBarBackground
         profileView.dropShadow()
         // tap gesture
         let profileTapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTapGestureAction(_:)))
@@ -108,7 +110,7 @@ class SettingsCollectionView: UICollectionViewCell {
         tableView.bounces = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = UIColor(hex: 0x1a1a1a)
+        tableView.backgroundColor = .statusBarBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
@@ -116,6 +118,7 @@ class SettingsCollectionView: UICollectionViewCell {
         tableView.dropShadow()
         addSubview(tableView)
         settingsLabelTexts = ["App Settings", "Notification Settings", "Account Settings", "Help", "About", "Logout"]
+        settingsPageIcons = [Icons.SETTINGS_24, Icons.NOTIFICATIONS_24?.withRenderingMode(.alwaysTemplate), Icons.ACCOUNT_SETTINGS_24?.withRenderingMode(.alwaysTemplate), Icons.HELP_24?.withRenderingMode(.alwaysTemplate), Icons.ABOUT_24, Icons.LOGOUT_24?.withRenderingMode(.alwaysTemplate)] as! [UIImage]
     }
     
     @objc func profileTapGestureAction(_ sender: UITapGestureRecognizer) {
@@ -148,7 +151,7 @@ extension SettingsCollectionView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SettingsTableViewCell(style: .default, reuseIdentifier: "cell")
         cell.settingsLabel.text = settingsLabelTexts[indexPath.item]
-        
+        cell.settingsIcon.image = settingsPageIcons[indexPath.item]
         return cell
     }
     
@@ -158,15 +161,9 @@ extension SettingsCollectionView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("row: \(indexPath.row)")
-        self.ripple(view: tableView.cellForRow(at: indexPath)!)
     }
     
-    func ripple(view:UIView){
-        let ripple = CATransition()
-        ripple.type = "rippleEffect"
-        ripple.duration = 0.5
-        view.layer.add(ripple, forKey: nil)
-    }
+
     
 }
 

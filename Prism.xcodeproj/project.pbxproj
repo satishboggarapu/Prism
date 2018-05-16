@@ -59,6 +59,9 @@
 		192E4CC779FDE90E5A79EA59 /* SourceSansPro-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 192E4518D6E1CA9CCD6A4601 /* SourceSansPro-ExtraLight.ttf */; };
 		192E4F667F2E072C92449A06 /* SourceSansPro-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 192E4231D1CE746671DB8351 /* SourceSansPro-Black.ttf */; };
 		4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A1808204381C6002DAA54 /* MyUser.swift */; };
+		4F6FED6C20A6263100AC1E10 /* PrismNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6FED6B20A6263100AC1E10 /* PrismNotification.swift */; };
+		4F786A6620A4D7C5003FDB79 /* NotificationsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F786A6520A4D7C5003FDB79 /* NotificationsCollectionView.swift */; };
+		4F786A6820A4E15A003FDB79 /* NotificationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F786A6720A4E15A003FDB79 /* NotificationsTableViewCell.swift */; };
 		4F8A41B42076904200E65E01 /* SettingsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */; };
 		4F9C95812050C5A800C08C9E /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C95802050C5A800C08C9E /* Key.swift */; };
 		4F9C95832050CBC700C08C9E /* Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C95822050CBC700C08C9E /* Default.swift */; };
@@ -151,6 +154,9 @@
 		192E4F6AC9507CE9A7BC635B /* CustomAlertDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertDialog.swift; sourceTree = "<group>"; };
 		3644F339173237F42FBC0459 /* Pods_Prism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A1808204381C6002DAA54 /* MyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUser.swift; sourceTree = "<group>"; };
+		4F6FED6B20A6263100AC1E10 /* PrismNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismNotification.swift; sourceTree = "<group>"; };
+		4F786A6520A4D7C5003FDB79 /* NotificationsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsCollectionView.swift; sourceTree = "<group>"; };
+		4F786A6720A4E15A003FDB79 /* NotificationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewCell.swift; sourceTree = "<group>"; };
 		4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCollectionView.swift; sourceTree = "<group>"; };
 		4F9C95802050C5A800C08C9E /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		4F9C95822050CBC700C08C9E /* Default.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Default.swift; sourceTree = "<group>"; };
@@ -321,6 +327,8 @@
 				4F8A41B32076904200E65E01 /* SettingsCollectionView.swift */,
 				192E4E032ABD9200A979DE31 /* LabelMenuCell.swift */,
 				4FA4E4362094119B0062F380 /* SettingsTableViewCell.swift */,
+				4F786A6520A4D7C5003FDB79 /* NotificationsCollectionView.swift */,
+				4F786A6720A4E15A003FDB79 /* NotificationsTableViewCell.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -385,6 +393,7 @@
 				4F9C958D2050D70900C08C9E /* CurrentUser.swift */,
 				10FCD829205F03E8001E0C1F /* DefaultProfilePicture.swift */,
 				192E406B8694AA1A663C7AFC /* DatabaseAction.swift */,
+				4F6FED6B20A6263100AC1E10 /* PrismNotification.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -756,6 +765,8 @@
 				4F4A1809204381C6002DAA54 /* MyUser.swift in Sources */,
 				10ADF6B92050D30B00060A19 /* ImageMenuCell.swift in Sources */,
 				10E3F55B204659EF00C82F3F /* ScreenType.swift in Sources */,
+				4F786A6820A4E15A003FDB79 /* NotificationsTableViewCell.swift in Sources */,
+				4F786A6620A4D7C5003FDB79 /* NotificationsCollectionView.swift in Sources */,
 				4FA4E4372094119B0062F380 /* SettingsTableViewCell.swift in Sources */,
 				10ADF6B72050D30B00060A19 /* PrismPostCollectionView.swift in Sources */,
 				192E43E16641725F17286B02 /* StringExtensions.swift in Sources */,
@@ -765,6 +776,7 @@
 				4F9C958A2050D6F400C08C9E /* PrismPost.swift in Sources */,
 				4F9C958B2050D6F400C08C9E /* PrismUser.swift in Sources */,
 				192E4469FD1C0A2665468104 /* DatabaseAction.swift in Sources */,
+				4F6FED6C20A6263100AC1E10 /* PrismNotification.swift in Sources */,
 				192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */,
 				192E41801618B460A2483C95 /* CustomImageView.swift in Sources */,
 				192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */,

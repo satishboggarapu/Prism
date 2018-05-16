@@ -213,6 +213,7 @@ class MainViewController: UIViewController {
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView?.register(PrismPostCollectionView.self, forCellWithReuseIdentifier: "FeedPosts")
         collectionView?.register(SettingsCollectionView.self, forCellWithReuseIdentifier: "Settings")
+        collectionView?.register(NotificationsCollectionView.self, forCellWithReuseIdentifier: "Notifications")
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.showsVerticalScrollIndicator = false
@@ -346,6 +347,10 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         else if indexPath.item == 3 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Settings", for: indexPath) as!
                 SettingsCollectionView
+            return cell
+        }
+        else if indexPath.item == 2 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Notifications", for: indexPath) as! NotificationsCollectionView
             return cell
         }
         else {

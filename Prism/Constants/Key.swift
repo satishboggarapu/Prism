@@ -42,6 +42,11 @@ public class Key {
     
     public static let DB_REF_ACCOUNTS = "ACCOUNTS";
     
+    public static let DB_REF_USER_NOTIFICATIONS = "USER_NOTIFICATIONS";
+    public static let ACTION_TIMESTAMP = "actionTimestamp"
+    public static let MOST_RECENT_UID = "mostRecentUid"
+    public static let VIEWED_TIMESTAMP = "viewedTimestamp"
+    
     
     
 }

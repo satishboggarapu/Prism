@@ -98,7 +98,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         print("refreshed")
         CurrentUser.refreshUserProfile()
         prismPostArrayList.removeAll()
-        refreshData(true)
+//        refreshData(true)
 
     }
 

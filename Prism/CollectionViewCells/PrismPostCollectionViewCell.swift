@@ -153,7 +153,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         backgroundImageView.addSubview(blurEffectView)
         backgroundImageView.addConstraintsWithFormat(format: "H:|[v0]|", views: blurEffectView)
         backgroundImageView.addConstraintsWithFormat(format: "V:|[v0]|", views: blurEffectView)
-    }
+    } 
 
     private func initializeProfileView() {
         profileView = UIView()

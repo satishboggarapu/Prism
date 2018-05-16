@@ -32,6 +32,26 @@ public class Helper {
     }
     
     /**
+     * Takes in a dataSnapshot object and parses its contents
+     * and returns a prismNotification object
+     * @return PrismNotification object
+     */
+    public static func constructPrismNotificationObject(notificationSnapshot: DataSnapshot) -> PrismNotification {
+        let prismNotification = PrismNotification()
+        let notificationSnapshotDict = notificationSnapshot.value as? NSDictionary
+
+        prismNotification.setActionTimestamp(actionTimestamp: (notificationSnapshotDict![Key.ACTION_TIMESTAMP]) as! Int64)
+        prismNotification.setMostRecentUid(mostRecentUid: notificationSnapshotDict![Key.MOST_RECENT_UID] as! String)
+        prismNotification.setViewedTimestamp(viewedTimestamp: notificationSnapshotDict![Key.VIEWED_TIMESTAMP] as! Int)
+        prismNotification.setNotificationId(notificationId: notificationSnapshot.key)
+        
+       
+        return prismNotification
+    }
+    
+    
+    
+    /**
      * Takes in userSnapshot object and parses the firebaseUser details
      * and creates a prismUser object
      * @return PrismUser object
