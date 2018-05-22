@@ -217,7 +217,7 @@ public class DatabaseAction {
      * for each postId in the hashMap and puts all prismPost objects in a list.
      * Gets called for getting user liked_posts, reposted_posts, and uploaded_posts
      */
-    private static func getListOfPrismPosts(allPostRefSnapshot: DataSnapshot, usersSnapshot: DataSnapshot, mapOfPostIds: [String: Int64]) -> [PrismPost] {
+    static func getListOfPrismPosts(allPostRefSnapshot: DataSnapshot, usersSnapshot: DataSnapshot, mapOfPostIds: [String: Int64]) -> [PrismPost] {
         var listOfPrismPosts = [PrismPost]()
         for key in mapOfPostIds.keys {
             let postId: String = String(key)

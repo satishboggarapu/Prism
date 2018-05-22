@@ -385,6 +385,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as! ProfileViewPostsCollectionView
             cell.viewController = self
+            cell.prismUser = prismPost.getPrismUser()
             cell.disableScrolling()
             return cell
         }
