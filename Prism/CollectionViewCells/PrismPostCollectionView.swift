@@ -239,7 +239,6 @@ extension PrismPostCollectionView: PrismPostCollectionViewCellDelegate {
         if index != nil {
             delegate?.prismPostSelected(IndexPath(item: index!, section: 0))
         }
-
     }
 
     func profileViewSelected(_ prismPost: PrismPost) {
