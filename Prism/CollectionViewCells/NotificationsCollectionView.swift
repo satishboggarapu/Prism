@@ -20,15 +20,12 @@ class NotificationsCollectionView: UICollectionViewCell {
     var notificationsArrayList: [PrismNotification]! = [PrismNotification]()
     private var usersReference: DatabaseReference = Default.USERS_REFERENCE
     
-    
-    
     override init(frame: CGRect){
         super.init(frame: frame)
         self.backgroundColor = UIColor.collectionViewBackground
         setupView()
         
-        refreshNotificationData(false)
-
+        refreshNotificationData()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,10 +55,20 @@ class NotificationsCollectionView: UICollectionViewCell {
         tableView.dropShadow()
         addSubview(tableView)
     }
- 
-    
-    
-    
+
+    func refreshNotificationData() {
+        refreshNotificationData() { (result) in
+            if result {
+                self.populateUserDetailsForAllNotifications() { (result) in
+                    self.tableView.reloadData()
+                }
+            } else {
+                print("error loading data")
+                // TODO: Log Error
+            }
+        }
+    }
+
     fileprivate func refreshNotificationData(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         print("Inside refreshNotificationData")
         notificationsArrayList.removeAll()
@@ -73,8 +80,6 @@ class NotificationsCollectionView: UICollectionViewCell {
                     self.notificationsArrayList.append(notification)
                 }
                 completionHandler(true)
-                print("complete")
-                self.tableView.reloadData()
             } else {
                 print("No More Notifications available")
                 completionHandler(false)
@@ -100,23 +105,9 @@ class NotificationsCollectionView: UICollectionViewCell {
                 }
                 completionHandler(true)
             } else {
-                print("no data")
                 completionHandler(false)
             }
         })
-    }
-    
-    func refreshNotificationData(_ isRefreshing: Bool) {
-        refreshNotificationData() { (result) in
-            if result {
-                    self.populateUserDetailsForAllNotifications() { (result) in
-                    self.tableView.reloadData()
-                }
-            } else {
-                print("error loading data")
-                // TODO: Log Error
-            }
-        }
     }
     
     func parseNotificationAction(prismNotification: PrismNotification) -> PrismNotification{
@@ -178,14 +169,14 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("cell")
         let cell = NotificationsTableViewCell(style: .default, reuseIdentifier: "cell")
-        let prismNotification = notificationsArrayList[indexPath.item]
+        let prismNotification: PrismNotification = notificationsArrayList[indexPath.item]
         
         cell.prismNotification = prismNotification
         cell.timeLabel.text = Helper.getFancyDateDifferenceString(time: prismNotification.getActionTimestamp())
-//        cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
-//        cell.loadPostImage()
+        cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
+        cell.prismUserProfilePicture.loadImageUsingUrlString(prismNotification.getPrismUser().getProfilePicture().profilePicUriString, postID: prismNotification.getPrismUser().getUid())
+
         return cell
     }
     

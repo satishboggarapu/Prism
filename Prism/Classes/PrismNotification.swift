@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class PrismNotification: Equatable {
+public class PrismNotification: Equatable, CustomStringConvertible {
     
     public static func ==(lhs: PrismNotification, rhs: PrismNotification) -> Bool {
         return lhs.getNotificationId() == rhs.getNotificationId()
@@ -29,8 +29,13 @@ public class PrismNotification: Equatable {
     private var image: String!
     private var postId: String!
 
-
-    
+    // CustomStringConvertible for class
+    public var description: String {
+        return "notificationId: \(notificationId!)\n" +
+                "actionTimestamp: \(actionTimestamp!)\n" +
+                "mostRecentUid: \(mostRecentUid!)\n" +
+                "viewedTimestamp: \(viewedTimestamp!)\n"
+    }
 
     // Empty Constructor required by Firebase to convert DataSnapshot to PrismNotification.class
     public init () { }
@@ -111,6 +116,7 @@ public class PrismNotification: Equatable {
     public func setPostId(postId : String) {
         self.postId = postId
     }
+
 }
 
 

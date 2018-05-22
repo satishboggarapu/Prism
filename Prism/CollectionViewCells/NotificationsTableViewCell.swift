@@ -19,7 +19,7 @@ class NotificationsTableViewCell: TableViewCell {
     var andOthersLabel: UILabel!
 
     var prismPostImage: CustomImageView!
-    var prismUserProfilePicture: UIImageView!
+    var prismUserProfilePicture: CustomImageView!
 
     var prismNotification: PrismNotification!
 
@@ -165,7 +165,7 @@ class NotificationsTableViewCell: TableViewCell {
         
     }
     private func initializePrismUserProfilePicture() {
-        prismUserProfilePicture = UIImageView()
+        prismUserProfilePicture = CustomImageView()
         prismUserProfilePicture.contentMode = .scaleAspectFit
         prismUserProfilePicture.clipsToBounds = true
         prismUserProfilePicture.translatesAutoresizingMaskIntoConstraints = false
