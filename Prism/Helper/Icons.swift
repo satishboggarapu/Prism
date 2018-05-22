@@ -78,8 +78,13 @@ public struct Icons {
     public static var ARROW_BACK_24 = Icons.icon("ic_arrow_back_white")
     public static var ACCOUNT_EDIT_24 = Icons.icon("ic_account_edit_24dp")
     
-    
+    // Icons for Settings Page
     public static var SETTINGS_24 = Icons.icon("ic_settings_24dp")
+    public static var ACCOUNT_SETTINGS_24 = Icons.icon("ic_account_settings_variant_24dp")
+    public static var HELP_24 = Icons.icon("ic_help_24dp")
+    public static var ABOUT_24 = Icons.icon("ic_about_24dp")
+    public static var LOGOUT_24 = Icons.icon("ic_logout_24dp")
+
 
     
 }
