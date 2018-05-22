@@ -11,6 +11,11 @@ import UIKit
 import Material
 
 
+//protocol NotificationsTableViewCellDelegate: class {
+//    func postImageSelected(_ prismPost: PrismPost)
+//    func profileViewSelected(_ prismPost: PrismPost)
+//}
+
 class NotificationsTableViewCell: TableViewCell {
     
     var usernameLabel: UILabel!
@@ -22,6 +27,8 @@ class NotificationsTableViewCell: TableViewCell {
     var prismUserProfilePicture: UIImageView!
 
     var prismNotification: PrismNotification!
+
+//    weak var delegate: NotificationsTableViewCellDelegate?
 
 
 
@@ -202,7 +209,6 @@ class NotificationsTableViewCell: TableViewCell {
             }
         }
     }
-//    
 
     
     
