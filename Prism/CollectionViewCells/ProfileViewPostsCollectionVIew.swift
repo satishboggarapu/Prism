@@ -91,10 +91,10 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
 
                 self.databaseReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
                     let uploadedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: uploadedPostsMap)
-//                    let repostedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
+                    let repostedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
                     self.prismPostArrayList.append(contentsOf: uploadedPosts)
-//                    self.prismPostArrayList.append(contentsOf: repostedPosts)
-                    self.loadImages()
+                    self.prismPostArrayList.append(contentsOf: repostedPosts)
+                    self.collectionView.reloadData()
                 })
             }
         }, withCancel: { (error) in
@@ -102,38 +102,13 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         })
     }
 
-    func loadImages() {
-        let group = DispatchGroup()
-        for post in prismPostArrayList {
-            group.enter()
-            let url = URL(string: post.getImage())
-            URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-                if error != nil {
-                    group.leave()
-                }
-                let imageToCache = UIImage(data: data!)
-                imageCache.setObject(imageToCache!, forKey: post.getPostId() as NSString)
-
-                let maxWidthInPixels: CGFloat = self.collectionViewCellWidth() * UIScreen.main.scale
-                let maxHeightInPixels: CGFloat = (maxWidthInPixels * imageToCache!.size.height)/imageToCache!.size.width
-                let maxWidthInPoints: CGFloat = maxWidthInPixels / UIScreen.main.scale
-                let maxHeightInPoints: CGFloat = maxHeightInPixels / UIScreen.main.scale
-                self.imageSizes[post.getPostId()] = CGSize(width: maxWidthInPoints.rounded(.up), height: maxHeightInPoints.rounded(.up))
-                group.leave()
-            }).resume()
-        }
-
-        group.wait()
-        collectionView.reloadData()
-    }
-
     func imageLoaded(postID: String, imageSize: CGSize) {
         let maxWidthInPixels: CGFloat = collectionViewCellWidth() * UIScreen.main.scale
         let maxHeightInPixels: CGFloat = (maxWidthInPixels * imageSize.height)/imageSize.width
         let maxWidthInPoints: CGFloat = maxWidthInPixels / UIScreen.main.scale
         let maxHeightInPoints: CGFloat = maxHeightInPixels / UIScreen.main.scale
-//        print(maxWidthInPoints, maxHeightInPoints, ((self.frame.width-20)/3))
-//        imageSizes[postID] = CGSize(width: maxWidthInPoints, height: maxHeightInPoints)
+        imageSizes[postID] = CGSize(width: maxWidthInPoints.rounded(.up), height: maxHeightInPoints.rounded(.up))
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func collectionViewCellWidth() -> CGFloat {

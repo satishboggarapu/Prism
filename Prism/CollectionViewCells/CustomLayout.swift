@@ -74,6 +74,11 @@ class PinterestLayout: UICollectionViewLayout {
             column = column < (numberOfColumns - 1) ? (column + 1) : 0
         }
     }
+    
+    override func invalidateLayout() {
+        cache.removeAll()
+        super.invalidateLayout()
+    }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 
@@ -90,6 +95,10 @@ class PinterestLayout: UICollectionViewLayout {
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cache[indexPath.item]
+    }
+    
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
     }
 
 }

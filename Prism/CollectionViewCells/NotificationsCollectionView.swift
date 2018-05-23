@@ -179,7 +179,6 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         let cell = NotificationsTableViewCell(style: .default, reuseIdentifier: "cell")
         let prismNotification: PrismNotification = notificationsArrayList[indexPath.item]
         
-        cell.delegate = self
         cell.prismNotification = prismNotification
         cell.timeLabel.text = Helper.getFancyDateDifferenceString(time: prismNotification.getActionTimestamp())
         cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
