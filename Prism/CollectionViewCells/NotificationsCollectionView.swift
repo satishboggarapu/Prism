@@ -13,7 +13,14 @@ import Material
 import MaterialComponents
 import Firebase
 
+//protocol NotificationsCollectionViewDelegate: class {
+//    func prismPostSelected(_ indexPath: IndexPath)
+//    func profileViewSelected(_ prismPost: PrismPost)
+//}
+
 class NotificationsCollectionView: UICollectionViewCell {
+    
+//    var delegate: NotificationsCollectionViewDelegate?
     
     // MARK: UIElements
     var tableView: UITableView!
@@ -172,6 +179,7 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         let cell = NotificationsTableViewCell(style: .default, reuseIdentifier: "cell")
         let prismNotification: PrismNotification = notificationsArrayList[indexPath.item]
         
+        cell.delegate = self
         cell.prismNotification = prismNotification
         cell.timeLabel.text = Helper.getFancyDateDifferenceString(time: prismNotification.getActionTimestamp())
         cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
@@ -188,5 +196,17 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
 //        print("row: \(indexPath.row)")
 //    }
 }
+//
+//extension NotificationsCollectionView: NotificationsCollectionViewDelegate {
+//    func prismPostSelected(_ indexPath: IndexPath) {
+//        <#code#>
+//    }
+//    
+//    
+//    
+//    func profileViewSelected(_ prismPost: PrismPost) {
+//        delegate?.profileViewSelected(prismPost)
+//    }
+//}
 
 
