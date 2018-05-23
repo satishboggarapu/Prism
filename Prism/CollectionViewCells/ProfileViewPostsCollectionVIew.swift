@@ -22,6 +22,8 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         layout.delegate = self
         return layout
     }
+    
+    var collectionViewInset: CGFloat = 4
 
     /*
      * Database References
@@ -45,7 +47,7 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
 
-//        refreshData()
+        refreshData()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,7 +66,7 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         collectionView.delegate = self
         collectionView.bounces = false
         collectionView.register(ProfileViewPostsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView.contentInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        collectionView.contentInset = UIEdgeInsets(top: collectionViewInset, left: collectionViewInset, bottom: collectionViewInset, right: collectionViewInset)
         addSubview(collectionView)
         // collectionView constraints
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
@@ -89,9 +91,9 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
 
                 self.databaseReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
                     let uploadedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: uploadedPostsMap)
-                    let repostedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
+//                    let repostedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
                     self.prismPostArrayList.append(contentsOf: uploadedPosts)
-                    self.prismPostArrayList.append(contentsOf: repostedPosts)
+//                    self.prismPostArrayList.append(contentsOf: repostedPosts)
                     self.loadImages()
                 })
             }
@@ -112,11 +114,11 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
                 let imageToCache = UIImage(data: data!)
                 imageCache.setObject(imageToCache!, forKey: post.getPostId() as NSString)
 
-                let maxWidthInPixels: CGFloat = ((self.frame.width-20)/3) * UIScreen.main.scale
+                let maxWidthInPixels: CGFloat = self.collectionViewCellWidth() * UIScreen.main.scale
                 let maxHeightInPixels: CGFloat = (maxWidthInPixels * imageToCache!.size.height)/imageToCache!.size.width
                 let maxWidthInPoints: CGFloat = maxWidthInPixels / UIScreen.main.scale
                 let maxHeightInPoints: CGFloat = maxHeightInPixels / UIScreen.main.scale
-                self.imageSizes[post.getPostId()] = CGSize(width: maxWidthInPoints, height: maxHeightInPoints)
+                self.imageSizes[post.getPostId()] = CGSize(width: maxWidthInPoints.rounded(.up), height: maxHeightInPoints.rounded(.up))
                 group.leave()
             }).resume()
         }
@@ -126,12 +128,18 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
     }
 
     func imageLoaded(postID: String, imageSize: CGSize) {
-        let maxWidthInPixels: CGFloat = ((self.frame.width-20)/3) * UIScreen.main.scale
+        let maxWidthInPixels: CGFloat = collectionViewCellWidth() * UIScreen.main.scale
         let maxHeightInPixels: CGFloat = (maxWidthInPixels * imageSize.height)/imageSize.width
         let maxWidthInPoints: CGFloat = maxWidthInPixels / UIScreen.main.scale
         let maxHeightInPoints: CGFloat = maxHeightInPixels / UIScreen.main.scale
 //        print(maxWidthInPoints, maxHeightInPoints, ((self.frame.width-20)/3))
 //        imageSizes[postID] = CGSize(width: maxWidthInPoints, height: maxHeightInPoints)
+    }
+    
+    private func collectionViewCellWidth() -> CGFloat {
+        // Structure of collectionView row
+        // |-4-[-4-[Image]-4-][-4-[Image]-4-][-4-[Image]-4-]-4-|
+        return ((Constraints.screenWidth() - (collectionViewInset * 2))/3) - 8
     }
 
     func disableScrolling() {
@@ -170,25 +178,8 @@ extension ProfileViewPostsCollectionView: UICollectionViewDelegate, UICollection
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         let postId = prismPostArrayList[indexPath.item].getPostId()
         if imageSizes.keys.contains(postId) {
-            print(imageSizes[postId]!.height)
-            return imageSizes[postId]!.height
+            return imageSizes[postId]!.height + 8
         }
         return 100
     }
-
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let postId = prismPostArrayList[indexPath.item].getPostId()
-//        if imageSizes.keys.contains(postId) {
-//            return CGSize(width: imageSizes[postId]!.width, height: imageSizes[postId]!.height)
-//        }
-//        return CGSize(width: (self.frame.width-20)/3, height: 100)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 5
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 5
-//    }
 }

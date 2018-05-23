@@ -25,8 +25,8 @@ class ProfileViewPostsCollectionViewCell: UICollectionViewCell {
     private func setupView() {
         initializePrismPostImage()
 
-        addConstraintsWithFormat(format: "H:|[v0]|", views: prismPostImage)
-        addConstraintsWithFormat(format: "V:|[v0]|", views: prismPostImage)
+        addConstraintsWithFormat(format: "H:|-4-[v0]-4-|", views: prismPostImage)
+        addConstraintsWithFormat(format: "V:|-4-[v0]-4-|", views: prismPostImage)
     }
 
     private func initializePrismPostImage() {
