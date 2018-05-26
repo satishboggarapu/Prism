@@ -27,6 +27,8 @@ class NotificationsTableViewCell: TableViewCell {
     var prismUserProfilePicture: CustomImageView!
 
     var prismNotification: PrismNotification!
+    var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
+
 
 //    weak var delegate: NotificationsTableViewCellDelegate?
 
@@ -84,12 +86,15 @@ class NotificationsTableViewCell: TableViewCell {
         contentView.addSubview(textView)
         contentView.addSubview(prismUserProfilePicture)
         contentView.addSubview(prismPostImage)
-        contentView.addConstraintsWithFormat(format: "V:|-8-[v0]-8-|", views: textView)
-        contentView.addConstraintsWithFormat(format: "V:|-8-[v0]-8-|", views: prismUserProfilePicture)
-        contentView.addConstraintsWithFormat(format: "V:|-8-[v0]-8-|", views: prismPostImage)
+        contentView.addConstraintsWithFormat(format: "V:|-12-[v0]-12-|", views: textView)
+        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-8-|", views: prismUserProfilePicture)
+        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-8-|", views: prismPostImage)
 
-        contentView.addConstraintsWithFormat(format: "H:|-8-[v0]-8-[v1]-[v2]-8-|", views: prismUserProfilePicture, textView, prismPostImage)
+        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-8-[v1]-[v2(48)]-8-|", views: prismUserProfilePicture, textView, prismPostImage)
 
+        let separatorLine = UIImageView.init(frame: CGRect(x: 0, y: 64, width: contentView.frame.size.width, height: 1))
+        separatorLine.backgroundColor = .white
+        contentView.addSubview(separatorLine)
 
         
         contentView.backgroundColor = .collectionViewBackground
@@ -158,13 +163,12 @@ class NotificationsTableViewCell: TableViewCell {
     
     private func initializePrismPostImage() {
         prismPostImage = CustomImageView()
-        prismPostImage.contentMode = .scaleAspectFit
+        prismPostImage.contentMode = .scaleAspectFill
         prismPostImage.clipsToBounds = true
         prismPostImage.translatesAutoresizingMaskIntoConstraints = false
         prismPostImage.isUserInteractionEnabled = true
         prismPostImage.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
 //        contentView.addSubview(prismPostImage)
-        
         prismPostImage.isUserInteractionEnabled = true
         // tap gesture
         let prismPostImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(prismPostImageTapGestureAction(_:)))
@@ -178,6 +182,9 @@ class NotificationsTableViewCell: TableViewCell {
         prismUserProfilePicture.translatesAutoresizingMaskIntoConstraints = false
         prismUserProfilePicture.tintColor = .white
         prismUserProfilePicture.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
+        prismUserProfilePicture.layer.cornerRadius = profilePictureSize/2
+
+
 //        contentView.addSubview(prismUserProfilePicture)
         
         prismUserProfilePicture.isUserInteractionEnabled = true
@@ -189,26 +196,24 @@ class NotificationsTableViewCell: TableViewCell {
     
     // MARK: Setter Methods
 
-//    public func loadProfileImage() {
-//        let profilePicture = prismPost.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
-//        if profilePicture != nil {
-//            profileImage.image = profilePicture
-//        } else {
-//            let imageUrl = prismPost.getPrismUser().getProfilePicture().profilePicUriString
-//            profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
-//            self.addBorderToProfilePic()
-//        }
-//    }
-    
-    public func loadPostImage() {
-        let imageUrl = prismNotification.getImage()
-        let postId = prismNotification.getPostId()
-        prismPostImage.loadImageUsingUrlString(imageUrl, postID: postId) { (result, image) in
-            if result && self.prismNotification.getNotificationAction() != "followed you • " {
-                self.prismPostImage.image = image
-            }
+    public func loadProfileImage() {
+        let profilePicture = prismNotification.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
+        if profilePicture != nil {
+            prismUserProfilePicture.image = profilePicture
+        } else {
+            prismUserProfilePicture.loadImageUsingUrlString(prismNotification.getPrismUser().getProfilePicture().profilePicUriString, postID: prismNotification.getPrismUser().getUid())
         }
     }
+    
+    public func loadPostImage() {
+        if prismNotification.getNotificationAction() != "followed you • " {
+            let imageUrl = prismNotification.getPrismPost().getImage()
+            let postId = prismNotification.getPostId()
+            prismPostImage.loadImageUsingUrlString(imageUrl, postID: postId)
+        }
+    }
+    
+    
 
     
     
