@@ -170,6 +170,8 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
             }
         }
 
+        
+
         return cell
     }
 
