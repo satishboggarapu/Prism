@@ -132,6 +132,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
                                       "v3": separatorView]
         cellVerticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(topMargin)-[v0]-\(topMargin)-[v1(<=\(imageMaxHeight))]-\(topMargin)-[v2]-\(topMargin)-[v3(\(dividerHeight))]|", options: NSLayoutFormatOptions(), metrics: nil, views: views)
         addConstraints(cellVerticalConstraint)
+        
+        
+//        let separatorLine = UIImageView.init(frame: CGRect(x: 0, y: contentView.frame.height, width: contentView.frame.size.width, height: 1))
+//        separatorLine.backgroundColor = .white
+//        self.addSubview(separatorLine)
 
     }
 

@@ -25,6 +25,7 @@ public class PrismNotification: Equatable, CustomStringConvertible {
     fileprivate var viewedTimestamp: Int!
 
     private var prismUser: PrismUser!
+    private var prismPost: PrismPost!
     private var notificationAction: String!
     private var image: String!
     private var postId: String!
@@ -75,6 +76,10 @@ public class PrismNotification: Equatable, CustomStringConvertible {
         return prismUser
     }
     
+    public func getPrismPost() -> PrismPost {
+        return prismPost
+    }
+    
     public func getImage() -> String {
         return image
     }
@@ -111,6 +116,10 @@ public class PrismNotification: Equatable, CustomStringConvertible {
     
     public func setPrismUser(prismUser : PrismUser) {
         self.prismUser = prismUser
+    }
+   
+    public func setPrismPost(prismPost : PrismPost) {
+        self.prismPost = prismPost
     }
     
     public func setPostId(postId : String) {

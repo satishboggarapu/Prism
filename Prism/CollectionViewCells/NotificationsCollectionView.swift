@@ -25,7 +25,10 @@ class NotificationsCollectionView: UICollectionViewCell {
     // MARK: UIElements
     var tableView: UITableView!
     var notificationsArrayList: [PrismNotification]! = [PrismNotification]()
+    var tableViewHeight: CGFloat = 64
     private var usersReference: DatabaseReference = Default.USERS_REFERENCE
+    typealias completion = (_ isFinished:Bool) -> Void
+
     
     override init(frame: CGRect){
         super.init(frame: frame)
@@ -109,8 +112,18 @@ class NotificationsCollectionView: UICollectionViewCell {
                     let userSnapshot = snapshot.childSnapshot(forPath: notification.getMostRecentUid())
                     let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
                     notification.setPrismUser(prismUser: prismUser)
+                    self.setPrismNotificationPostId(prismNotification: notification)
+                    Default.ALL_POSTS_REFERENCE.child(notification.getPostId()).observeSingleEvent(of: .value, with: {(snapshot) in
+                        if snapshot.exists(){
+                            let prismPost = Helper.constructPrismPostObject(postSnapshot: snapshot)
+                            print("PrismPostCreated in populateUserDetailsForAllNotifications")
+                            notification.setPrismPost(prismPost: prismPost)
+                        }
+                        else {
+                            completionHandler(false)
+                        }
+                    })
                 }
-                completionHandler(true)
             } else {
                 completionHandler(false)
             }
@@ -139,12 +152,76 @@ class NotificationsCollectionView: UICollectionViewCell {
    
     func setPrismNotificationPostId(prismNotification: PrismNotification){
         let actionId = prismNotification.getNotificationId()
-        if let range = actionId.range(of: "_") {
+        if let range = actionId.range(of: "_like") {
+            let firstPartExcludingDelimiter = actionId.substring(to: range.lowerBound)
+            print(firstPartExcludingDelimiter)
+            prismNotification.setPostId(postId: firstPartExcludingDelimiter)
+        }
+        if let range = actionId.range(of: "_follow") {
+            let firstPartExcludingDelimiter = actionId.substring(to: range.lowerBound)
+            print(firstPartExcludingDelimiter)
+            prismNotification.setPostId(postId: firstPartExcludingDelimiter)
+        }
+        if let range = actionId.range(of: "_repost") {
             let firstPartExcludingDelimiter = actionId.substring(to: range.lowerBound)
             print(firstPartExcludingDelimiter)
             prismNotification.setPostId(postId: firstPartExcludingDelimiter)
         }
     }
+    
+//    func getPostImageUrl(prismNotification: PrismNotification){
+//
+//        let postId = prismNotification.getPostId()
+//        var imageUrl: String!
+//        Default.ALL_POSTS_REFERENCE.child(postId).observeSingleEvent(of: .value, with: {(snapshot) in
+//            if snapshot.exists() {
+//                imageUrl = snapshot.childSnapshot(forPath: "image").value as! String
+//                prismNotification.setImage(image: imageUrl)
+//            } else {
+//                print("post ID not found")
+//            }
+//        })
+//    }
+    
+    
+//    func getPostImageUrl(prismNotification: PrismNotification, completionHandler: @escaping completion) {
+//        let postId = prismNotification.getPostId()
+//        var notification: PrismNotification!
+//        Default.ALL_POSTS_REFERENCE.child(postId).observeSingleEvent(of: .value, with: {(snapshot) in
+//            if snapshot.exists() {
+//                let imageUrl = snapshot.childSnapshot(forPath: "image").value as! String
+//                prismNotification.setImage(image: imageUrl)
+//                if prismNotification.getImage() == nil {
+//                    completionHandler(false)
+//                }
+//            }
+//            else{
+//                print("getPostImageUrl - snapshot doesnt exist")
+//            }
+//        })
+//        completionHandler(true)
+//    }
+//
+//    fileprivate func getPostImageUrl(completionHandler: @escaping ((_ exit: Bool) -> PrismNotification)) {
+//        print("Inside getPostImageUrl")
+//        let postId = prismNotification.getPostId()
+//        var notification: PrismNotification!
+//
+//        Default.ALL_POSTS_REFERENCE.child(postId).observeSingleEvent(of: .value, with: {(snapshot) in
+//            if snapshot.exists() {
+//                let imageUrl = snapshot.childSnapshot(forPath: "image").value as! String
+//                prismNotification.setImage(image: imageUrl)
+//                completionHandler(true)
+//            }else{
+//                print("no data")
+//                completionHandler(false)
+//            }
+//        })
+//    }
+    
+    
+    
+}
 
     
 //    func setPrismUserNameForNotification(prismNotification: PrismNotification) {
@@ -164,7 +241,7 @@ class NotificationsCollectionView: UICollectionViewCell {
     
 
     
-}
+
 
 extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -182,19 +259,34 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         cell.prismNotification = prismNotification
         cell.timeLabel.text = Helper.getFancyDateDifferenceString(time: prismNotification.getActionTimestamp())
         cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
-        cell.prismUserProfilePicture.loadImageUsingUrlString(prismNotification.getPrismUser().getProfilePicture().profilePicUriString, postID: prismNotification.getPrismUser().getUid())
+        cell.loadProfileImage()
+        cell.loadPostImage()
+        
+//        self.getPostImageUrl(prismNotification: notification, completionHandler: { (isFinished) in
+//            if isFinished {
+//                cell.loadPostImage()
+//            }
+//        })
+        
+        
 
+
+        
+        
+
+        
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64
+        return tableViewHeight
     }
-    
+}
 //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("row: \(indexPath.row)")
 //    }
-}
+
 //
 //extension NotificationsCollectionView: NotificationsCollectionViewDelegate {
 //    func prismPostSelected(_ indexPath: IndexPath) {
