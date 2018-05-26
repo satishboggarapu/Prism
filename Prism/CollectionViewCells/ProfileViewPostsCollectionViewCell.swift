@@ -12,6 +12,7 @@ class ProfileViewPostsCollectionViewCell: UICollectionViewCell {
 
     var prismPostImage: CustomImageView!
     var prismPost: PrismPost!
+    var repostIcon: UIImageView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,6 +35,11 @@ class ProfileViewPostsCollectionViewCell: UICollectionViewCell {
         prismPostImage.contentMode = .scaleAspectFit
         prismPostImage.translatesAutoresizingMaskIntoConstraints = false
         addSubview(prismPostImage)
+    }
+    
+    private func initializeReportIcon() {
+        repostIcon = UIImageView()
+        repostIcon.image = Icons.REPOST_24
     }
 
     public func loadPostImage() {

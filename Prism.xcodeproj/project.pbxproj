@@ -10,6 +10,7 @@
 		100763C22041B106005093C5 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100763C12041B106005093C5 /* Constraints.swift */; };
 		1011FAE02075BF3800468D82 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1011FADF2075BF3800468D82 /* DateExtensions.swift */; };
 		103399162061DFE000E105EC /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103399152061DFE000E105EC /* DictionaryExtensions.swift */; };
+		10638A1120B5B83900D8471B /* UICollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10638A1020B5B83900D8471B /* UICollectionViewExtensions.swift */; };
 		106EAD9F2062E97C008E41B0 /* SDWebImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106EAD9E2062E97C008E41B0 /* SDWebImageHelper.swift */; };
 		10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10863A4D203FD57800FA851B /* UIColorExtensions.swift */; };
 		1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F3203E838500C282BA /* AppDelegate.swift */; };
@@ -101,6 +102,7 @@
 		100763C12041B106005093C5 /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		1011FADF2075BF3800468D82 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		103399152061DFE000E105EC /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
+		10638A1020B5B83900D8471B /* UICollectionViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtensions.swift; sourceTree = "<group>"; };
 		106EAD9E2062E97C008E41B0 /* SDWebImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageHelper.swift; sourceTree = "<group>"; };
 		10863A4D203FD57800FA851B /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		1091E1F0203E838500C282BA /* Prism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prism.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +255,7 @@
 			children = (
 				10ADF6BF2050D36000060A19 /* UIViewControllerExtensions.swift */,
 				10ADF6C02050D36000060A19 /* UIViewExtensions.swift */,
+				10638A1020B5B83900D8471B /* UICollectionViewExtensions.swift */,
 				10863A4D203FD57800FA851B /* UIColorExtensions.swift */,
 				192E4A2EEA660D591ABB6BF5 /* StringExtensions.swift */,
 				103399152061DFE000E105EC /* DictionaryExtensions.swift */,
@@ -763,6 +766,7 @@
 				4F9C95832050CBC700C08C9E /* Default.swift in Sources */,
 				10FCD82A205F03E8001E0C1F /* DefaultProfilePicture.swift in Sources */,
 				10E3F55D204659EF00C82F3F /* Colors.swift in Sources */,
+				10638A1120B5B83900D8471B /* UICollectionViewExtensions.swift in Sources */,
 				4F9C95812050C5A800C08C9E /* Key.swift in Sources */,
 				10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */,
 				4F9C95852050D5BF00C08C9E /* MyTimeUnit.swift in Sources */,

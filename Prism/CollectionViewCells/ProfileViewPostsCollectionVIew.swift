@@ -11,19 +11,20 @@ import Firebase
 
 class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDelegate {
 
+    /*
+     * Attributes
+     */
     var collectionView: UICollectionView!
     var viewController: ProfileViewController!
     var prismUser: PrismUser!
-    var prismPostArrayList = [PrismPost]()
-    var imageSizes = [String: CGSize]()
-
-    var flowLayout: PinterestLayout {
+    private var prismPostArrayList = [PrismPost]()
+    private var imageSizes = [String: CGSize]()
+    private var collectionViewInset: CGFloat = 4
+    private var flowLayout: PinterestLayout {
         let layout = PinterestLayout()
         layout.delegate = self
         return layout
     }
-    
-    var collectionViewInset: CGFloat = 4
 
     /*
      * Database References
@@ -47,6 +48,7 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         databaseReferenceAllPosts = Default.ALL_POSTS_REFERENCE
         usersReference = Default.USERS_REFERENCE
 
+        // Pull Firebase data and populate collectionView
         refreshData()
     }
 
@@ -54,6 +56,9 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         fatalError("init(coder:) has not been implemented")
     }
 
+    /*
+     *
+     */
     private func setupView() {
         backgroundColor = .collectionViewBackground
 
@@ -66,15 +71,18 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
         collectionView.delegate = self
         collectionView.bounces = false
         collectionView.register(ProfileViewPostsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView.contentInset = UIEdgeInsets(top: collectionViewInset, left: collectionViewInset, bottom: collectionViewInset, right: collectionViewInset)
+        collectionView.addContentInset(collectionViewInset)
         addSubview(collectionView)
-        // collectionView constraints
+        
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
 
     }
 
-    func refreshData() {
+    /*
+     *
+     */
+    private func refreshData() {
         var repostedPostsMap = [String: Int64]()
         var uploadedPostsMap = [String: Int64]()
         usersReference.observeSingleEvent(of: .value, with: { (usersSnapshot) in
