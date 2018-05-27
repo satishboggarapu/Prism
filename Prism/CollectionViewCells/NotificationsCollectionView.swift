@@ -78,16 +78,18 @@ class NotificationsCollectionView: UICollectionViewCell {
             }
         }
     }
+    
+    
 
     fileprivate func refreshNotificationData(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         print("Inside refreshNotificationData")
         notificationsArrayList.removeAll()
-        let query = Default.NOTIFICATIONS_REFERENCE
+        let query = Default.NOTIFICATIONS_REFERENCE.queryOrdered(byChild: "actionTimestamp")
         query.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for notificationSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
                     let notification = Helper.constructPrismNotificationObject(notificationSnapshot: notificationSnapshot)
-                    self.notificationsArrayList.append(notification)
+                    self.notificationsArrayList.insert(notification, at: 0)
                 }
                 completionHandler(true)
             } else {
@@ -97,38 +99,65 @@ class NotificationsCollectionView: UICollectionViewCell {
         })
     }
     
-    /**
-     * Once all posts are loaded into the prismPostHashMap,
-     * this method iterates over each post, grabs firebaseUser's details
-     * for the post like "profilePicUriString" and "username" and
-     * updates the prismPost objects in that hashMap and then
-     * updates the RecyclerViewAdapter so the UI gets updated
-     */
+//    fileprivate func populateUserDetailsForAllNotifications(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
+//        print("Inside populateUserDetailsForAllNotifications")
+//        usersReference.observeSingleEvent(of: .value, with: { (snapshot) in
+//            if snapshot.exists() {
+//                for notification in self.notificationsArrayList {
+//                    let userSnapshot = snapshot.childSnapshot(forPath: notification.getMostRecentUid())
+//                    let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
+//                    notification.setPrismUser(prismUser: prismUser)
+//                    self.setPrismNotificationPostId(prismNotification: notification)
+//                    Default.ALL_POSTS_REFERENCE.child(notification.getPostId()).observeSingleEvent(of: .value, with: {(snapshot) in
+//                        if snapshot.exists(){
+//                            let prismPost = Helper.constructPrismPostObject(postSnapshot: snapshot)
+//                            print("PrismPostCreated in populateUserDetailsForAllNotifications")
+//                            notification.setPrismPost(prismPost: prismPost)
+//                        }
+//                        else {
+//                            completionHandler(false)
+//                        }
+//                    })
+//                }
+//            } else {
+//                completionHandler(false)
+//            }
+//        })
+//    }
+//    
+    
     fileprivate func populateUserDetailsForAllNotifications(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         print("Inside populateUserDetailsForAllNotifications")
         usersReference.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
-                for notification in self.notificationsArrayList {
-                    let userSnapshot = snapshot.childSnapshot(forPath: notification.getMostRecentUid())
-                    let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
-                    notification.setPrismUser(prismUser: prismUser)
-                    self.setPrismNotificationPostId(prismNotification: notification)
-                    Default.ALL_POSTS_REFERENCE.child(notification.getPostId()).observeSingleEvent(of: .value, with: {(snapshot) in
-                        if snapshot.exists(){
-                            let prismPost = Helper.constructPrismPostObject(postSnapshot: snapshot)
-                            print("PrismPostCreated in populateUserDetailsForAllNotifications")
-                            notification.setPrismPost(prismPost: prismPost)
+                Default.ALL_POSTS_REFERENCE.observeSingleEvent(of: .value, with: {(allPostsSnapshot) in
+                    if allPostsSnapshot.exists(){
+                        for notification in self.notificationsArrayList {
+                            let userSnapshot = snapshot.childSnapshot(forPath: notification.getMostRecentUid())
+                            let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
+                            notification.setPrismUser(prismUser: prismUser)
+                            self.setPrismNotificationPostId(prismNotification: notification)
+                            if allPostsSnapshot.childSnapshot(forPath: notification.getPostId()).exists(){
+                                let prismPost = Helper.constructPrismPostObject(postSnapshot: allPostsSnapshot.childSnapshot(forPath: notification.getPostId()))
+                                print("PrismPostCreated in populateUserDetailsForAllNotifications")
+                                notification.setPrismPost(prismPost: prismPost)
+                            }
+                            else {
+                                completionHandler(false)
+                            }
                         }
-                        else {
-                            completionHandler(false)
-                        }
-                    })
-                }
-            } else {
+                    }
+                    else {
+                        completionHandler(false)
+                    }
+                })
+            }
+            else {
                 completionHandler(false)
             }
         })
     }
+    
     
     func parseNotificationAction(prismNotification: PrismNotification) -> PrismNotification{
         let action = prismNotification.getNotificationId()
@@ -154,17 +183,14 @@ class NotificationsCollectionView: UICollectionViewCell {
         let actionId = prismNotification.getNotificationId()
         if let range = actionId.range(of: "_like") {
             let firstPartExcludingDelimiter = actionId.substring(to: range.lowerBound)
-            print(firstPartExcludingDelimiter)
             prismNotification.setPostId(postId: firstPartExcludingDelimiter)
         }
         if let range = actionId.range(of: "_follow") {
             let firstPartExcludingDelimiter = actionId.substring(to: range.lowerBound)
-            print(firstPartExcludingDelimiter)
             prismNotification.setPostId(postId: firstPartExcludingDelimiter)
         }
         if let range = actionId.range(of: "_repost") {
             let firstPartExcludingDelimiter = actionId.substring(to: range.lowerBound)
-            print(firstPartExcludingDelimiter)
             prismNotification.setPostId(postId: firstPartExcludingDelimiter)
         }
     }
@@ -261,20 +287,7 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
         cell.loadProfileImage()
         cell.loadPostImage()
-        
-//        self.getPostImageUrl(prismNotification: notification, completionHandler: { (isFinished) in
-//            if isFinished {
-//                cell.loadPostImage()
-//            }
-//        })
-        
-        
-
-
-        
-        
-
-        
+        cell.usernameLabel.text = prismNotification.getPrismUser().getUsername()
         
         return cell
     }

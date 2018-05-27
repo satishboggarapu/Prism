@@ -25,9 +25,12 @@ class NotificationsTableViewCell: TableViewCell {
 
     var prismPostImage: CustomImageView!
     var prismUserProfilePicture: CustomImageView!
+    var actionIconView: UIImageView!
+    var actionImage: UIImage!
 
     var prismNotification: PrismNotification!
     var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
+    var actionIconSize: CGFloat = 24
 
 
 //    weak var delegate: NotificationsTableViewCellDelegate?
@@ -57,6 +60,7 @@ class NotificationsTableViewCell: TableViewCell {
         initializeNotificationActionLabel()
         initializePrismUserProfilePicture()
         initializePrismPostImage()
+        initializeActionIcon()
 //        contentView.backgroundColor = UIColor(hex: 0x1a1a1a)
         
         // Set top text view
@@ -75,27 +79,35 @@ class NotificationsTableViewCell: TableViewCell {
         bottomTextView.addArrangedSubview(notificationActionLabel)
         bottomTextView.addArrangedSubview(timeLabel)
         
-        // Set text View
         let textView = UIStackView()
         textView.alignment = .top
         textView.distribution = .fillEqually
         textView.axis = .vertical
         textView.addArrangedSubview(topTextView)
         textView.addArrangedSubview(bottomTextView)
-
+        
         contentView.addSubview(textView)
         contentView.addSubview(prismUserProfilePicture)
         contentView.addSubview(prismPostImage)
-        contentView.addConstraintsWithFormat(format: "V:|-12-[v0]-12-|", views: textView)
-        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-8-|", views: prismUserProfilePicture)
-        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-8-|", views: prismPostImage)
-
-        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-8-[v1]-[v2(48)]-8-|", views: prismUserProfilePicture, textView, prismPostImage)
-
-        let separatorLine = UIImageView.init(frame: CGRect(x: 0, y: 64, width: contentView.frame.size.width, height: 1))
+        contentView.addSubview(actionIconView)
+        
+        let separatorLine = UIImageView()
         separatorLine.backgroundColor = .white
         contentView.addSubview(separatorLine)
+        
+        contentView.addConstraintsWithFormat(format: "V:|-12-[v0]-12-|", views: textView)
+        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-7-[v1(1)]|", views: prismUserProfilePicture, separatorLine)
+        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-8-|", views: prismPostImage)
+        contentView.addConstraintsWithFormat(format: "V:|-36-[v0(24)]-|", views: actionIconView)
 
+        
+        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-8-[v1]-[v2(48)]-8-|", views: prismUserProfilePicture, textView, prismPostImage)
+        contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: separatorLine)
+        contentView.addConstraintsWithFormat(format: "H:|-36-[v0(24)]-|", views: actionIconView)
+
+        
+        
+        
         
         contentView.backgroundColor = .collectionViewBackground
         
@@ -161,13 +173,29 @@ class NotificationsTableViewCell: TableViewCell {
         timeLabel.addGestureRecognizer(timeLabelTapGesture)
     }
     
+    private func initializeActionIcon() {
+        actionIconView = UIImageView()
+        actionIconView.layer.masksToBounds = false
+        actionIconView.contentMode = .center
+        actionIconView.layer.backgroundColor = UIColor.black.cgColor
+        actionIconView.layer.cornerRadius = actionIconSize/2
+        actionIconView.clipsToBounds = true
+        actionIconView.layer.borderWidth = 1
+        actionIconView.layer.borderColor = UIColor.white.cgColor
+        actionIconView.tintColor = .white
+        actionIconView.image = #imageLiteral(resourceName: "ic_heart_24dp").withRenderingMode(.alwaysTemplate)
+
+
+
+    }
+    
     private func initializePrismPostImage() {
         prismPostImage = CustomImageView()
         prismPostImage.contentMode = .scaleAspectFill
         prismPostImage.clipsToBounds = true
         prismPostImage.translatesAutoresizingMaskIntoConstraints = false
         prismPostImage.isUserInteractionEnabled = true
-        prismPostImage.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
+//        prismPostImage.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
 //        contentView.addSubview(prismPostImage)
         prismPostImage.isUserInteractionEnabled = true
         // tap gesture
@@ -181,12 +209,12 @@ class NotificationsTableViewCell: TableViewCell {
         prismUserProfilePicture.clipsToBounds = true
         prismUserProfilePicture.translatesAutoresizingMaskIntoConstraints = false
         prismUserProfilePicture.tintColor = .white
-        prismUserProfilePicture.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
+//        prismUserProfilePicture.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
         prismUserProfilePicture.layer.cornerRadius = profilePictureSize/2
 
 
 //        contentView.addSubview(prismUserProfilePicture)
-        
+        self.addBorderToProfilePic()
         prismUserProfilePicture.isUserInteractionEnabled = true
         // tap gesture
         let prismUserProfilePictureTapGesture = UITapGestureRecognizer(target: self, action: #selector(prismUserProfilePictureTapGestureAction(_:)))
@@ -205,6 +233,19 @@ class NotificationsTableViewCell: TableViewCell {
         }
     }
     
+    public func loadAndOthers() {
+        let notificationQuantity = prismNotification.getPrismPost().getLikes()
+        if notificationQuantity == 0{
+            andOthersLabel.text = ""
+        }
+        else if notificationQuantity == 1{
+            andOthersLabel.text = " and 1 other"
+        }
+        else {
+            andOthersLabel.text = " and \(notificationQuantity) others"
+        }
+    }
+    
     public func loadPostImage() {
         if prismNotification.getNotificationAction() != "followed you • " {
             let imageUrl = prismNotification.getPrismPost().getImage()
@@ -213,6 +254,25 @@ class NotificationsTableViewCell: TableViewCell {
         }
     }
     
+    private func addBorderToProfilePic() {
+        prismUserProfilePicture.layer.borderWidth = 1
+        prismUserProfilePicture.layer.borderColor = UIColor.white.cgColor
+    }
+    
+//    public func setActionImage(){
+//        let notificationAction = prismNotification.getNotificationAction()
+//        if notificationAction.contains("_like"){
+//            actionImage = #imageLiteral(resourceName: "ic_heart_24dp").invertedImage()
+//        }
+//        else if notificationAction.contains("_repost"){
+//            actionImage = #imageLiteral(resourceName: "ic_camera_iris_24dp").invertedImage()
+//
+//        }
+//        else if notificationAction.contains("_follow"){
+//            actionImage = #imageLiteral(resourceName: "ic_plus_circle_24dp").invertedImage()
+//        }
+//        actionIconView.image = actionImage
+//    }
     
 
     
@@ -244,4 +304,20 @@ class NotificationsTableViewCell: TableViewCell {
         print("Tapped on Prism User Profile Picture")
     }
     
+    
+    
+}
+
+extension UIImage {
+    func invertedImage() -> UIImage? {
+        guard let cgImage = self.cgImage else { return nil }
+        let ciImage = CoreImage.CIImage(cgImage: cgImage)
+        guard let filter = CIFilter(name: "CIColorInvert") else { return nil }
+        filter.setDefaults()
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        let context = CIContext(options: nil)
+        guard let outputImage = filter.outputImage else { return nil }
+        guard let outputImageCopy = context.createCGImage(outputImage, from: outputImage.extent) else { return nil }
+        return UIImage(cgImage: outputImageCopy)
+    }
 }

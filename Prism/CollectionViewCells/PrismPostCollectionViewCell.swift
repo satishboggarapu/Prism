@@ -332,7 +332,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     private func addBorderToProfilePic() {
-        profileImage.layer.borderWidth = 2
+        profileImage.layer.borderWidth = 1
         profileImage.layer.borderColor = UIColor.white.cgColor
     }
 
