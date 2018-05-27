@@ -45,7 +45,7 @@ class ProfileViewPostsCollectionViewCell: UICollectionViewCell {
         repostIcon = UIImageView()
         repostIcon.image = Icons.REPOST_24?.withRenderingMode(.alwaysTemplate)
         repostIcon.tintColor = .white
-//        repostIcon.isHidden = true
+        repostIcon.isHidden = true
         prismPostImage.addSubview(repostIcon)
     }
 

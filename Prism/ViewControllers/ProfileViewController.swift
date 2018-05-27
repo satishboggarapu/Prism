@@ -266,6 +266,7 @@ class ProfileViewController: UIViewController {
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView?.register(ProfileViewPostsCollectionView.self, forCellWithReuseIdentifier: "posts")
+        collectionView?.register(ProfileViewLikesCollectionView.self, forCellWithReuseIdentifier: "likes")
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.showsVerticalScrollIndicator = false
@@ -389,12 +390,13 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
             cell.disableScrolling()
             return cell
         }
-//        else if indexPath.item == 3 {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Settings", for: indexPath) as!
-//                    SettingsCollectionView
-//            return cell
-//        }
-        else {
+        else if indexPath.item == 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "likes", for: indexPath) as! ProfileViewLikesCollectionView
+            cell.viewController = self
+            cell.prismUser = prismPost.getPrismUser()
+            cell.disableScrolling()
+            return cell
+        } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             cell.backgroundColor = .loginBackground
 //            cell.backgroundColor = (indexPath.item == 0) ? .red : .blue
