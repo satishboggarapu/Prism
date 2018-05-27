@@ -10,6 +10,11 @@ import MaterialComponents
 import Firebase
 
 class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDelegate {
+    
+    struct ProfileViewPrismPost {
+        var prismPost: PrismPost
+        var isPostReposted: Bool
+    }
 
     /*
      * Attributes
@@ -17,7 +22,7 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
     var collectionView: UICollectionView!
     var viewController: ProfileViewController!
     var prismUser: PrismUser!
-    private var prismPostArrayList = [PrismPost]()
+    private var prismPostArrayList = [ProfileViewPrismPost]()
     private var imageSizes = [String: CGSize]()
     private var collectionViewInset: CGFloat = 4
     private var flowLayout: PinterestLayout {
@@ -100,8 +105,8 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
                 self.databaseReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
                     let uploadedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: uploadedPostsMap)
                     let repostedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
-                    self.prismPostArrayList.append(contentsOf: uploadedPosts)
-                    self.prismPostArrayList.append(contentsOf: repostedPosts)
+                    for post in uploadedPosts { self.prismPostArrayList.append(ProfileViewPrismPost(prismPost: post, isPostReposted: false)) }
+                    for post in repostedPosts { self.prismPostArrayList.append(ProfileViewPrismPost(prismPost: post, isPostReposted: true)) }
                     self.collectionView.reloadData()
                 })
             }
@@ -153,13 +158,14 @@ extension ProfileViewPostsCollectionView: UICollectionViewDelegate, UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ProfileViewPostsCollectionViewCell
         cell.prismPostImage.delegate = self
-        cell.prismPost = prismPostArrayList[indexPath.item]
+        cell.prismPost = prismPostArrayList[indexPath.item].prismPost
         cell.loadPostImage()
+        cell.repostIcon.isHidden = !prismPostArrayList[indexPath.item].isPostReposted
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        let postId = prismPostArrayList[indexPath.item].getPostId()
+        let postId = prismPostArrayList[indexPath.item].prismPost.getPostId()
         if imageSizes.keys.contains(postId) {
             return imageSizes[postId]!.height + 8
         }

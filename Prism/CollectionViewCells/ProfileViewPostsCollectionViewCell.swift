@@ -35,11 +35,18 @@ class ProfileViewPostsCollectionViewCell: UICollectionViewCell {
         prismPostImage.contentMode = .scaleAspectFit
         prismPostImage.translatesAutoresizingMaskIntoConstraints = false
         addSubview(prismPostImage)
+        
+        initializeReportIcon()
+        prismPostImage.addConstraintsWithFormat(format: "H:[v0(24)]-4-|", views: repostIcon)
+        prismPostImage.addConstraintsWithFormat(format: "V:[v0(24)]-4-|", views: repostIcon)
     }
     
     private func initializeReportIcon() {
         repostIcon = UIImageView()
-        repostIcon.image = Icons.REPOST_24
+        repostIcon.image = Icons.REPOST_24?.withRenderingMode(.alwaysTemplate)
+        repostIcon.tintColor = .white
+//        repostIcon.isHidden = true
+        prismPostImage.addSubview(repostIcon)
     }
 
     public func loadPostImage() {
