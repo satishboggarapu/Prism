@@ -35,7 +35,7 @@ class NotificationsTableViewCell: TableViewCell {
     var actionIconSize: CGFloat = 24
 //    var actionIconResize: CGFloat = 20
 
-
+    var viewController: MainViewController!
 
 //    weak var delegate: NotificationsTableViewCellDelegate?
 
@@ -331,6 +331,8 @@ class NotificationsTableViewCell: TableViewCell {
 //    }
     @objc func usernameLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Username Label")
+        let vc = RegisterViewController()
+        viewController.navigationController?.pushViewController(vc, animated: false)
     }
     @objc func andOthersLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on And Others Label")

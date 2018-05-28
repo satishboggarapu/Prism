@@ -350,6 +350,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
         }
         else if indexPath.item == 2 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Notifications", for: indexPath) as! NotificationsCollectionView
+            cell.viewController = self
             return cell
         }
         else {

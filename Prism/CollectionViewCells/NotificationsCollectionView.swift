@@ -29,7 +29,7 @@ class NotificationsCollectionView: UICollectionViewCell {
     private var usersReference: DatabaseReference = Default.USERS_REFERENCE
     private var refreshControl: UIRefreshControl!
 
-
+    var viewController: MainViewController!
     
     override init(frame: CGRect){
         super.init(frame: frame)
@@ -203,7 +203,7 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         let cell = NotificationsTableViewCell(style: .default, reuseIdentifier: "cell")
         print(notificationsArrayList.count)
         let prismNotification: PrismNotification = notificationsArrayList[indexPath.item]
-        
+        cell.viewController = viewController
         cell.prismNotification = prismNotification
         cell.timeLabel.text = Helper.getFancyDateDifferenceString(time: prismNotification.getActionTimestamp())
         cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
