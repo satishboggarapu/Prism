@@ -78,9 +78,9 @@ class SettingsCollectionView: UICollectionViewCell {
     
     private func initializeFullName() {
         fullName = UILabel()
-        fullName.text = "Shiv Shah"
         fullName.textColor = UIColor.white
         fullName.font = mediumFont
+        setFullName()
         fullName.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -99,6 +99,7 @@ class SettingsCollectionView: UICollectionViewCell {
         profileImage.layer.cornerRadius = profilePictureSize/2
         profileImage.clipsToBounds = true
         profileImage.translatesAutoresizingMaskIntoConstraints = false
+        addBorderToProfilePic()
     }
     
     private func initializeTableView() {
@@ -126,16 +127,23 @@ class SettingsCollectionView: UICollectionViewCell {
     }
     
     
-    public func loadProfileImage() {
+    private func loadProfileImage() {
         let profilePicture = CurrentUser.prismUser.getProfilePicture().getLowResDefaultProfilePic()
         print(profilePicture)
         if profilePicture != nil {
             profileImage.image = profilePicture
         } else {
-            let imageUrl = CurrentUser.prismUser.getProfilePicture().profilePicUriString
-//            profileImage.loadImageUsingUrlString
-//            self.addBorderToProfilePic()
+            profileImage.loadImageUsingUrlString(CurrentUser.prismUser.getProfilePicture().profilePicUriString, postID: CurrentUser.prismUser.getUid())
         }
+    }
+    
+    private func addBorderToProfilePic(){
+        profileImage.layer.borderWidth = 1
+        profileImage.layer.borderColor = UIColor.white.cgColor
+    }
+    
+    private func setFullName(){
+        fullName.text = CurrentUser.prismUser.getFullName()
     }
 }
 

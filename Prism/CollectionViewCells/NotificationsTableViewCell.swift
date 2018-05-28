@@ -27,10 +27,14 @@ class NotificationsTableViewCell: TableViewCell {
     var prismUserProfilePicture: CustomImageView!
     var actionIconView: UIImageView!
     var actionImage: UIImage!
+//    var actionIconFunction: UIImageView!
 
+    
     var prismNotification: PrismNotification!
     var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
     var actionIconSize: CGFloat = 24
+//    var actionIconResize: CGFloat = 20
+
 
 
 //    weak var delegate: NotificationsTableViewCellDelegate?
@@ -61,6 +65,7 @@ class NotificationsTableViewCell: TableViewCell {
         initializePrismUserProfilePicture()
         initializePrismPostImage()
         initializeActionIcon()
+//        initializeActionIconFunction()
 //        contentView.backgroundColor = UIColor(hex: 0x1a1a1a)
         
         // Set top text view
@@ -95,15 +100,20 @@ class NotificationsTableViewCell: TableViewCell {
         separatorLine.backgroundColor = .white
         contentView.addSubview(separatorLine)
         
+        let separatorLineHeight = 0.25
         contentView.addConstraintsWithFormat(format: "V:|-12-[v0]-12-|", views: textView)
-        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-7-[v1(1)]|", views: prismUserProfilePicture, separatorLine)
+        contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-7-[v1(\(separatorLineHeight))]|", views: prismUserProfilePicture, separatorLine)
         contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-8-|", views: prismPostImage)
         contentView.addConstraintsWithFormat(format: "V:|-36-[v0(24)]-|", views: actionIconView)
+//        contentView.addConstraintsWithFormat(format: "V:|-38-[v0(20)]-|", views: actionIconFunction)
+
 
         
-        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-8-[v1]-[v2(48)]-8-|", views: prismUserProfilePicture, textView, prismPostImage)
+        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-16-[v1]-[v2(48)]-8-|", views: prismUserProfilePicture, textView, prismPostImage)
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: separatorLine)
         contentView.addConstraintsWithFormat(format: "H:|-36-[v0(24)]-|", views: actionIconView)
+//        contentView.addConstraintsWithFormat(format: "H:|-38-[v0(20)]-|", views: actionIconFunction)
+
 
         
         
@@ -135,7 +145,6 @@ class NotificationsTableViewCell: TableViewCell {
         andOthersLabel.textColor = UIColor.white
         andOthersLabel.font = thickFont
         andOthersLabel.translatesAutoresizingMaskIntoConstraints = false
-        andOthersLabel.text = " and 2 others"
         //        contentView.addSubview(usernameLabel)
         
         andOthersLabel.isUserInteractionEnabled = true
@@ -153,10 +162,10 @@ class NotificationsTableViewCell: TableViewCell {
         notificationActionLabel.text = "liked • "
 //        contentView.addSubview(notificationActionLabel)
         
-        notificationActionLabel.isUserInteractionEnabled = true
-        // tap gesture
-        let notificationActionLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(notificationActionLabelTapGestureAction(_:)))
-        notificationActionLabel.addGestureRecognizer(notificationActionLabelTapGesture)
+//        notificationActionLabel.isUserInteractionEnabled = true
+//        // tap gesture
+//        let notificationActionLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(notificationActionLabelTapGestureAction(_:)))
+//        notificationActionLabel.addGestureRecognizer(notificationActionLabelTapGesture)
     }
     
     private func initializeTimeLabel() {
@@ -167,10 +176,10 @@ class NotificationsTableViewCell: TableViewCell {
         timeLabel.text = "2 days ago"
 //        contentView.addSubview(timeLabel)
         
-        timeLabel.isUserInteractionEnabled = true
-        // tap gesture
-        let timeLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(timeLabelTapGestureAction(_:)))
-        timeLabel.addGestureRecognizer(timeLabelTapGesture)
+//        timeLabel.isUserInteractionEnabled = true
+//        // tap gesture
+//        let timeLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(timeLabelTapGestureAction(_:)))
+//        timeLabel.addGestureRecognizer(timeLabelTapGesture)
     }
     
     private func initializeActionIcon() {
@@ -183,11 +192,18 @@ class NotificationsTableViewCell: TableViewCell {
         actionIconView.layer.borderWidth = 1
         actionIconView.layer.borderColor = UIColor.white.cgColor
         actionIconView.tintColor = .white
-        actionIconView.image = #imageLiteral(resourceName: "ic_heart_24dp").withRenderingMode(.alwaysTemplate)
-
-
-
     }
+    
+//    private func initializeActionIconFunction(){
+//        actionIconFunction = UIImageView()
+//        actionIconFunction.layer.masksToBounds = false
+//        actionIconFunction.contentMode = .scaleAspectFill
+//        actionIconFunction.layer.backgroundColor = UIColor.black.cgColor
+//        actionIconFunction.layer.cornerRadius = actionIconResize/2
+//        actionIconFunction.clipsToBounds = true
+//        actionIconFunction.tintColor = .white
+//        actionIconFunction.image = #imageLiteral(resourceName: "ic_plus_circle_24dp").withRenderingMode(.alwaysTemplate)
+//    }
     
     private func initializePrismPostImage() {
         prismPostImage = CustomImageView()
@@ -197,10 +213,10 @@ class NotificationsTableViewCell: TableViewCell {
         prismPostImage.isUserInteractionEnabled = true
 //        prismPostImage.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
 //        contentView.addSubview(prismPostImage)
-        prismPostImage.isUserInteractionEnabled = true
-        // tap gesture
-        let prismPostImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(prismPostImageTapGestureAction(_:)))
-        prismPostImage.addGestureRecognizer(prismPostImageTapGesture)
+//        prismPostImage.isUserInteractionEnabled = true
+//        // tap gesture
+//        let prismPostImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(prismPostImageTapGestureAction(_:)))
+//        prismPostImage.addGestureRecognizer(prismPostImageTapGesture)
         
     }
     private func initializePrismUserProfilePicture() {
@@ -259,20 +275,45 @@ class NotificationsTableViewCell: TableViewCell {
         prismUserProfilePicture.layer.borderColor = UIColor.white.cgColor
     }
     
-//    public func setActionImage(){
-//        let notificationAction = prismNotification.getNotificationAction()
-//        if notificationAction.contains("_like"){
-//            actionImage = #imageLiteral(resourceName: "ic_heart_24dp").invertedImage()
-//        }
-//        else if notificationAction.contains("_repost"){
-//            actionImage = #imageLiteral(resourceName: "ic_camera_iris_24dp").invertedImage()
-//
-//        }
-//        else if notificationAction.contains("_follow"){
-//            actionImage = #imageLiteral(resourceName: "ic_plus_circle_24dp").invertedImage()
-//        }
-//        actionIconView.image = actionImage
-//    }
+    public func setActionImage(){
+        let notificationAction = prismNotification.getNotificationId()
+        if notificationAction.contains("_like"){
+            actionIconView.image = #imageLiteral(resourceName: "ic_heart_24dp").resize(toWidth: 18)?.resize(toHeight: 18)?.withRenderingMode(.alwaysTemplate)
+        }
+        else if notificationAction.contains("_repost"){
+            actionIconView.image = #imageLiteral(resourceName: "ic_camera_iris_24dp").resize(toWidth: 18)?.resize(toHeight: 18)?.withRenderingMode(.alwaysTemplate)
+            
+        }
+        else if notificationAction.contains("_follow"){
+            actionIconView.image = #imageLiteral(resourceName: "ic_plus_circle_24dp").resize(toWidth: 18)?.resize(toHeight: 18)?.withRenderingMode(.alwaysTemplate)
+        }
+    }
+    
+    public func setAndOthersText(){
+        if prismNotification.getNotificationId().contains("_follow"){
+        }
+        else if prismNotification.getNotificationId().contains("like"){
+            
+            if prismNotification.getPrismPost().getLikes() == 2{
+                andOthersLabel.text = " and \(prismNotification.getPrismPost().getLikes()-1) other"
+            }
+            else if prismNotification.getPrismPost().getLikes() >= 3{
+                andOthersLabel.text = " and \(prismNotification.getPrismPost().getLikes()-1) others"
+            }
+        }
+        else if prismNotification.getNotificationId().contains("repost"){
+            if prismNotification.getPrismPost().getReposts() == 2{
+                andOthersLabel.text = " and \(prismNotification.getPrismPost().getReposts()-1) other"
+            }
+            else if prismNotification.getPrismPost().getReposts() >= 3{
+                andOthersLabel.text = " and \(prismNotification.getPrismPost().getReposts()-1) others"
+            }
+        }
+    }
+    
+    public func setUsernameLabel(){
+        usernameLabel.text = prismNotification.getPrismUser().getUsername()
+    }
     
 
     
@@ -285,21 +326,21 @@ class NotificationsTableViewCell: TableViewCell {
     // MARK: Tap Gesture Methods
 
     
-    @objc func timeLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on Time Label")
-    }
+//    @objc func timeLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+//        print("Tapped on Time Label")
+//    }
     @objc func usernameLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Username Label")
     }
     @objc func andOthersLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on And Others Label")
     }
-    @objc func notificationActionLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on Notification Action Label")
-    }
-    @objc func prismPostImageTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on Prism Post Image")
-    }
+//    @objc func notificationActionLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+//        print("Tapped on Notification Action Label")
+//    }
+//    @objc func prismPostImageTapGestureAction(_ sender: UITapGestureRecognizer) {
+//        print("Tapped on Prism Post Image")
+//    }
     @objc func prismUserProfilePictureTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Prism User Profile Picture")
     }

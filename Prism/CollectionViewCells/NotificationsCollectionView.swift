@@ -27,7 +27,8 @@ class NotificationsCollectionView: UICollectionViewCell {
     var notificationsArrayList: [PrismNotification]! = [PrismNotification]()
     var tableViewHeight: CGFloat = 64
     private var usersReference: DatabaseReference = Default.USERS_REFERENCE
-    typealias completion = (_ isFinished:Bool) -> Void
+    private var refreshControl: UIRefreshControl!
+
 
     
     override init(frame: CGRect){
@@ -46,6 +47,9 @@ class NotificationsCollectionView: UICollectionViewCell {
         initializeNotificationsTableView()
         addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)        
         addConstraintsWithFormat(format: "V:|[v0]|", views: tableView)
+        
+        
+
     }
     
     private func initializeNotificationsTableView() {
@@ -54,7 +58,7 @@ class NotificationsCollectionView: UICollectionViewCell {
         tableView.dataSource = self
         //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.separatorStyle = .none
-        tableView.bounces = false
+        tableView.bounces = true
         tableView.showsHorizontalScrollIndicator = false
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = .collectionViewBackground
@@ -63,6 +67,14 @@ class NotificationsCollectionView: UICollectionViewCell {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.dropShadow()
+        
+        // initialize refresh control
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        tableView.alwaysBounceVertical = true
+        
         addSubview(tableView)
     }
 
@@ -71,6 +83,7 @@ class NotificationsCollectionView: UICollectionViewCell {
             if result {
                 self.populateUserDetailsForAllNotifications() { (result) in
                     self.tableView.reloadData()
+                    self.refreshControl.endRefreshing()
                 }
             } else {
                 print("error loading data")
@@ -85,6 +98,7 @@ class NotificationsCollectionView: UICollectionViewCell {
         print("Inside refreshNotificationData")
         notificationsArrayList.removeAll()
         let query = Default.NOTIFICATIONS_REFERENCE.queryOrdered(byChild: "actionTimestamp")
+        print(CurrentUser.prismUser.getUid())
         query.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for notificationSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
@@ -98,33 +112,6 @@ class NotificationsCollectionView: UICollectionViewCell {
             }
         })
     }
-    
-//    fileprivate func populateUserDetailsForAllNotifications(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
-//        print("Inside populateUserDetailsForAllNotifications")
-//        usersReference.observeSingleEvent(of: .value, with: { (snapshot) in
-//            if snapshot.exists() {
-//                for notification in self.notificationsArrayList {
-//                    let userSnapshot = snapshot.childSnapshot(forPath: notification.getMostRecentUid())
-//                    let prismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot) as PrismUser
-//                    notification.setPrismUser(prismUser: prismUser)
-//                    self.setPrismNotificationPostId(prismNotification: notification)
-//                    Default.ALL_POSTS_REFERENCE.child(notification.getPostId()).observeSingleEvent(of: .value, with: {(snapshot) in
-//                        if snapshot.exists(){
-//                            let prismPost = Helper.constructPrismPostObject(postSnapshot: snapshot)
-//                            print("PrismPostCreated in populateUserDetailsForAllNotifications")
-//                            notification.setPrismPost(prismPost: prismPost)
-//                        }
-//                        else {
-//                            completionHandler(false)
-//                        }
-//                    })
-//                }
-//            } else {
-//                completionHandler(false)
-//            }
-//        })
-//    }
-//    
     
     fileprivate func populateUserDetailsForAllNotifications(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         print("Inside populateUserDetailsForAllNotifications")
@@ -195,79 +182,12 @@ class NotificationsCollectionView: UICollectionViewCell {
         }
     }
     
-//    func getPostImageUrl(prismNotification: PrismNotification){
-//
-//        let postId = prismNotification.getPostId()
-//        var imageUrl: String!
-//        Default.ALL_POSTS_REFERENCE.child(postId).observeSingleEvent(of: .value, with: {(snapshot) in
-//            if snapshot.exists() {
-//                imageUrl = snapshot.childSnapshot(forPath: "image").value as! String
-//                prismNotification.setImage(image: imageUrl)
-//            } else {
-//                print("post ID not found")
-//            }
-//        })
-//    }
-    
-    
-//    func getPostImageUrl(prismNotification: PrismNotification, completionHandler: @escaping completion) {
-//        let postId = prismNotification.getPostId()
-//        var notification: PrismNotification!
-//        Default.ALL_POSTS_REFERENCE.child(postId).observeSingleEvent(of: .value, with: {(snapshot) in
-//            if snapshot.exists() {
-//                let imageUrl = snapshot.childSnapshot(forPath: "image").value as! String
-//                prismNotification.setImage(image: imageUrl)
-//                if prismNotification.getImage() == nil {
-//                    completionHandler(false)
-//                }
-//            }
-//            else{
-//                print("getPostImageUrl - snapshot doesnt exist")
-//            }
-//        })
-//        completionHandler(true)
-//    }
-//
-//    fileprivate func getPostImageUrl(completionHandler: @escaping ((_ exit: Bool) -> PrismNotification)) {
-//        print("Inside getPostImageUrl")
-//        let postId = prismNotification.getPostId()
-//        var notification: PrismNotification!
-//
-//        Default.ALL_POSTS_REFERENCE.child(postId).observeSingleEvent(of: .value, with: {(snapshot) in
-//            if snapshot.exists() {
-//                let imageUrl = snapshot.childSnapshot(forPath: "image").value as! String
-//                prismNotification.setImage(image: imageUrl)
-//                completionHandler(true)
-//            }else{
-//                print("no data")
-//                completionHandler(false)
-//            }
-//        })
-//    }
-    
-    
-    
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        print("refreshed")
+        CurrentUser.refreshUserProfile()
+        refreshNotificationData()
+    }
 }
-
-    
-//    func setPrismUserNameForNotification(prismNotification: PrismNotification) {
-//        usersReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
-//            print(dataSnapshot)
-//            let mostRecentUid = prismNotification.getMostRecentUid()
-//            let userSnapshot: DataSnapshot = dataSnapshot.childSnapshot(forPath: mostRecentUid)
-//            let prismUser : PrismUser = Helper.constructPrismUserObject(userSnapshot: userSnapshot)
-//            prismNotification.setPrismUser(prismUser: prismUser)
-//        }, withCancel: { (error) in
-//            // TODO: Log Error
-//        })
-//    }
-
-    
-
-    
-
-    
-
 
 extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -275,11 +195,13 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(notificationsArrayList.count)
         return notificationsArrayList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = NotificationsTableViewCell(style: .default, reuseIdentifier: "cell")
+        print(notificationsArrayList.count)
         let prismNotification: PrismNotification = notificationsArrayList[indexPath.item]
         
         cell.prismNotification = prismNotification
@@ -287,7 +209,9 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         cell.notificationActionLabel.text = parseNotificationAction(prismNotification: prismNotification).getNotificationAction()
         cell.loadProfileImage()
         cell.loadPostImage()
-        cell.usernameLabel.text = prismNotification.getPrismUser().getUsername()
+        cell.setUsernameLabel()
+        cell.setAndOthersText()
+        cell.setActionImage()
         
         return cell
     }
@@ -296,21 +220,5 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
         return tableViewHeight
     }
 }
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print("row: \(indexPath.row)")
-//    }
-
-//
-//extension NotificationsCollectionView: NotificationsCollectionViewDelegate {
-//    func prismPostSelected(_ indexPath: IndexPath) {
-//        <#code#>
-//    }
-//    
-//    
-//    
-//    func profileViewSelected(_ prismPost: PrismPost) {
-//        delegate?.profileViewSelected(prismPost)
-//    }
-//}
 
 
