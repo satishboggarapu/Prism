@@ -10,6 +10,8 @@ import UIKit
 import MaterialComponents
 import Material
 
+// TODO: Change view if not current user
+
 class ProfileViewController: UIViewController {
 
     private var backButton: FABButton!
@@ -24,6 +26,7 @@ class ProfileViewController: UIViewController {
     var prismPost: PrismPost!
     private var lastPanGesturePosition: CGPoint!
     private var fadeProfileView: Bool!
+    private var postsCollectionViewLastContentOffset: CGPoint = CGPoint(x: -4, y: -4)
 
     var panGesture: UIPanGestureRecognizer!
 
@@ -302,9 +305,19 @@ class ProfileViewController: UIViewController {
                     }
                     collectionView.collectionViewLayout.invalidateLayout()
                 } else if menuBar.frame.origin.y == 0 {
-                    gesture.isEnabled = false
+                    let collectionViewHeight = collectionView.frame.height
                     let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! ProfileViewPostsCollectionView
-                    cell.enableScrolling()
+                    let cellCollectionViewHeight = cell.collectionView.contentSize.height
+                    let cellCollectionViewOffset = cell.collectionView.contentOffset
+                    let maxOffset = cellCollectionViewHeight - collectionViewHeight + 4
+                    if collectionViewHeight < cellCollectionViewHeight && postsCollectionViewLastContentOffset.y < maxOffset {
+                        // cut off at max value
+                        let newOffSetValue = CGPoint(x: -4, y: postsCollectionViewLastContentOffset.y + (lastPanGesturePosition.y - point.y))
+                        cell.collectionView.setContentOffset(newOffSetValue, animated: false)
+                        postsCollectionViewLastContentOffset = newOffSetValue
+                    }
+                    print(collectionViewHeight, cellCollectionViewHeight, cellCollectionViewOffset, maxOffset)
+
                 }
 
                 let alpha = 1 - (newY/maxY)

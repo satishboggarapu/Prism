@@ -159,7 +159,8 @@ extension ProfileViewPostsCollectionView: UICollectionViewDelegate, UICollection
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ProfileViewPostsCollectionViewCell
         cell.prismPostImage.delegate = self
         cell.prismPost = prismPostArrayList[indexPath.item].prismPost
-        cell.loadPostImage()
+//        cell.loadPostImage()
+        cell.prismPostImage.backgroundColor = .red
         cell.repostIcon.isHidden = !prismPostArrayList[indexPath.item].isPostReposted
         return cell
     }
