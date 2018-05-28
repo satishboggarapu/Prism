@@ -250,8 +250,11 @@ class MainViewController: UIViewController {
     @objc func signOutButtonAction(_ sender: UIBarButtonItem) {
         try! Auth.auth().signOut()
         print("user logged out")
-        onDoneBlock!(true)
-        self.navigationController?.popViewController(animated: false)
+//        onDoneBlock!(true)
+//        self.navigationController?.popViewController(animated: false)
+//
+        let vc = LoginViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     func scrollToMenuIndex(_ menuIndex: Int) {

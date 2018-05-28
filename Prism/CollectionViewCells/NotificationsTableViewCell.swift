@@ -332,12 +332,11 @@ class NotificationsTableViewCell: TableViewCell {
 //    }
     @objc func usernameLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Username Label")
-        let vc = RegisterViewController()
-        viewController.navigationController?.pushViewController(vc, animated: false)
     }
     @objc func andOthersLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on And Others Label")
-
+        let vc = LikesAndRepostsViewController()
+        viewController.navigationController?.pushViewController(vc, animated: true)
     }
 //    @objc func notificationActionLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
 //        print("Tapped on Notification Action Label")
@@ -351,18 +350,4 @@ class NotificationsTableViewCell: TableViewCell {
     
     
     
-}
-
-extension UIImage {
-    func invertedImage() -> UIImage? {
-        guard let cgImage = self.cgImage else { return nil }
-        let ciImage = CoreImage.CIImage(cgImage: cgImage)
-        guard let filter = CIFilter(name: "CIColorInvert") else { return nil }
-        filter.setDefaults()
-        filter.setValue(ciImage, forKey: kCIInputImageKey)
-        let context = CIContext(options: nil)
-        guard let outputImage = filter.outputImage else { return nil }
-        guard let outputImageCopy = context.createCGImage(outputImage, from: outputImage.extent) else { return nil }
-        return UIImage(cgImage: outputImageCopy)
-    }
 }
