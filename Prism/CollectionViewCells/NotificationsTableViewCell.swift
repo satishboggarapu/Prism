@@ -162,10 +162,10 @@ class NotificationsTableViewCell: TableViewCell {
         notificationActionLabel.text = "liked • "
 //        contentView.addSubview(notificationActionLabel)
         
-        notificationActionLabel.isUserInteractionEnabled = true
-        // tap gesture
-        let notificationActionLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(notificationActionLabelTapGestureAction(_:)))
-        notificationActionLabel.addGestureRecognizer(notificationActionLabelTapGesture)
+//        notificationActionLabel.isUserInteractionEnabled = true
+//        // tap gesture
+//        let notificationActionLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(notificationActionLabelTapGestureAction(_:)))
+//        notificationActionLabel.addGestureRecognizer(notificationActionLabelTapGesture)
     }
     
     private func initializeTimeLabel() {
@@ -176,10 +176,10 @@ class NotificationsTableViewCell: TableViewCell {
         timeLabel.text = "2 days ago"
 //        contentView.addSubview(timeLabel)
         
-        timeLabel.isUserInteractionEnabled = true
-        // tap gesture
-        let timeLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(timeLabelTapGestureAction(_:)))
-        timeLabel.addGestureRecognizer(timeLabelTapGesture)
+//        timeLabel.isUserInteractionEnabled = true
+//        // tap gesture
+//        let timeLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(timeLabelTapGestureAction(_:)))
+//        timeLabel.addGestureRecognizer(timeLabelTapGesture)
     }
     
     private func initializeActionIcon() {
@@ -213,10 +213,10 @@ class NotificationsTableViewCell: TableViewCell {
         prismPostImage.isUserInteractionEnabled = true
 //        prismPostImage.image = #imageLiteral(resourceName: "ic_magnify_48dp").withRenderingMode(.alwaysTemplate)
 //        contentView.addSubview(prismPostImage)
-        prismPostImage.isUserInteractionEnabled = true
-        // tap gesture
-        let prismPostImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(prismPostImageTapGestureAction(_:)))
-        prismPostImage.addGestureRecognizer(prismPostImageTapGesture)
+//        prismPostImage.isUserInteractionEnabled = true
+//        // tap gesture
+//        let prismPostImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(prismPostImageTapGestureAction(_:)))
+//        prismPostImage.addGestureRecognizer(prismPostImageTapGesture)
         
     }
     private func initializePrismUserProfilePicture() {
@@ -326,21 +326,21 @@ class NotificationsTableViewCell: TableViewCell {
     // MARK: Tap Gesture Methods
 
     
-    @objc func timeLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on Time Label")
-    }
+//    @objc func timeLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+//        print("Tapped on Time Label")
+//    }
     @objc func usernameLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Username Label")
     }
     @objc func andOthersLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on And Others Label")
     }
-    @objc func notificationActionLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on Notification Action Label")
-    }
-    @objc func prismPostImageTapGestureAction(_ sender: UITapGestureRecognizer) {
-        print("Tapped on Prism Post Image")
-    }
+//    @objc func notificationActionLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
+//        print("Tapped on Notification Action Label")
+//    }
+//    @objc func prismPostImageTapGestureAction(_ sender: UITapGestureRecognizer) {
+//        print("Tapped on Prism Post Image")
+//    }
     @objc func prismUserProfilePictureTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Prism User Profile Picture")
     }

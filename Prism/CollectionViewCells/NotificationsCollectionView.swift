@@ -27,7 +27,8 @@ class NotificationsCollectionView: UICollectionViewCell {
     var notificationsArrayList: [PrismNotification]! = [PrismNotification]()
     var tableViewHeight: CGFloat = 64
     private var usersReference: DatabaseReference = Default.USERS_REFERENCE
-    typealias completion = (_ isFinished:Bool) -> Void
+    private var refreshControl: UIRefreshControl!
+
 
     
     override init(frame: CGRect){
@@ -46,6 +47,9 @@ class NotificationsCollectionView: UICollectionViewCell {
         initializeNotificationsTableView()
         addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)        
         addConstraintsWithFormat(format: "V:|[v0]|", views: tableView)
+        
+        
+
     }
     
     private func initializeNotificationsTableView() {
@@ -54,7 +58,7 @@ class NotificationsCollectionView: UICollectionViewCell {
         tableView.dataSource = self
         //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.separatorStyle = .none
-        tableView.bounces = false
+        tableView.bounces = true
         tableView.showsHorizontalScrollIndicator = false
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = .collectionViewBackground
@@ -63,6 +67,14 @@ class NotificationsCollectionView: UICollectionViewCell {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.dropShadow()
+        
+        // initialize refresh control
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        tableView.alwaysBounceVertical = true
+        
         addSubview(tableView)
     }
 
@@ -71,6 +83,7 @@ class NotificationsCollectionView: UICollectionViewCell {
             if result {
                 self.populateUserDetailsForAllNotifications() { (result) in
                     self.tableView.reloadData()
+                    self.refreshControl.endRefreshing()
                 }
             } else {
                 print("error loading data")
@@ -85,6 +98,7 @@ class NotificationsCollectionView: UICollectionViewCell {
         print("Inside refreshNotificationData")
         notificationsArrayList.removeAll()
         let query = Default.NOTIFICATIONS_REFERENCE.queryOrdered(byChild: "actionTimestamp")
+        print(CurrentUser.prismUser.getUid())
         query.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 for notificationSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
@@ -167,6 +181,12 @@ class NotificationsCollectionView: UICollectionViewCell {
             prismNotification.setPostId(postId: firstPartExcludingDelimiter)
         }
     }
+    
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        print("refreshed")
+        CurrentUser.refreshUserProfile()
+        refreshNotificationData()
+    }
 }
 
 extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSource {
@@ -175,11 +195,13 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(notificationsArrayList.count)
         return notificationsArrayList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = NotificationsTableViewCell(style: .default, reuseIdentifier: "cell")
+        print(notificationsArrayList.count)
         let prismNotification: PrismNotification = notificationsArrayList[indexPath.item]
         
         cell.prismNotification = prismNotification
