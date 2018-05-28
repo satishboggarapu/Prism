@@ -314,6 +314,7 @@ class NotificationsTableViewCell: TableViewCell {
     public func setUsernameLabel(){
         usernameLabel.text = prismNotification.getPrismUser().getUsername()
     }
+
     
 
     
@@ -334,6 +335,7 @@ class NotificationsTableViewCell: TableViewCell {
     }
     @objc func andOthersLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on And Others Label")
+
     }
 //    @objc func notificationActionLabelTapGestureAction(_ sender: UITapGestureRecognizer) {
 //        print("Tapped on Notification Action Label")

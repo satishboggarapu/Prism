@@ -77,6 +77,7 @@
 		4F9C958E2050D70900C08C9E /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C958D2050D70900C08C9E /* CurrentUser.swift */; };
 		4F9C95902050D71C00C08C9E /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C958F2050D71C00C08C9E /* Helper.swift */; };
 		4FA4E4372094119B0062F380 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA4E4362094119B0062F380 /* SettingsTableViewCell.swift */; };
+		4FB5A70D20BB9DD200FA81E0 /* LikesAndRepostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5A70C20BB9DD200FA81E0 /* LikesAndRepostsViewController.swift */; };
 		68027A98BF11F075EE0D168F /* Pods_PrismUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BDFE7215CD5E190950B491B /* Pods_PrismUITests.framework */; };
 		BCB811FC130209F7BEAA5342 /* Pods_Prism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3644F339173237F42FBC0459 /* Pods_Prism.framework */; };
 		C1486B8044EB40DAD581D5B1 /* Pods_PrismTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD8C3AF1BF3E179192CC9D1B /* Pods_PrismTests.framework */; };
@@ -177,6 +178,7 @@
 		4F9C958D2050D70900C08C9E /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		4F9C958F2050D71C00C08C9E /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		4FA4E4362094119B0062F380 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		4FB5A70C20BB9DD200FA81E0 /* LikesAndRepostsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesAndRepostsViewController.swift; sourceTree = "<group>"; };
 		570B94E1B88EBFA96F19DD07 /* Pods-PrismTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests.release.xcconfig"; sourceTree = "<group>"; };
 		5C04D5E0B49BD9CB9E071F02 /* Pods-PrismTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests.debug.xcconfig"; sourceTree = "<group>"; };
 		73F31C4B9B92F692DA9C08D8 /* Pods-PrismUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrismUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrismUITests/Pods-PrismUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 				10ADF6C32050D52000060A19 /* MainViewController.swift */,
 				192E4428ECFDAD48433B65F0 /* PrismPostDetailViewController.swift */,
 				192E4E71BDD094785EA8DE44 /* ProfileViewController.swift */,
+				4FB5A70C20BB9DD200FA81E0 /* LikesAndRepostsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -796,6 +799,7 @@
 				4F6FED6C20A6263100AC1E10 /* PrismNotification.swift in Sources */,
 				192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */,
 				192E41801618B460A2483C95 /* CustomImageView.swift in Sources */,
+				4FB5A70D20BB9DD200FA81E0 /* LikesAndRepostsViewController.swift in Sources */,
 				192E41EA51FFD6B9BDCA49C0 /* PrismPostConstraints.swift in Sources */,
 				192E40E74CF1F2D5D23C3973 /* CustomAlertDialog.swift in Sources */,
 				192E475921D261AF8321C298 /* MoreDialog.swift in Sources */,
