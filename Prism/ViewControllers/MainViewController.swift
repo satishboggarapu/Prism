@@ -65,6 +65,8 @@ class MainViewController: UIViewController {
         usersReference = Default.USERS_REFERENCE
 
         CurrentUser()
+        
+        
 
 //        refreshData()
     }

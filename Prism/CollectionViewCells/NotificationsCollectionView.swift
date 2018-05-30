@@ -34,9 +34,9 @@ class NotificationsCollectionView: UICollectionViewCell {
     override init(frame: CGRect){
         super.init(frame: frame)
         self.backgroundColor = UIColor.collectionViewBackground
-        setupView()
-        
         refreshNotificationData()
+        setupView()
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -132,6 +132,7 @@ class NotificationsCollectionView: UICollectionViewCell {
                             else {
                                 completionHandler(false)
                             }
+                            completionHandler(true)
                         }
                     }
                     else {
@@ -184,8 +185,9 @@ class NotificationsCollectionView: UICollectionViewCell {
     
     @objc func refresh(_ refreshControl: UIRefreshControl) {
         print("refreshed")
-        CurrentUser.refreshUserProfile()
+//        CurrentUser.refreshUserProfile()
         refreshNotificationData()
+
     }
 }
 
