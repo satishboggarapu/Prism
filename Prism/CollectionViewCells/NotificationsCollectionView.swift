@@ -43,7 +43,7 @@ class NotificationsCollectionView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupView() {
+    private func setupView() {
         initializeNotificationsTableView()
         addConstraintsWithFormat(format: "H:|[v0]|", views: tableView)        
         addConstraintsWithFormat(format: "V:|[v0]|", views: tableView)

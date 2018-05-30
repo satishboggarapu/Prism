@@ -170,9 +170,6 @@ extension SettingsCollectionView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("row: \(indexPath.row)")
     }
-    
-
-    
 }
 
 
