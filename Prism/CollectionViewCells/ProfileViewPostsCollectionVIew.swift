@@ -9,7 +9,7 @@ import Material
 import MaterialComponents
 import Firebase
 
-class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDelegate {
+class ProfileViewPostsCollectionView1: UICollectionViewCell, CustomImageViewDelegate {
     
     struct ProfileViewPrismPost {
         var prismPost: PrismPost
@@ -146,7 +146,7 @@ class ProfileViewPostsCollectionView: UICollectionViewCell, CustomImageViewDeleg
     }
 }
 
-extension ProfileViewPostsCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, PinterestLayoutDelegate {
+extension ProfileViewPostsCollectionView1: UICollectionViewDelegate, UICollectionViewDataSource, PinterestLayoutDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }

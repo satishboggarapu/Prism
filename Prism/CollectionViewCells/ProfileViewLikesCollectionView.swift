@@ -14,7 +14,7 @@ import Firebase
 
 // TODO: Null checks
 
-class ProfileViewLikesCollectionView: UICollectionViewCell, CustomImageViewDelegate {
+class ProfileViewLikesCollectionView1: UICollectionViewCell, CustomImageViewDelegate {
     
     /*
      * Attributes
@@ -140,7 +140,7 @@ class ProfileViewLikesCollectionView: UICollectionViewCell, CustomImageViewDeleg
     
 }
 
-extension ProfileViewLikesCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, PinterestLayoutDelegate {
+extension ProfileViewLikesCollectionView1: UICollectionViewDelegate, UICollectionViewDataSource, PinterestLayoutDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }

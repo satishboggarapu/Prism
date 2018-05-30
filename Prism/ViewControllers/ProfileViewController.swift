@@ -26,7 +26,8 @@ class ProfileViewController: UIViewController {
     var prismPost: PrismPost!
     private var lastPanGesturePosition: CGPoint!
     private var fadeProfileView: Bool!
-    private var postsCollectionViewLastContentOffset: CGPoint = CGPoint(x: -4, y: -4)
+    private var collectionViewLastContentOffsets: [CGPoint] = [CGPoint(x: -4, y: -4), CGPoint(x: -4, y: -4)]
+    private var cellSize: CGSize!
 
     var panGesture: UIPanGestureRecognizer!
 
@@ -284,60 +285,84 @@ class ProfileViewController: UIViewController {
 
     }
 
+    // up == position
+    // down == negative
     @objc private func panGestureAction(_ gesture: UIPanGestureRecognizer) {
         let point = gesture.location(in: self.view)
-        let maxHeight = Constraints.statusBarHeight() + Constraints.navigationBarHeight()
-        let maxY = profileView.frame.height
-
+        
         switch gesture.state {
             case .began:
                 break
             case .changed:
-                let newY = menuBar.frame.origin.y + (point.y - lastPanGesturePosition.y)
-
-                if newY >= 0 && newY <= maxY {
-                    let offset = (point.y - lastPanGesturePosition.y)
-                    menuBar.frame.origin.y += offset
-                    collectionView.frame.origin.y += offset
-                    profileView.frame.origin.y += offset/2
-                    if offset < 0 && collectionView.frame.height < view.frame.height-50 {
-                        collectionView.frame.size.height += -offset
+                let gestureOffset = lastPanGesturePosition.y - point.y
+                let visibleCell = collectionView.indexPathsForVisibleItems.first!
+                let maxY = profileView.frame.height
+                
+                if gestureOffset > 0 { // finger moving up
+                    // if bar is not at the top then move the bar first
+                    if menuBar.frame.origin.y > 0 {
+                        updateMenuBarConstraintsAndProfileViewUI(point)
+                    } else {
+                        updateCollectionViewScrollInset(point)
                     }
-                    collectionView.collectionViewLayout.invalidateLayout()
-                } else if menuBar.frame.origin.y == 0 {
-                    let collectionViewHeight = collectionView.frame.height
-                    let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! ProfileViewPostsCollectionView
-                    let cellCollectionViewHeight = cell.collectionView.contentSize.height
-                    let cellCollectionViewOffset = cell.collectionView.contentOffset
-                    let maxOffset = cellCollectionViewHeight - collectionViewHeight + 4
-                    if collectionViewHeight < cellCollectionViewHeight && postsCollectionViewLastContentOffset.y < maxOffset {
-                        // cut off at max value
-                        let newOffSetValue = CGPoint(x: -4, y: postsCollectionViewLastContentOffset.y + (lastPanGesturePosition.y - point.y))
-                        cell.collectionView.setContentOffset(newOffSetValue, animated: false)
-                        postsCollectionViewLastContentOffset = newOffSetValue
+                } else if gestureOffset < 0 {
+                    if collectionViewLastContentOffsets[visibleCell.item].y == -4 && menuBar.frame.origin.y < maxY {
+                        updateMenuBarConstraintsAndProfileViewUI(point)
+                    } else {
+                        updateCollectionViewScrollInset(point)
                     }
-                    print(collectionViewHeight, cellCollectionViewHeight, cellCollectionViewOffset, maxOffset)
-
-                }
-
-                let alpha = 1 - (newY/maxY)
-                profileNavigationView.alpha = alpha
-
-                if newY <= 50 && !fadeProfileView {
-                    fadeProfileView = true
-                    UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
-                        self.profileView.alpha = 0
-                    }, completion: nil)
-                } else if newY > 50 && fadeProfileView {
-                    fadeProfileView = false
-                    UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
-                        self.profileView.alpha = 1
-                    }, completion: nil)
                 }
             default:
                 break
         }
         lastPanGesturePosition = point
+    }
+    
+    private func updateMenuBarConstraintsAndProfileViewUI(_ point: CGPoint) {
+        var offset = lastPanGesturePosition.y - point.y
+        let newY = menuBar.frame.origin.y + (point.y - lastPanGesturePosition.y)
+        let maxY = profileView.frame.height
+        if offset > 0 && newY < 0 { offset -= newY }
+        else if offset < 0 && newY > maxY { offset -= maxY - newY }
+        menuBar.frame.origin.y -= offset
+        collectionView.frame.origin.y -= offset
+        profileView.frame.origin.y -= offset/2
+        if offset > 0 && collectionView.frame.height < view.frame.height-50 {
+            collectionView.frame.size.height += offset
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+        
+        let alpha = 1 - (newY/maxY)
+        profileNavigationView.alpha = alpha
+        
+        if newY <= 50 && !fadeProfileView {
+            fadeProfileView = true
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
+                self.profileView.alpha = 0
+            }, completion: nil)
+        } else if newY > 50 && fadeProfileView {
+            fadeProfileView = false
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
+                self.profileView.alpha = 1
+            }, completion: nil)
+        }
+    }
+    
+    private func updateCollectionViewScrollInset(_ point: CGPoint) {
+        let gestureOffset = lastPanGesturePosition.y - point.y
+        let visibleCell = collectionView.indexPathsForVisibleItems.first!
+        let cell = collectionView.cellForItem(at: visibleCell) as! ProfileViewCollectionView
+        let collectionViewHeight = collectionView.frame.height
+        let maxOffset = cell.collectionView.contentSize.height - collectionViewHeight + 4
+        let newContentOffsetY = collectionViewLastContentOffsets[visibleCell.item].y + gestureOffset
+        var contentOffset = collectionViewLastContentOffsets[visibleCell.item]
+        if gestureOffset < 0 {
+            contentOffset.y = (newContentOffsetY < -4) ? -4 : newContentOffsetY
+        } else if gestureOffset > 0 && cell.collectionView.contentSize.height > collectionViewHeight {
+            contentOffset.y = (newContentOffsetY > maxOffset) ? maxOffset : newContentOffsetY
+        }
+        cell.collectionView.setContentOffset(contentOffset, animated: false)
+        collectionViewLastContentOffsets[visibleCell.item] = contentOffset
     }
 
     @objc private func backButtonAction() {
@@ -367,7 +392,7 @@ extension ProfileViewController: UIScrollViewDelegate {
 //        collectionView.collectionViewLayout.invalidateLayout()
 
         menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / 2
-
+//        print(menuBar.horizontalBarLeftAnchorConstraint?.constant)
 //        lastPanGesturePosition = scrollView.contentOffset.y
 //
 //        if scrollView.contentOffset.y == 120 {
@@ -402,8 +427,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
             cell.prismUser = prismPost.getPrismUser()
             cell.disableScrolling()
             return cell
-        }
-        else if indexPath.item == 1 {
+        } else if indexPath.item == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "likes", for: indexPath) as! ProfileViewLikesCollectionView
             cell.viewController = self
             cell.prismUser = prismPost.getPrismUser()
