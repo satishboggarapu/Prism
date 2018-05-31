@@ -25,6 +25,7 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     var collectionView: UICollectionView!
     var viewController: ProfileViewController!
     var prismUser: PrismUser!
+    var refreshControl: UIRefreshControl!
     fileprivate var prismPostArrayList = [ProfileViewPrismPost]()
     fileprivate var imageSizes = [String: CGSize]()
     fileprivate var collectionViewInset: CGFloat = 4
@@ -84,6 +85,20 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
         let height = Constraints.screenHeight() - Constraints.navigationBarHeight() - Constraints.statusBarHeight() - 50
         collectionView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: height)
         addSubview(collectionView)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
+//        collectionView.addSubview(refreshControl)
+        collectionView.alwaysBounceVertical = true
+    }
+    
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        print("refreshed")
+//        CurrentUser.refreshUserProfile()
+//        prismPostArrayList.removeAll()
+//        refreshData(true)
+        
     }
     
     /*

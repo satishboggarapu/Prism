@@ -289,13 +289,13 @@ class ProfileViewController: UIViewController {
     // down == negative
     @objc private func panGestureAction(_ gesture: UIPanGestureRecognizer) {
         let point = gesture.location(in: self.view)
+        let visibleCell = collectionView.indexPathsForVisibleItems.first!
         
         switch gesture.state {
             case .began:
                 break
             case .changed:
                 let gestureOffset = lastPanGesturePosition.y - point.y
-                let visibleCell = collectionView.indexPathsForVisibleItems.first!
                 let maxY = profileView.frame.height
                 
                 if gestureOffset > 0 { // finger moving up
@@ -312,6 +312,10 @@ class ProfileViewController: UIViewController {
                         updateCollectionViewScrollInset(point)
                     }
                 }
+            case .ended:
+                let cell = collectionView.cellForItem(at: visibleCell) as! ProfileViewCollectionView
+//                cell.collectionView.setContentOffset(CGPoint(x: -4, y: -60.5), animated: true)
+//                collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -60.5)
             default:
                 break
         }
@@ -320,9 +324,9 @@ class ProfileViewController: UIViewController {
     
     private func updateMenuBarConstraintsAndProfileViewUI(_ point: CGPoint) {
         var offset = lastPanGesturePosition.y - point.y
-        let newY = menuBar.frame.origin.y + (point.y - lastPanGesturePosition.y)
+        let newY = menuBar.frame.origin.y - (lastPanGesturePosition.y - point.y)
         let maxY = profileView.frame.height
-        if offset > 0 && newY < 0 { offset -= newY }
+        if offset > 0 && newY < 0 { offset += newY }
         else if offset < 0 && newY > maxY { offset -= maxY - newY }
         menuBar.frame.origin.y -= offset
         collectionView.frame.origin.y -= offset
@@ -357,12 +361,18 @@ class ProfileViewController: UIViewController {
         let newContentOffsetY = collectionViewLastContentOffsets[visibleCell.item].y + gestureOffset
         var contentOffset = collectionViewLastContentOffsets[visibleCell.item]
         if gestureOffset < 0 {
+            // TODO: Code to handle refresh control
             contentOffset.y = (newContentOffsetY < -4) ? -4 : newContentOffsetY
+//            contentOffset.y = newContentOffsetY
         } else if gestureOffset > 0 && cell.collectionView.contentSize.height > collectionViewHeight {
             contentOffset.y = (newContentOffsetY > maxOffset) ? maxOffset : newContentOffsetY
         }
         cell.collectionView.setContentOffset(contentOffset, animated: false)
         collectionViewLastContentOffsets[visibleCell.item] = contentOffset
+        
+//        if contentOffset.y <= -120 {
+//            cell.refreshControl.beginRefreshing()
+//        }
     }
 
     @objc private func backButtonAction() {
