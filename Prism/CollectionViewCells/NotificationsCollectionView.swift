@@ -197,7 +197,6 @@ extension NotificationsCollectionView: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(notificationsArrayList.count)
         return notificationsArrayList.count
     }
     
