@@ -26,8 +26,11 @@ class ProfileViewController: UIViewController {
     var prismPost: PrismPost!
     private var lastPanGesturePosition: CGPoint!
     private var fadeProfileView: Bool!
-    private var collectionViewLastContentOffsets: [CGPoint] = [CGPoint(x: -4, y: -4), CGPoint(x: -4, y: -4)]
+    var collectionViewLastContentOffsets: [CGPoint] = [CGPoint(x: -4, y: -4), CGPoint(x: -4, y: -4)]
+    private var collectionViewLastRefreshTime: [Date] = [Date().addingTimeInterval(-4), Date().addingTimeInterval(-4)]
     private var cellSize: CGSize!
+    private var isRefreshing: [Bool] = [false, false]
+    private var timer = Timer()
 
     var panGesture: UIPanGestureRecognizer!
 
@@ -300,7 +303,7 @@ class ProfileViewController: UIViewController {
                 
                 if gestureOffset > 0 { // finger moving up
                     // if bar is not at the top then move the bar first
-                    if menuBar.frame.origin.y > 0 {
+                    if menuBar.frame.origin.y > 0 && collectionViewLastContentOffsets[visibleCell.item].y >=  -4{
                         updateMenuBarConstraintsAndProfileViewUI(point)
                     } else {
                         updateCollectionViewScrollInset(point)
@@ -313,18 +316,40 @@ class ProfileViewController: UIViewController {
                     }
                 }
             case .ended:
+                // refresh control code
                 let cell = collectionView.cellForItem(at: visibleCell) as! ProfileViewCollectionView
-//                cell.collectionView.setContentOffset(CGPoint(x: -4, y: -60.5), animated: true)
-//                collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -60.5)
+                var contentOffset = collectionViewLastContentOffsets[visibleCell.item]
+                if collectionViewLastContentOffsets[visibleCell.item].y <= -120 {
+                    contentOffset = CGPoint(x: -4, y: -60.5)
+                    cell.refreshControl.beginRefreshing()
+                    cell.reloadData = true
+                    cell.isReloadingData = false
+                    collectionViewLastRefreshTime[visibleCell.item] = Date()
+                } else if collectionViewLastContentOffsets[visibleCell.item].y < -4 {
+                    contentOffset = CGPoint(x: -4, y: -4)
+                    cell.refreshControl.endRefreshing()
+                }
+                cell.collectionView.setContentOffset(contentOffset, animated: true)
+                
+//                timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateIsRefreshing), userInfo: nil, repeats: false)
+                
+//                if contentOffset.y == -60.5 {
+//                    cell.refreshControlAction()
+//                }
+                collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -4)
             default:
                 break
         }
         lastPanGesturePosition = point
     }
     
+    @objc private func updateIsRefreshing() {
+        isRefreshing[(collectionView.indexPathsForVisibleItems.first?.item)!] = false
+    }
+    
     private func updateMenuBarConstraintsAndProfileViewUI(_ point: CGPoint) {
         var offset = lastPanGesturePosition.y - point.y
-        let newY = menuBar.frame.origin.y - (lastPanGesturePosition.y - point.y)
+        let newY = menuBar.frame.origin.y - offset
         let maxY = profileView.frame.height
         if offset > 0 && newY < 0 { offset += newY }
         else if offset < 0 && newY > maxY { offset -= maxY - newY }
@@ -359,21 +384,32 @@ class ProfileViewController: UIViewController {
         let collectionViewHeight = collectionView.frame.height
         let maxOffset = cell.collectionView.contentSize.height - collectionViewHeight + 4
         let newContentOffsetY = collectionViewLastContentOffsets[visibleCell.item].y + gestureOffset
+        let maxY = profileView.frame.height
         var contentOffset = collectionViewLastContentOffsets[visibleCell.item]
-        if gestureOffset < 0 {
+        if gestureOffset < 0 && !cell.isReloadingData {
             // TODO: Code to handle refresh control
-            contentOffset.y = (newContentOffsetY < -4) ? -4 : newContentOffsetY
-//            contentOffset.y = newContentOffsetY
+            if menuBar.frame.origin.y == 0 || menuBar.frame.origin.y < maxY {
+                contentOffset.y = (newContentOffsetY < -4) ? -4 : newContentOffsetY
+            } else if isLastRefreshMoreThenFourSeconds(visibleCell.item) {
+                contentOffset.y = newContentOffsetY
+            }
         } else if gestureOffset > 0 && cell.collectionView.contentSize.height > collectionViewHeight {
             contentOffset.y = (newContentOffsetY > maxOffset) ? maxOffset : newContentOffsetY
+            if contentOffset.y > -4 && menuBar.frame.origin.y == maxY {
+                contentOffset.y = -4
+            }
         }
         cell.collectionView.setContentOffset(contentOffset, animated: false)
         collectionViewLastContentOffsets[visibleCell.item] = contentOffset
         
+        // refresh control code
 //        if contentOffset.y <= -120 {
 //            cell.refreshControl.beginRefreshing()
 //        }
     }
+    
+    // create a seperate array to check if its same as the current array
+    // or a timer that disables user interaction
 
     @objc private func backButtonAction() {
         navigationController?.popViewController(animated: false)
@@ -381,6 +417,11 @@ class ProfileViewController: UIViewController {
 
     @objc private func editAccountButtonAction() {
 
+    }
+    
+    private func isLastRefreshMoreThenFourSeconds(_ index: Int) -> Bool {
+        let difference = abs(Date().seconds(from: collectionViewLastRefreshTime[index]))
+        return difference >= 4
     }
 
 }
