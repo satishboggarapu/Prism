@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Material
+import MaterialComponents
 
 
 //protocol NotificationsTableViewCellDelegate: class {
@@ -23,6 +24,7 @@ class LikesAndRepostsTableViewCell: TableViewCell {
     private var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
     var fullName: UILabel!
     var userName: UILabel!
+    var followersButton: MDCFlatButton!
     
     var boldFont: UIFont = SourceSansFont.bold(with: 17)
     var mediumFont: UIFont = SourceSansFont.light(with: 17)
@@ -43,6 +45,7 @@ class LikesAndRepostsTableViewCell: TableViewCell {
         initializePrismUserProfilePicture()
         initializeFullName()
         initializeUserName()
+        initializeFollowersButton()
 
         // Set Profile View
         let topRightView = UIStackView()
@@ -60,11 +63,15 @@ class LikesAndRepostsTableViewCell: TableViewCell {
         contentView.addSubview(separatorLine)
         contentView.addSubview(prismUserProfilePicture)
         contentView.addSubview(topRightView)
+        contentView.addSubview(followersButton)
 
         contentView.addConstraintsWithFormat(format: "V:|-8-[v0(48)]-7-[v1(\(separatorLineHeight))]|", views: prismUserProfilePicture, separatorLine)
         contentView.addConstraintsWithFormat(format: "V:|-8-[v0]-8-|", views: topRightView)
-        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-16-[v1]-|", views: prismUserProfilePicture, topRightView)
+        contentView.addConstraintsWithFormat(format: "V:|-24-[v0]-24-|", views: followersButton)
+
+        contentView.addConstraintsWithFormat(format: "H:|-8-[v0(48)]-16-[v1]-[v2]-8-|", views: prismUserProfilePicture, topRightView, followersButton)
         contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: separatorLine)
+    
 
         contentView.backgroundColor = .collectionViewBackground
     }
@@ -107,6 +114,28 @@ class LikesAndRepostsTableViewCell: TableViewCell {
     
     @objc func prismUserProfilePictureTapGestureAction(_ sender: UITapGestureRecognizer) {
         print("Tapped on Prism User Profile Picture")
+    }
+    
+    private func initializeFollowersButton(){
+        followersButton = MDCFlatButton()
+        followersButton.setBackgroundColor(UIColor.blue)
+        followersButton.setTitle("Follow", for: UIControlState.normal)
+        followersButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+        followersButton.addTarget(self, action: #selector(followersButtonPressed(sender:)), for: UIControlEvents.touchUpInside)
+
+//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
+//        button.center = view.center
+//        button.setTitle("Press", for: UIControlState.normal)
+//        button.setTitleColor(UIColor.blue, for: UIControlState.normal)
+//        button.setTitleColor(UIColor.cyan, for: UIControlState.highlighted)
+//        button.addTarget(self, action: #selector(buttonPressed(sender:)), for: UIControlEvents.touchUpInside)
+//        view.addSubview(button)
+        
+    }
+    
+    @objc func followersButtonPressed(sender: UIButton) {
+        sender.setTitle("Pressed", for: UIControlState.normal)
+        print("button pressed!!")
     }
     
     
