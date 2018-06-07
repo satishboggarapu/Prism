@@ -325,9 +325,11 @@ class ProfileViewController: UIViewController {
                     cell.reloadData = true
                     cell.isReloadingData = false
                     collectionViewLastRefreshTime[visibleCell.item] = Date()
+                    collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -4)
                 } else if collectionViewLastContentOffsets[visibleCell.item].y < -4 {
                     contentOffset = CGPoint(x: -4, y: -4)
                     cell.refreshControl.endRefreshing()
+                    collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -4)
                 }
                 cell.collectionView.setContentOffset(contentOffset, animated: true)
                 
@@ -336,7 +338,7 @@ class ProfileViewController: UIViewController {
 //                if contentOffset.y == -60.5 {
 //                    cell.refreshControlAction()
 //                }
-                collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -4)
+            
             default:
                 break
         }
