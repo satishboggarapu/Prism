@@ -14,6 +14,10 @@ import Firebase
 
 class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     
+    /**
+     * PrismPost object just for ProfileViewCollectionView, consits of normal PrismPost, and isPostReposted attributes,
+     * which is set to true if the user reposted the post.
+     */
     struct ProfileViewPrismPost: Equatable {
         var prismPost: PrismPost
         var isPostReposted: Bool
@@ -22,8 +26,6 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
             return lhs.prismPost == rhs.prismPost && lhs.isPostReposted == rhs.isPostReposted
         }
     }
-    
-    
     
     /*
      * Attributes
@@ -37,12 +39,12 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     fileprivate var imageSizes = [String: CGSize]()
     fileprivate var imageSizesNew = [String: CGSize]()
     fileprivate var collectionViewInset: CGFloat = 4
+    // TODO: Convert this to 1 line after testing with images
     fileprivate var flowLayout: PinterestLayout {
         let layout = PinterestLayout()
         layout.delegate = self
         return layout
     }
-    
     var reloadData: Bool = false
     var isReloadingData: Bool = false
     
@@ -76,7 +78,7 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /*
+    /**
      *
      */
     private func setupView() {
@@ -84,38 +86,44 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
         
         // initialize collectionView
         let layout = flowLayout
-        
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.collectionViewBackground1
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.bounces = false
         collectionView.clipsToBounds = false
+        collectionView.isScrollEnabled = false
         collectionView.register(ProfileViewPostsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.addContentInset(collectionViewInset)
         let height = Constraints.screenHeight() - Constraints.navigationBarHeight() - Constraints.statusBarHeight() - 50
         collectionView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: height)
         addSubview(collectionView)
         
+        // initialize refreshControel
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .white
-//        refreshControl.addTarget(self, action: #selector(refreshControlAction(_ :)), for: .allEvents)
         collectionView.addSubview(refreshControl)
         collectionView.alwaysBounceVertical = true
     }
     
-    @objc func refreshControlAction() {
+    /**
+     *
+     */
+    fileprivate func refreshControlAction() {
         print("refreshing")
     }
     
-    /*
+    /**
      *
      */
     fileprivate func refreshData(_ isReloadingData: Bool) {
         
     }
     
-    func imageLoaded(postID: String, imageSize: CGSize) {
+    /**
+     *
+     */
+    internal func imageLoaded(postID: String, imageSize: CGSize) {
         let maxWidthInPixels: CGFloat = collectionViewCellWidth() * UIScreen.main.scale
         let maxHeightInPixels: CGFloat = (maxWidthInPixels * imageSize.height)/imageSize.width
         let maxWidthInPoints: CGFloat = maxWidthInPixels / UIScreen.main.scale
@@ -124,27 +132,18 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
+    /**
+     *
+     */
     private func collectionViewCellWidth() -> CGFloat {
         // Structure of collectionView row
         // |-4-[-4-[Image]-4-][-4-[Image]-4-][-4-[Image]-4-]-4-|
         return ((Constraints.screenWidth() - (collectionViewInset * 2))/3) - 8
     }
     
-    func disableScrolling() {
-        collectionView.isScrollEnabled = false
-    }
-    
-    func enableScrolling() {
-        collectionView.isScrollEnabled = true
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y == 0 {
-            viewController.panGesture.isEnabled = true
-            disableScrolling()
-        }
-    }
-    
+    /**
+     *
+     */
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if reloadData && !isReloadingData {
             isReloadingData = true
@@ -236,7 +235,7 @@ class ProfileViewPostsCollectionView: ProfileViewCollectionView {
         })
     }
     
-    override func refreshControlAction() {
+    override fileprivate func refreshControlAction() {
         print("refreshing uploaded/reposted PrismPosts")
         refreshData(true)
     }
@@ -282,7 +281,7 @@ class ProfileViewLikesCollectionView: ProfileViewCollectionView {
         })
     }
     
-    override func refreshControlAction() {
+    override fileprivate func refreshControlAction() {
         print("refreshing likes PrismPosts")
         refreshData(true)
     }

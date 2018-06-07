@@ -389,10 +389,9 @@ class ProfileViewController: UIViewController {
         let maxY = profileView.frame.height
         var contentOffset = collectionViewLastContentOffsets[visibleCell.item]
         if gestureOffset < 0 && !cell.isReloadingData {
-            // TODO: Code to handle refresh control
             if menuBar.frame.origin.y == 0 || menuBar.frame.origin.y < maxY {
                 contentOffset.y = (newContentOffsetY < -4) ? -4 : newContentOffsetY
-            } else if isLastRefreshMoreThenFourSeconds(visibleCell.item) {
+            } else if isGesutreInsideCollectionView(point) && isLastRefreshMoreThenFourSeconds(visibleCell.item) {
                 contentOffset.y = newContentOffsetY
             }
         } else if gestureOffset > 0 && cell.collectionView.contentSize.height > collectionViewHeight {
@@ -400,6 +399,8 @@ class ProfileViewController: UIViewController {
             if contentOffset.y > -4 && menuBar.frame.origin.y == maxY {
                 contentOffset.y = -4
             }
+        } else if gestureOffset > 0 && contentOffset.y < -4 {
+            contentOffset.y = (newContentOffsetY < -4) ? newContentOffsetY : -4
         }
         cell.collectionView.setContentOffset(contentOffset, animated: false)
         collectionViewLastContentOffsets[visibleCell.item] = contentOffset
@@ -419,6 +420,10 @@ class ProfileViewController: UIViewController {
 
     @objc private func editAccountButtonAction() {
 
+    }
+    
+    private func isGesutreInsideCollectionView(_ point: CGPoint) -> Bool {
+        return point.y > collectionView.frame.origin.y
     }
     
     private func isLastRefreshMoreThenFourSeconds(_ index: Int) -> Bool {
@@ -478,13 +483,11 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as! ProfileViewPostsCollectionView
             cell.viewController = self
             cell.prismUser = prismPost.getPrismUser()
-            cell.disableScrolling()
             return cell
         } else if indexPath.item == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "likes", for: indexPath) as! ProfileViewLikesCollectionView
             cell.viewController = self
             cell.prismUser = prismPost.getPrismUser()
-            cell.disableScrolling()
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
