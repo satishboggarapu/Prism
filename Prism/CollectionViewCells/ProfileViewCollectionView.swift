@@ -12,11 +12,18 @@ import Material
 import MaterialComponents
 import Firebase
 
+// TODO: Make refreshControl private
+// TODO: Make reloadData and isReloadingData private
+// TODO: Comment
+
+/**
+ *  Base collectionViewCell class for Posts and Likes tabs in ProfileViewController.
+ */
 class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     
     /**
      * PrismPost object just for ProfileViewCollectionView, consits of normal PrismPost, and isPostReposted attributes,
-     * which is set to true if the user reposted the post.
+     * which is set to true if the user reposted the post
      */
     struct ProfileViewPrismPost: Equatable {
         var prismPost: PrismPost
@@ -79,7 +86,12 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     }
     
     /**
+     *  Initializes `collectionView` and `refreshControl`
      *
+     *  - parameters:
+     *      - none
+     *
+     *  - returns:
      */
     private func setupView() {
         backgroundColor = .collectionViewBackground
@@ -95,8 +107,7 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
         collectionView.isScrollEnabled = false
         collectionView.register(ProfileViewPostsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.addContentInset(collectionViewInset)
-        let height = Constraints.screenHeight() - Constraints.navigationBarHeight() - Constraints.statusBarHeight() - 50
-        collectionView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: height)
+        collectionView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: getCollectionViewHeight())
         addSubview(collectionView)
         
         // initialize refreshControel
@@ -107,21 +118,44 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     }
     
     /**
+     *  Gets called when `refreshControl` is refreshing. Reloads data all of the firebase data, by making a call to
+     *      *refreshData()* method
      *
+     *  - parameters:
+     *      - none
+     *
+     *  - returns:
      */
     fileprivate func refreshControlAction() {
         print("refreshing")
     }
     
     /**
+     *  If `isReloadingData` is true, new data pulled from firebase is appended to `prismPostArrayListNew`, then checked
+     *      if it's the same as current posts in `prismPostArrayList`. If `prismPostArrayListNew` is different from
+     *      current posts, then `prismPostArrayListNew` is copied to `prismPostArrayList` and `collectionView` is reloaded.
+     *  If `isReloadingData` is false, the data pulled from firebase is directly appended to `prismPostArrayList` and
+     *      `collectionView` is reloaded
      *
+     *  - parameters:
+     *      - isReloadingData: Bool. True if reloading data, false if loading data for the first time
+     *
+     *  - returns:
      */
     fileprivate func refreshData(_ isReloadingData: Bool) {
         
     }
     
     /**
+     *  Protocol method from CustomImageView. Gets called when image was succesfully loaded. Checks the original image
+     *      size and computes the proper imageSize for the collectionViewCell and stores the size in `imageSizes` dict.
+     *      Invalidates the collectionViewLayout so the UI can be updated accordingly
      *
+     *  - parameters:
+     *      - postID: String. postID of the prismPost being loaded
+     *      - imageSize: CGSize: Orignial size of the image loaded from the prismPost
+     *
+     *  - returns:
      */
     internal func imageLoaded(postID: String, imageSize: CGSize) {
         let maxWidthInPixels: CGFloat = collectionViewCellWidth() * UIScreen.main.scale
@@ -133,16 +167,56 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     }
     
     /**
+     *  Computes the height for the `collectionView`
      *
+     *  - parameters:
+     *      - none
+     *
+     *  - returns:
+     *      - Height of the collectionView as CGFloat.
+     */
+    private func getCollectionViewHeight() -> CGFloat {
+        return Constraints.screenHeight() - Constraints.navigationBarHeight() - Constraints.statusBarHeight() - 50
+    }
+    
+    /**
+     *  Computes cell width for the `collectionView`. 3 colums
+     *
+     *  Cell horizontal layout: |-4-[-4-[Image]-4-][-4-[Image]-4-][-4-[Image]-4-]-4-|
+     *
+     *  - parameters:
+     *      - none
+     *
+     *  - returns:
+     *      - the width of each cell as CGFloat
      */
     private func collectionViewCellWidth() -> CGFloat {
-        // Structure of collectionView row
-        // |-4-[-4-[Image]-4-][-4-[Image]-4-][-4-[Image]-4-]-4-|
         return ((Constraints.screenWidth() - (collectionViewInset * 2))/3) - 8
     }
     
     /**
+     *  Converts array of PrismPosts objects to `ProfileViewPrismPosts`
      *
+     *  - parameters:
+     *      - posts: Array of PrismPosts that need to be converted to `ProfileViewPrismPosts`
+     *      - isPostReposted: Bool, refresnting true if the post was reposted by the user, else false
+     *
+     *  - returns:
+     *      - array of ProfileViewPrismPost, [ProfileViewPrismPost]
+     */
+    fileprivate func convertPrismPostsToProfileViewPrismPosts(posts: [PrismPost], isPostReposted: Bool) -> [ProfileViewPrismPost] {
+        var profileViewPrismPosts = [ProfileViewPrismPost]()
+        for post in posts {
+            profileViewPrismPosts.append(ProfileViewPrismPost(prismPost: post, isPostReposted: isPostReposted))
+        }
+        return profileViewPrismPosts
+    }
+    
+    /**
+     *  Called when the collectionView scroll is finished scroll animation is complete. Checks if data needs to be
+     *      reloaded and if data is currently being reloading. If reloadData is true and isReloadingData is false,
+     *      isReloadingData is set to true, reloadData is set to false, and `refreshControlAction()` is called, which
+     *      which refreshes data
      */
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if reloadData && !isReloadingData {
@@ -172,6 +246,10 @@ extension ProfileViewCollectionView: UICollectionViewDelegate, UICollectionViewD
         return cell
     }
     
+    /**
+     *  First checks if the size of the image has been computed and stored in `imageSizes` dict, if so its returned.
+     *      Else a defualt height of 150 is returned
+     */
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         let postId = prismPostArrayList[indexPath.item].prismPost.getPostId()
         if imageSizes.keys.contains(postId) {
@@ -182,56 +260,55 @@ extension ProfileViewCollectionView: UICollectionViewDelegate, UICollectionViewD
     
 }
 
+/**
+ *  CollectionViewCell for Posts Tab in ProfileViewController. Overrides the *refreshData()* method to load uploaded and
+ *      reposted posts from the user. Also overrides the *refreshControlAction()*
+ */
 class ProfileViewPostsCollectionView: ProfileViewCollectionView {
     override func refreshData(_ isReloadingData: Bool) {
+        /// Stores the snapshot from firebase of the repostedPosts. Key = String (Reposted Time), Value = Int64 (PostID)
         var repostedPostsMap = [String: Int64]()
+        /// Stores the snapshot from firebase of the uploadedPosts. Key = String (Uploaded Time), Value = Int64 (PostID)
         var uploadedPostsMap = [String: Int64]()
         usersReference.observeSingleEvent(of: .value, with: { (usersSnapshot) in
             if usersSnapshot.exists() {
                 let userSnapshot: DataSnapshot = usersSnapshot.childSnapshot(forPath: self.prismUser.getUid())
-                
                 if userSnapshot.hasChild(Key.DB_REF_USER_UPLOADS) {
                     uploadedPostsMap.update(other: userSnapshot.childSnapshot(forPath: Key.DB_REF_USER_UPLOADS).value as! [String: Int64])
                 }
-                
                 if userSnapshot.hasChild(Key.DB_REF_USER_REPOSTS) {
                     repostedPostsMap.update(other: userSnapshot.childSnapshot(forPath: Key.DB_REF_USER_REPOSTS).value as! [String: Int64])
                 }
                 
                 self.databaseReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
+                    // Converts array of prismPostId's to PrismPost objects
                     let uploadedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: uploadedPostsMap)
                     let repostedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: repostedPostsMap)
-                    for post in uploadedPosts {
-                        if isReloadingData {
-                            self.prismPostArrayListNew.append(ProfileViewPrismPost(prismPost: post, isPostReposted: false))
-                        } else {
-                            self.prismPostArrayList.append(ProfileViewPrismPost(prismPost: post, isPostReposted: false))
-                        }
-                    }
-                    for post in repostedPosts {
-                        if isReloadingData {
-                            self.prismPostArrayListNew.append(ProfileViewPrismPost(prismPost: post, isPostReposted: true))
-                        } else {
-                            self.prismPostArrayList.append(ProfileViewPrismPost(prismPost: post, isPostReposted: true))
-                        }
-                    }
+                    // Converts array of PrismPost objects to ProfileViewPrismPost objects
+                    let uploadedProfileViewPosts = self.convertPrismPostsToProfileViewPrismPosts(posts: uploadedPosts, isPostReposted: false)
+                    let repostedProfileViewPosts = self.convertPrismPostsToProfileViewPrismPosts(posts: repostedPosts, isPostReposted: true)
+                    // If data is being reloaded, store it in prismPostArrayListNew, else store it prismPostArrayList
                     if isReloadingData {
-                        if self.prismPostArrayListNew != self.prismPostArrayList {
-                            self.prismPostArrayList = self.prismPostArrayListNew
-                            self.collectionView.reloadData()
-                        }
+                        self.prismPostArrayListNew.append(contentsOf: uploadedProfileViewPosts)
+                        self.prismPostArrayListNew.append(contentsOf: repostedProfileViewPosts)
                     } else {
-                        self.collectionView.reloadData()
+                        self.prismPostArrayList.append(contentsOf: uploadedProfileViewPosts)
+                        self.prismPostArrayList.append(contentsOf: repostedProfileViewPosts)
                     }
+                    // If data is being reloaded, check if new data is different from curent data, if so replace it
+                    //   with new data
+                    if isReloadingData && self.prismPostArrayListNew != self.prismPostArrayList {
+                        self.prismPostArrayList = self.prismPostArrayListNew
+                    }
+                    
+                    self.collectionView.reloadData()
                     self.prismPostArrayListNew.removeAll()
                     self.refreshControl.endRefreshing()
                     self.isReloadingData = false
-//                    self.collectionView.setContentOffset(CGPoint(x: -4, y: -4), animated: true)
-//                    self.viewController.collectionViewLastContentOffsets[0] = CGPoint(x: -4, y: -4)
                 })
             }
         }, withCancel: { (error) in
-            
+            // TODO: Log Error
         })
     }
     
@@ -241,43 +318,48 @@ class ProfileViewPostsCollectionView: ProfileViewCollectionView {
     }
 }
 
+/**
+ *  CollectionViewCell for Likes Tab in ProfileViewController. Overrides the *refreshData()* method to load liked posts
+ *      from the user. Also overrides the *refreshControlAction()*
+ */
 class ProfileViewLikesCollectionView: ProfileViewCollectionView {
     override func refreshData(_ isReloadingData: Bool) {
+        /// Stores the snapshot from firebase of the likedPosts. Key = String (Reposted Time), Value = Int64 (PostID)
         var likedPostsMap = [String: Int64]()
         usersReference.observeSingleEvent(of: .value, with: { (usersSnapshot) in
             if usersSnapshot.exists() {
                 let userSnapshot: DataSnapshot = usersSnapshot.childSnapshot(forPath: self.prismUser.getUid())
-                
                 if userSnapshot.hasChild(Key.DB_REF_USER_LIKES) {
                     likedPostsMap.update(other: userSnapshot.childSnapshot(forPath: Key.DB_REF_USER_LIKES).value as! [String: Int64])
                 }
                 
                 self.databaseReference.observeSingleEvent(of: .value, with: { (dataSnapshot) in
+                    // Converts array of prismPostId's to PrismPost objects
                     let likedPosts = DatabaseAction.getListOfPrismPosts(allPostRefSnapshot: dataSnapshot, usersSnapshot: usersSnapshot, mapOfPostIds: likedPostsMap)
-                    for post in likedPosts {
-                        if isReloadingData {
-                            self.prismPostArrayListNew.append(ProfileViewPrismPost(prismPost: post, isPostReposted: false))
-                        } else {
-                            self.prismPostArrayList.append(ProfileViewPrismPost(prismPost: post, isPostReposted: false))
-                        }
-                    }
+                    // Converts array of PrismPost objects to ProfileViewPrismPost objects
+                    let likedProfileViewPosts = self.convertPrismPostsToProfileViewPrismPosts(posts: likedPosts, isPostReposted: false)
+                    // If data is being reloaded, store it in prismPostArrayListNew, else store it prismPostArrayList
                     if isReloadingData {
-                        if self.prismPostArrayListNew != self.prismPostArrayList {
-                            self.prismPostArrayList = self.prismPostArrayListNew
-                            self.collectionView.reloadData()
-                        }
+                        self.prismPostArrayListNew.append(contentsOf: likedProfileViewPosts)
+                    } else {
+                        self.prismPostArrayList.append(contentsOf: likedProfileViewPosts)
+                    }
+                    // If data is being reloaded, check if new data is different from curent data, if so replace it
+                    //   with new data
+                    if isReloadingData && self.prismPostArrayListNew != self.prismPostArrayList{
+                        self.prismPostArrayList = self.prismPostArrayListNew
+                        self.collectionView.reloadData()
                     } else {
                         self.collectionView.reloadData()
                     }
+                    
                     self.prismPostArrayListNew.removeAll()
                     self.refreshControl.endRefreshing()
                     self.isReloadingData = false
-//                    self.collectionView.setContentOffset(CGPoint(x: -4, y: -4), animated: true)
-//                    self.viewController.collectionViewLastContentOffsets[1] = CGPoint(x: -4, y: -4)
                 })
             }
         }, withCancel: { (error) in
-            
+            // TODO: Log Error
         })
     }
     

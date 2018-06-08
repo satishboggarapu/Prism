@@ -448,6 +448,7 @@
 				1091E1EE203E838500C282BA /* Resources */,
 				A4E274339D637F09286E49F1 /* [CP] Embed Pods Frameworks */,
 				C7B8FBB30E09585BC38DF14E /* [CP] Copy Pods Resources */,
+				10810B4320C9030E001BF5BA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -619,6 +620,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrismTests/Pods-PrismTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		10810B4320C9030E001BF5BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nTAGS=\"TODO:|FIXME:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 \\\n| xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" \\\n| perl -p -e \"s/($TAGS)/ warning: \\$1/\"\n";
 		};
 		74B101564E2D082A11453BA9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
