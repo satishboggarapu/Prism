@@ -10,7 +10,8 @@ import UIKit
 import MaterialComponents
 import Material
 
-// TODO: Change view if not current user
+// TODO: Add functionality to be able to view post
+// TODO: Clean up
 
 public enum ProfileViewType {
     case CURRENT_USER
@@ -59,7 +60,7 @@ class ProfileViewController: UIViewController {
         setupNavigationBar()
         initializeProfileView()
         
-        if prismPost.getPrismUser().getUid() == CurrentUser.prismUser.getUid() {
+        if prismPost.getPrismUser()?.getUid() == CurrentUser.prismUser.getUid() {
             setupViewForCurrentUser()
         } else {
             setupViewForNormalUser()
@@ -142,19 +143,19 @@ class ProfileViewController: UIViewController {
         profileImage.clipsToBounds = true
         profileImage.translatesAutoresizingMaskIntoConstraints = false
 
-        let profilePicture = prismPost.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
+        let profilePicture = prismPost.getPrismUser()?.getProfilePicture().getLowResDefaultProfilePic()
         if profilePicture != nil {
             profileImage.image = profilePicture
         } else {
-            let imageUrl = prismPost.getPrismUser().getProfilePicture().profilePicUriString
-            profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
+            let imageUrl = prismPost.getPrismUser()?.getProfilePicture().profilePicUriString
+            profileImage.loadImageUsingUrlString(imageUrl!, postID: prismPost.getUid())
             profileImage.layer.borderWidth = 1
             profileImage.layer.borderColor = UIColor.white.cgColor
         }
 
         let username = UILabel()
         username.textColor = UIColor.white
-        username.text = prismPost.getPrismUser().getUsername()
+        username.text = prismPost.getPrismUser()?.getUsername()
         username.font = SourceSansFont.bold(with: 17)
         username.translatesAutoresizingMaskIntoConstraints = false
 
@@ -174,13 +175,21 @@ class ProfileViewController: UIViewController {
      *
      */
     private func initializeProfileView() {
+        var followersCountInt = 0
+        var followingsCountInt = 0
+        if let prismUser = prismPost.getPrismUser() {
+            followersCountInt = prismUser.getFollowerCount()
+            followingsCountInt = prismUser.getFollowingCount()
+        }
+        
+        
         profileView = UIView()
         profileView.backgroundColor = .statusBarBackground
         profileView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileView)
 
         let username = UILabel()
-        username.text = prismPost.getPrismUser().getUsername()
+        username.text = prismPost.getPrismUser()?.getUsername()
         username.textColor = .white
         username.font = SourceSansFont.bold(with: 20)
         username.textAlignment = .center
@@ -188,7 +197,7 @@ class ProfileViewController: UIViewController {
         profileView.addSubview(username)
 
         let fullName = UILabel()
-        fullName.text = prismPost.getPrismUser().getFullName()
+        fullName.text = prismPost.getPrismUser()?.getFullName()
         fullName.textColor = .white
         fullName.font = SourceSansFont.light(with: 15)
         fullName.textAlignment = .center
@@ -202,18 +211,18 @@ class ProfileViewController: UIViewController {
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         profileView.addSubview(profileImage)
 
-        let profilePicture = prismPost.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
+        let profilePicture = prismPost.getPrismUser()?.getProfilePicture().getLowResDefaultProfilePic()
         if profilePicture != nil {
             profileImage.image = profilePicture
         } else {
-            let imageUrl = prismPost.getPrismUser().getProfilePicture().profilePicUriString
-            profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
+            let imageUrl = prismPost.getPrismUser()?.getProfilePicture().profilePicUriString
+            profileImage.loadImageUsingUrlString(imageUrl!, postID: prismPost.getUid())
             profileImage.layer.borderWidth = 2
             profileImage.layer.borderColor = UIColor.white.cgColor
         }
 
         let followersCount = UILabel()
-        followersCount.text = String(prismPost.getPrismUser().getFollowerCount())
+        followersCount.text = String(followersCountInt)
         followersCount.textColor = .white
         followersCount.textAlignment = .center
         followersCount.font = SourceSansFont.bold(with: 16)
@@ -225,7 +234,7 @@ class ProfileViewController: UIViewController {
         postsCount.font = SourceSansFont.bold(with: 16)
 
         let followingCount = UILabel()
-        followingCount.text = String(prismPost.getPrismUser().getFollowingCount())
+        followingCount.text = String(followingsCountInt)
         followingCount.textColor = .white
         followingCount.textAlignment = .center
         followingCount.font = SourceSansFont.bold(with: 16)

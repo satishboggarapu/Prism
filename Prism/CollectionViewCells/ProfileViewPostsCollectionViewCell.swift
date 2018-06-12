@@ -52,7 +52,7 @@ class ProfileViewPostsCollectionViewCell: UICollectionViewCell {
     public func loadPostImage() {
         let imageUrl = prismPost.getImage()
         let postId = prismPost.getPostId()
-        prismPostImage.loadImageUsingUrlString(imageUrl, postID: postId) { (result, image) in
+        prismPostImage.loadImageUsingUrlString(imageUrl, postID: postId!) { (result, image) in
             // do nothing
         }
     }

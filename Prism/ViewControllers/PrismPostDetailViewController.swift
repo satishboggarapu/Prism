@@ -171,7 +171,7 @@ class PrismPostDetailViewController: UIViewController {
         username = UILabel()
         username.textColor = .white
         username.font = boldFont
-        username.text = prismPost.getPrismUser().getUsername()
+        username.text = prismPost.getPrismUser()?.getUsername()
     }
 
     private func initializePostTime() {
@@ -238,12 +238,12 @@ class PrismPostDetailViewController: UIViewController {
     }
 
     public func loadProfileImage() {
-        let profilePicture = prismPost.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
+        let profilePicture = prismPost.getPrismUser()?.getProfilePicture().getLowResDefaultProfilePic()
         if profilePicture != nil {
             profileImage.image = profilePicture
         } else {
-            let imageUrl = prismPost.getPrismUser().getProfilePicture().profilePicUriString
-            profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
+            let imageUrl = prismPost.getPrismUser()?.getProfilePicture().profilePicUriString
+            profileImage.loadImageUsingUrlString(imageUrl!, postID: prismPost.getUid())
             self.addBorderToProfilePic()
         }
     }

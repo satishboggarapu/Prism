@@ -285,20 +285,21 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     // MARK: Setter Methods
 
     public func loadProfileImage() {
-        let profilePicture = prismPost.getPrismUser().getProfilePicture().getLowResDefaultProfilePic()
+        let profilePicture = prismPost.getPrismUser()?.getProfilePicture().getLowResDefaultProfilePic()
         if profilePicture != nil {
             profileImage.image = profilePicture
         } else {
-            let imageUrl = prismPost.getPrismUser().getProfilePicture().profilePicUriString
-            profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
-            self.addBorderToProfilePic()
+            if let imageUrl = prismPost.getPrismUser()?.getProfilePicture().profilePicUriString {
+                profileImage.loadImageUsingUrlString(imageUrl, postID: prismPost.getUid())
+                self.addBorderToProfilePic()
+            }
         }
     }
 
     public func loadPostImage() {
         let imageUrl = prismPost.getImage()
         let postId = prismPost.getPostId()
-        postImage.loadImageUsingUrlString(imageUrl, postID: postId) { (result, image) in
+        postImage.loadImageUsingUrlString(imageUrl, postID: postId!) { (result, image) in
             if result {
                 self.backgroundImageView.image = image
             }
@@ -306,7 +307,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     }
 
     public func setUsernameText() {
-        userName.text = prismPost.getPrismUser().getUsername()
+        userName.text = prismPost.getPrismUser()?.getUsername()
     }
 
     public func setPostDateText() {

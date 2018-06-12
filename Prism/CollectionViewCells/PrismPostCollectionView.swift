@@ -96,9 +96,9 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
 
     @objc func refresh(_ refreshControl: UIRefreshControl) {
         print("refreshed")
-//        CurrentUser.refreshUserProfile()
-//        prismPostArrayList.removeAll()
-//        refreshData(true)
+        CurrentUser.refreshUserProfile()
+        prismPostArrayList.removeAll()
+        refreshData(true)
 
     }
 
@@ -107,7 +107,6 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset)
 //        // pull more posts if available
 //        let scrollViewOffsetValue: CGFloat = (scrollView.contentSize.height - scrollView.frame.size.height) * 0.80
 //        if (scrollView.contentOffset.y >= scrollViewOffsetValue) && prismPostArrayList.count > 0 && !pullingData { }
@@ -185,7 +184,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     func getCellSize(indexPath: IndexPath) -> CGSize {
-        let postId: String = prismPostArrayList[indexPath.item].getPostId()
+        let postId: String = prismPostArrayList[indexPath.item].getPostId()!
         var imageHeightInPoints: CGFloat = 150
         if imageSizes.keys.contains(postId) {
             let maxWidthInPixels: CGFloat = PrismPostConstraints.IMAGE_MAX_WIDTH * UIScreen.main.scale

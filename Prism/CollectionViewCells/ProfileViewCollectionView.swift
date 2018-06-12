@@ -192,7 +192,6 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
      *  - returns:
      */
     public func updateCollectionViewHeight() {
-        print(getCollectionViewHeight())
         collectionView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: getCollectionViewHeight())
     }
     
@@ -269,8 +268,8 @@ extension ProfileViewCollectionView: UICollectionViewDelegate, UICollectionViewD
      */
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         let postId = prismPostArrayList[indexPath.item].prismPost.getPostId()
-        if imageSizes.keys.contains(postId) {
-            return imageSizes[postId]!.height + 8
+        if imageSizes.keys.contains(postId!) {
+            return imageSizes[postId!]!.height + 8
         }
         return 150
     }

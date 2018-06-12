@@ -86,7 +86,7 @@ public class CurrentUser {
      * Returns True if CurrentUser has liked given prismPost
      */
     public static func hasLiked(_ prismPost: PrismPost) -> Bool {
-        return liked_posts != nil && liked_posts_map.keys.contains(prismPost.getPostId())
+        return liked_posts != nil && liked_posts_map.keys.contains(prismPost.getPostId()!)
     }
     
     /**
@@ -94,7 +94,7 @@ public class CurrentUser {
      */
     static func likePost(_ prismPost: PrismPost) {
         liked_posts.append(prismPost)
-        liked_posts_map[prismPost.getPostId()] = prismPost.getTimestamp()
+        liked_posts_map![prismPost.getPostId()!] = prismPost.getTimestamp()
     }
     
     /**
@@ -110,14 +110,14 @@ public class CurrentUser {
      */
     static func unlikePost(_ prismPost: PrismPost) {
         liked_posts.removeObject(prismPost)
-        liked_posts_map.removeValue(forKey: prismPost.getPostId())
+        liked_posts_map.removeValue(forKey: prismPost.getPostId()!)
     }
     
     /**
      * Returns True if CurrentUser has reposted given prismPost
      */
     public static func hasReposted(_ prismPost: PrismPost) -> Bool {
-        return reposted_posts_map != nil && reposted_posts_map.keys.contains(prismPost.getPostId())
+        return reposted_posts_map != nil && reposted_posts_map.keys.contains(prismPost.getPostId()!)
     }
     
     /**
@@ -125,7 +125,7 @@ public class CurrentUser {
      */
     static func repostPost(_ prismPost: PrismPost) {
         reposted_posts.append(prismPost)
-        reposted_posts_map[prismPost.getPostId()] = prismPost.getTimestamp()
+        reposted_posts_map![prismPost.getPostId()!] = prismPost.getTimestamp()
     }
     
     /**
@@ -144,7 +144,7 @@ public class CurrentUser {
      */
     static func unrepostPost(_ prismPost: PrismPost) {
         reposted_posts.removeObject(prismPost)
-        reposted_posts_map.removeValue(forKey: prismPost.getPostId())
+        reposted_posts_map.removeValue(forKey: prismPost.getPostId()!)
     }
     
     /**
@@ -152,7 +152,7 @@ public class CurrentUser {
      */
     static func uploadPost(_ prismPost: PrismPost) {
         uploaded_posts.append(prismPost)
-        uploaded_posts_map[prismPost.getPostId()] = prismPost.getTimestamp()
+        uploaded_posts_map![prismPost.getPostId()!] = prismPost.getTimestamp()
     }
     
     /**
@@ -168,7 +168,7 @@ public class CurrentUser {
      */
     static func deletePost(_ prismPost: PrismPost) {
         uploaded_posts.removeObject(prismPost)
-        uploaded_posts_map.removeValue(forKey: prismPost.getPostId())
+        uploaded_posts_map.removeValue(forKey: prismPost.getPostId()!)
     }
     
     /**

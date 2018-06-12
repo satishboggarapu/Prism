@@ -26,11 +26,11 @@ public class PrismPost: Equatable {
     fileprivate var uid: String!
     
     // Attributes not saved in cloud
-    private var likes: Int!
-    private var reposts: Int!
-    private var postId: String!
-    private var prismUser: PrismUser!
-    private var isReposted: Bool!
+    private var likes: Int = 0
+    private var reposts: Int = 0
+    private var postId: String?
+    private var prismUser: PrismUser?
+    private var isReposted: Bool?
     
     // Empty Constructor required by Firebase to convert DataSnapshot to PrismPost.class
     public init () { }
@@ -58,11 +58,11 @@ public class PrismPost: Equatable {
     
     // Try to not use this if possible, use getPrismUser().getUid() instead
     // if getPrismUser() is not null;
-    public func getUid() -> String{
+    public func getUid() -> String {
         return uid
     }
     
-    public func getPostId() -> String {
+    public func getPostId() -> String? {
         return postId
     }
     
@@ -76,11 +76,11 @@ public class PrismPost: Equatable {
         return reposts
     }
     
-    public func getPrismUser() -> PrismUser {
+    public func getPrismUser() -> PrismUser? {
         return prismUser
     }
     
-    public func getIsReposted() -> Bool {
+    public func getIsReposted() -> Bool? {
         return (isReposted == nil) ? false : isReposted
     }
     
