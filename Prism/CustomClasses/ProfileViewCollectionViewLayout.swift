@@ -6,23 +6,20 @@
 
 import UIKit
 
-protocol PinterestLayoutDelegate: class {
+protocol ProfileViewCollectionViewLayoutDelegate: class {
     // 1. Method to ask the delegate for the height of the image
     func collectionView(_ collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat
 }
 
-class PinterestLayout: UICollectionViewLayout {
-    //1. Pinterest Layout Delegate
-    weak var delegate: PinterestLayoutDelegate!
-
-    //2. Configurable properties
+class ProfileViewCollectionViewLayout: UICollectionViewLayout {
+    
+    /**
+     *  Attributes
+     */
+    weak var delegate: ProfileViewCollectionViewLayoutDelegate!
     fileprivate var numberOfColumns = 3
     fileprivate var cellPadding: CGFloat = 0
-
-    //3. Array to keep a cache of attributes.
     fileprivate var cache = [UICollectionViewLayoutAttributes]()
-
-    //4. Content height and size
     fileprivate var contentHeight: CGFloat = 0
 
     fileprivate var contentWidth: CGFloat {
@@ -55,18 +52,15 @@ class PinterestLayout: UICollectionViewLayout {
         for item in 0 ..< collectionView.numberOfItems(inSection: 0) {
 
             let indexPath = IndexPath(item: item, section: 0)
-
             // 4. Asks the delegate for the height of the picture and the annotation and calculates the cell frame.
             let photoHeight = delegate.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath)
             let height = photoHeight
             let frame = CGRect(x: xOffset[column], y: yOffset[column], width: columnWidth, height: height)
             let insetFrame = frame.insetBy(dx: 0, dy: 0)
-
             // 5. Creates an UICollectionViewLayoutItem with the frame and add it to the cache
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attributes.frame = insetFrame
             cache.append(attributes)
-
             // 6. Updates the collection view content height
             contentHeight = max(contentHeight, frame.maxY)
             yOffset[column] = yOffset[column] + height
@@ -81,9 +75,7 @@ class PinterestLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
-
         // Loop through the cache and look for items in the rect
         for attributes in cache {
             if attributes.frame.intersects(rect) {

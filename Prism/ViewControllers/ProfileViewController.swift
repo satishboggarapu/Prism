@@ -12,17 +12,27 @@ import Material
 
 // TODO: Change view if not current user
 
+public enum ProfileViewType {
+    case CURRENT_USER
+    case NORMAL_USER
+}
+
 class ProfileViewController: UIViewController {
 
+    /**
+     *  UIElements
+     */
     private var backButton: FABButton!
     private var editAccountButton: FABButton!
     private var profileNavigationView: UIView!
-//    private var scrollView: UIScrollView!
-//    private var scrollViewContentView: UIView!
     private var profileView: UIView!
     private var menuBar: ProfileViewMenuBar!
     private var collectionView: UICollectionView!
 
+    /**
+     *
+     */
+    private var profileViewType: ProfileViewType!
     var prismPost: PrismPost!
     private var lastPanGesturePosition: CGPoint!
     private var fadeProfileView: Bool!
@@ -31,65 +41,77 @@ class ProfileViewController: UIViewController {
     private var cellSize: CGSize!
     private var isRefreshing: [Bool] = [false, false]
     private var timer = Timer()
-
     var panGesture: UIPanGestureRecognizer!
-
+    
+    private var collectionViewSize: Int = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .statusBarBackground
         fadeProfileView = false
 
-        // Do any additional setup after loading the view.
+        // panGesture inizilization
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
         view.addGestureRecognizer(panGesture)
 
+        // setup UIElements
         setupNavigationBar()
-
-//        scrollView = UIScrollView()
-//        scrollView.bounces = false
-//        scrollView.showsHorizontalScrollIndicator = false
-//        scrollView.showsVerticalScrollIndicator = false
-//        scrollView.delegate = self
-//        view.addSubview(scrollView)
-
-//        scrollViewContentView = UIView()
-//        scrollView.addSubview(scrollViewContentView)
-//        scrollView.addConstraintsWithFormat(format: "H:|[v0]|", views: scrollViewContentView)
-//        scrollView.addConstraintsWithFormat(format: "V:|[v0]|", views: scrollViewContentView)
-//        view.addConstraint(NSLayoutConstraint(item: scrollViewContentView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: scrollViewContentView, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 1, constant: 0))
-//
-//        view.addConstraintsWithFormat(format: "H:|[v0]|", views: scrollView)
-//        view.addConstraintsWithFormat(format: "V:|[v0]|", views: scrollView)
-
-
         initializeProfileView()
+        
+        if prismPost.getPrismUser().getUid() == CurrentUser.prismUser.getUid() {
+            setupViewForCurrentUser()
+        } else {
+            setupViewForNormalUser()
+        }
+    }
+    
+    /**
+     *
+     */
+    private func setupViewForCurrentUser() {
+        profileViewType = ProfileViewType.CURRENT_USER
+        collectionViewSize = 2
+        
         initializeMenuBar()
         initializeCollectionView()
-
+        
+        // UIElements constraints
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: profileView)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: menuBar)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         view.addConstraintsWithFormat(format: "V:|[v0][v1(50)][v2]|", views: profileView, menuBar, collectionView)
-
-//        view.layoutSubviews()
-//        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + (profileView.frame.height/2))
-//        print(CGSize(width: view.frame.width, height: view.frame.height + profileView.frame.height))
-//        print(scrollView.contentSize)
-//        print(profileView.frame.height)
-
     }
     
+    /**
+     *
+     */
+    private func setupViewForNormalUser() {
+        profileViewType = ProfileViewType.NORMAL_USER
+        collectionViewSize = 1
+        
+        initializeCollectionView()
+        
+        // UIElements constraints
+        view.addConstraintsWithFormat(format: "H:|[v0]|", views: profileView)
+        view.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
+        view.addConstraintsWithFormat(format: "V:|[v0]-[v1]|", views: profileView, collectionView)
+    }
+    
+    /**
+     *
+     */
     private func setupNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.setHidesBackButton(true, animated: false)
         navigationController?.navigationBar.barTintColor = .statusBarBackground
+        
+        let buttonContentEdgeInset: CGFloat = 8
 
         // left button
         backButton = FABButton()
         backButton.backgroundColor = .clear
-        backButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        backButton.addContentEdgeInset(buttonContentEdgeInset)
         backButton.setTitle("", for: .normal)
         backButton.setImage(Icons.ARROW_BACK_24?.withRenderingMode(.alwaysTemplate), for: .normal)
         backButton.setImage(Icons.ARROW_BACK_24?.withRenderingMode(.alwaysTemplate), for: .highlighted)
@@ -100,7 +122,7 @@ class ProfileViewController: UIViewController {
         // right button
         editAccountButton = FABButton()
         editAccountButton.backgroundColor = .clear
-        editAccountButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        editAccountButton.addContentEdgeInset(buttonContentEdgeInset)
         editAccountButton.setTitle("", for: .normal)
         editAccountButton.setImage(Icons.ACCOUNT_EDIT_24?.withRenderingMode(.alwaysTemplate), for: .normal)
         editAccountButton.setImage(Icons.ACCOUNT_EDIT_24?.withRenderingMode(.alwaysTemplate), for: .highlighted)
@@ -116,7 +138,7 @@ class ProfileViewController: UIViewController {
 
         let profileImage = CustomImageView()
         profileImage.contentMode = .scaleAspectFit
-        profileImage.layer.cornerRadius = 36/2
+        profileImage.layer.cornerRadius = 18
         profileImage.clipsToBounds = true
         profileImage.translatesAutoresizingMaskIntoConstraints = false
 
@@ -148,6 +170,9 @@ class ProfileViewController: UIViewController {
 
     }
 
+    /**
+     *
+     */
     private func initializeProfileView() {
         profileView = UIView()
         profileView.backgroundColor = .statusBarBackground
@@ -257,7 +282,10 @@ class ProfileViewController: UIViewController {
 
 
     }
-
+    
+    /**
+     *
+     */
     private func initializeMenuBar() {
         menuBar = ProfileViewMenuBar()
         menuBar.homeController = self
@@ -265,6 +293,9 @@ class ProfileViewController: UIViewController {
         view.addSubview(menuBar)
     }
 
+    /**
+     *
+     */
     private func initializeCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -284,12 +315,11 @@ class ProfileViewController: UIViewController {
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView!)
-
-
     }
 
-    // up == position
-    // down == negative
+    /**
+     *
+     */
     @objc private func panGestureAction(_ gesture: UIPanGestureRecognizer) {
         let point = gesture.location(in: self.view)
         let visibleCell = collectionView.indexPathsForVisibleItems.first!
@@ -303,13 +333,15 @@ class ProfileViewController: UIViewController {
                 
                 if gestureOffset > 0 { // finger moving up
                     // if bar is not at the top then move the bar first
-                    if menuBar.frame.origin.y > 0 && collectionViewLastContentOffsets[visibleCell.item].y >=  -4{
+                    if (isPrismUserCurrentUser() && menuBar.frame.origin.y > 0 && collectionViewLastContentOffsets[visibleCell.item].y >=  -4) ||
+                        (!isPrismUserCurrentUser() && collectionView.frame.origin.y > 0 && collectionViewLastContentOffsets[visibleCell.item].y >=  -4) {
                         updateMenuBarConstraintsAndProfileViewUI(point)
                     } else {
                         updateCollectionViewScrollInset(point)
                     }
                 } else if gestureOffset < 0 {
-                    if collectionViewLastContentOffsets[visibleCell.item].y == -4 && menuBar.frame.origin.y < maxY {
+                    if (isPrismUserCurrentUser() && collectionViewLastContentOffsets[visibleCell.item].y == -4 && menuBar.frame.origin.y < maxY) ||
+                        (!isPrismUserCurrentUser() && collectionViewLastContentOffsets[visibleCell.item].y == -4 && collectionView.frame.origin.y < maxY) {
                         updateMenuBarConstraintsAndProfileViewUI(point)
                     } else {
                         updateCollectionViewScrollInset(point)
@@ -332,33 +364,31 @@ class ProfileViewController: UIViewController {
                     collectionViewLastContentOffsets[visibleCell.item] = CGPoint(x: -4, y: -4)
                 }
                 cell.collectionView.setContentOffset(contentOffset, animated: true)
-                
-//                timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateIsRefreshing), userInfo: nil, repeats: false)
-                
-//                if contentOffset.y == -60.5 {
-//                    cell.refreshControlAction()
-//                }
-            
             default:
                 break
         }
         lastPanGesturePosition = point
     }
     
-    @objc private func updateIsRefreshing() {
-        isRefreshing[(collectionView.indexPathsForVisibleItems.first?.item)!] = false
-    }
-    
+    /**
+     *
+     */
     private func updateMenuBarConstraintsAndProfileViewUI(_ point: CGPoint) {
         var offset = lastPanGesturePosition.y - point.y
-        let newY = menuBar.frame.origin.y - offset
+        var newY = collectionView.frame.origin.y - offset
+        if isPrismUserCurrentUser() {
+            newY = menuBar.frame.origin.y - offset
+        }
         let maxY = profileView.frame.height
-        if offset > 0 && newY < 0 { offset += newY }
-        else if offset < 0 && newY > maxY { offset -= maxY - newY }
-        menuBar.frame.origin.y -= offset
+        if offset > 0 && newY < 0 {
+            offset += newY
+        } else if offset < 0 && newY > maxY {
+            offset -= maxY - newY
+        }
+        if isPrismUserCurrentUser() { menuBar.frame.origin.y -= offset }
         collectionView.frame.origin.y -= offset
         profileView.frame.origin.y -= offset/2
-        if offset > 0 && collectionView.frame.height < view.frame.height-50 {
+        if offset > 0 && ((isPrismUserCurrentUser() && collectionView.frame.height < view.frame.height-50) || (!isPrismUserCurrentUser() && collectionView.frame.height < view.frame.height)){
             collectionView.frame.size.height += offset
             collectionView.collectionViewLayout.invalidateLayout()
         }
@@ -379,6 +409,9 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    /**
+     *
+     */
     private func updateCollectionViewScrollInset(_ point: CGPoint) {
         let gestureOffset = lastPanGesturePosition.y - point.y
         let visibleCell = collectionView.indexPathsForVisibleItems.first!
@@ -389,14 +422,16 @@ class ProfileViewController: UIViewController {
         let maxY = profileView.frame.height
         var contentOffset = collectionViewLastContentOffsets[visibleCell.item]
         if gestureOffset < 0 && !cell.isReloadingData {
-            if menuBar.frame.origin.y == 0 || menuBar.frame.origin.y < maxY {
+            if (isPrismUserCurrentUser() && (menuBar.frame.origin.y == 0 || menuBar.frame.origin.y < maxY)) ||
+                (!isPrismUserCurrentUser() && (collectionView.frame.origin.y == 0 || collectionView.frame.origin.y < maxY)) {
                 contentOffset.y = (newContentOffsetY < -4) ? -4 : newContentOffsetY
             } else if isGesutreInsideCollectionView(point) && isLastRefreshMoreThenFourSeconds(visibleCell.item) {
                 contentOffset.y = newContentOffsetY
             }
         } else if gestureOffset > 0 && cell.collectionView.contentSize.height > collectionViewHeight {
             contentOffset.y = (newContentOffsetY > maxOffset) ? maxOffset : newContentOffsetY
-            if contentOffset.y > -4 && menuBar.frame.origin.y == maxY {
+            if contentOffset.y > -4 && ((isPrismUserCurrentUser() && menuBar.frame.origin.y == maxY) ||
+                                        (!isPrismUserCurrentUser() && collectionView.frame.origin.y == maxY)) {
                 contentOffset.y = -4
             }
         } else if gestureOffset > 0 && contentOffset.y < -4 {
@@ -404,31 +439,38 @@ class ProfileViewController: UIViewController {
         }
         cell.collectionView.setContentOffset(contentOffset, animated: false)
         collectionViewLastContentOffsets[visibleCell.item] = contentOffset
-        
-        // refresh control code
-//        if contentOffset.y <= -120 {
-//            cell.refreshControl.beginRefreshing()
-//        }
     }
-    
-    // create a seperate array to check if its same as the current array
-    // or a timer that disables user interaction
 
+    /**
+     *
+     */
     @objc private func backButtonAction() {
         navigationController?.popViewController(animated: false)
     }
 
+    /**
+     *
+     */
     @objc private func editAccountButtonAction() {
 
     }
     
+    /**
+     *
+     */
     private func isGesutreInsideCollectionView(_ point: CGPoint) -> Bool {
         return point.y > collectionView.frame.origin.y
     }
     
+    /**
+     *
+     */
     private func isLastRefreshMoreThenFourSeconds(_ index: Int) -> Bool {
-        let difference = abs(Date().seconds(from: collectionViewLastRefreshTime[index]))
-        return difference >= 4
+        return Date().seconds(from: collectionViewLastRefreshTime[index]) >= 4
+    }
+    
+    private func isPrismUserCurrentUser() -> Bool {
+        return profileViewType == ProfileViewType.CURRENT_USER
     }
 
 }
@@ -440,32 +482,17 @@ extension ProfileViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let offset = (scrollView.contentOffset.y - lastPanGesturePosition)
-//        if offset > 0 && collectionView.frame.height < view.frame.height - 50 {
-//            collectionView.frame.size.height += offset
-//        }
-//
-//        menuBar.frame.origin.y -= offset
-//        collectionView.frame.origin.y -= offset
-//        collectionView.collectionViewLayout.invalidateLayout()
-
-        menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / 2
-//        print(menuBar.horizontalBarLeftAnchorConstraint?.constant)
-//        lastPanGesturePosition = scrollView.contentOffset.y
-//
-//        if scrollView.contentOffset.y == 120 {
-//            let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! ProfileViewPostsCollectionView
-//            cell.enableScrolling()
-//        } else {
-//            let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as! ProfileViewPostsCollectionView
-//            cell.disableScrolling()
-//        }
+        if profileViewType == ProfileViewType.CURRENT_USER {
+            menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / 2
+        }
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let index = targetContentOffset.pointee.x / view.frame.width
-        let indexPath = IndexPath(item: Int(index), section: 0)
-        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition())
+        if profileViewType == ProfileViewType.CURRENT_USER {
+            let index = targetContentOffset.pointee.x / view.frame.width
+            let indexPath = IndexPath(item: Int(index), section: 0)
+            menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition())
+        }
     }
 }
 
@@ -475,7 +502,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return collectionViewSize
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -483,16 +510,17 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as! ProfileViewPostsCollectionView
             cell.viewController = self
             cell.prismUser = prismPost.getPrismUser()
+            cell.updateCollectionViewHeight()
             return cell
         } else if indexPath.item == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "likes", for: indexPath) as! ProfileViewLikesCollectionView
             cell.viewController = self
             cell.prismUser = prismPost.getPrismUser()
+            cell.updateCollectionViewHeight()
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             cell.backgroundColor = .loginBackground
-//            cell.backgroundColor = (indexPath.item == 0) ? .red : .blue
             return cell
         }
     }
@@ -508,6 +536,4 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-
-
 }

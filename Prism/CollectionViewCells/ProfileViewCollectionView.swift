@@ -47,8 +47,8 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     fileprivate var imageSizesNew = [String: CGSize]()
     fileprivate var collectionViewInset: CGFloat = 4
     // TODO: Convert this to 1 line after testing with images
-    fileprivate var flowLayout: PinterestLayout {
-        let layout = PinterestLayout()
+    fileprivate var flowLayout: ProfileViewCollectionViewLayout {
+        let layout = ProfileViewCollectionViewLayout()
         layout.delegate = self
         return layout
     }
@@ -176,7 +176,24 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
      *      - Height of the collectionView as CGFloat.
      */
     private func getCollectionViewHeight() -> CGFloat {
-        return Constraints.screenHeight() - Constraints.navigationBarHeight() - Constraints.statusBarHeight() - 50
+        let height = Constraints.screenHeight() - Constraints.navigationBarHeight() - Constraints.statusBarHeight()
+        if prismUser != nil && prismUser.getUid() == CurrentUser.prismUser.getUid() {
+            return height - 50
+        }
+        return height
+    }
+    
+    /**
+     *  Updates the height of the `collectionView
+     *
+     *  - parameters:
+     *      - none
+     *
+     *  - returns:
+     */
+    public func updateCollectionViewHeight() {
+        print(getCollectionViewHeight())
+        collectionView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: getCollectionViewHeight())
     }
     
     /**
@@ -227,7 +244,7 @@ class ProfileViewCollectionView: UICollectionViewCell, CustomImageViewDelegate {
     }
 }
 
-extension ProfileViewCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, PinterestLayoutDelegate {
+extension ProfileViewCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, ProfileViewCollectionViewLayoutDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
