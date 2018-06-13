@@ -22,6 +22,7 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     private var activityIndicator: MDCActivityIndicator!
     private var refreshControl: UIRefreshControl!
     private var reloadVisibleCells: Bool = true
+    private var lastRefreshTime: Date = Date()
 
     private var imageSizes: [String: CGSize] = [String: CGSize]()
     private var pullingData: Bool = false
@@ -95,11 +96,14 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
     }
 
     @objc func refresh(_ refreshControl: UIRefreshControl) {
-        print("refreshed")
-        CurrentUser.refreshUserProfile()
-        prismPostArrayList.removeAll()
-        refreshData(true)
-
+        if isLastRefreshMoreThenFourSeconds() {
+            lastRefreshTime = Date()
+            CurrentUser.refreshUserProfile()
+            prismPostArrayList.removeAll()
+            refreshData(true)
+        } else {
+            refreshControl.endRefreshing()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -223,6 +227,13 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
                 // TODO: Log Error
             }
         }
+    }
+    
+    /**
+     *
+     */
+    private func isLastRefreshMoreThenFourSeconds() -> Bool {
+        return Date().seconds(from: lastRefreshTime) >= 4
     }
 }
 
