@@ -31,10 +31,10 @@ class PrismPostDetailViewController: UIViewController {
     private var lastCollectionViewContentOffset: CGFloat = 0
     private var offset: CGFloat = 0
 
-    var profilePictureSize: CGFloat = 48
-    var boldFont: UIFont = SourceSansFont.bold(with: 17)
+    var profilePictureSize: CGFloat = 56
+    var boldFont: UIFont = SourceSansFont.bold(with: 18)
     var mediumFont: UIFont = SourceSansFont.light(with: 15)
-    var thinFont: UIFont = SourceSansFont.light(with: 12)
+    var thinFont: UIFont = SourceSansFont.light(with: 13)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +48,7 @@ class PrismPostDetailViewController: UIViewController {
         initializeImageView()
         initializeProfileView()
 
-        scrollView.contentSize = CGSize(width: self.view.frame.width, height: imageView.frame.height + 22)
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: imageView.frame.height + 80)
 
         initializeBackButton()
         initializeMoreButton()
@@ -57,18 +57,18 @@ class PrismPostDetailViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
     }
 
     private func setupNavigationBar() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-
+    
     private func initializeScrollView() {
         scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.bounces = false
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
@@ -110,7 +110,7 @@ class PrismPostDetailViewController: UIViewController {
 
     private func initializeProfileView() {
         profileView = UIView()
-        profileView.frame = CGRect(x: 0, y: imageView.frame.maxY, width: self.view.frame.width, height: 72)
+        profileView.frame = CGRect(x: 0, y: imageView.frame.maxY, width: self.view.frame.width, height: 80)
         profileView.backgroundColor = .statusBarBackground
         scrollView.addSubview(profileView)
 
@@ -121,48 +121,53 @@ class PrismPostDetailViewController: UIViewController {
         initializeRepostButton()
         initializeLikesLabel()
         initializeRepostsLabel()
-
-        let buttonStackViewWidth: CGFloat = 92
-
-        let labelStackView = UIStackView()
-        let width = self.view.frame.width - profileImage.frame.maxX - buttonStackViewWidth - 24
-        labelStackView.frame = CGRect(x: profileImage.frame.maxX + 8, y: 12, width: width, height: 40)
-        labelStackView.alignment = .top
-        labelStackView.axis = .vertical
-        labelStackView.distribution = .fillEqually
-        profileView.addSubview(labelStackView)
-        labelStackView.addArrangedSubview(username)
-        labelStackView.addArrangedSubview(postTime)
-
-        let buttonStackView = UIStackView()
-        buttonStackView.frame = CGRect(x: labelStackView.frame.maxX + 8, y: 10, width: buttonStackViewWidth, height: 36)
-        buttonStackView.alignment = .top
-        buttonStackView.axis = .horizontal
-        buttonStackView.distribution = .fillEqually
-        buttonStackView.spacing = 10
-        profileView.addSubview(buttonStackView)
-        buttonStackView.addArrangedSubview(likeButton)
-        buttonStackView.addArrangedSubview(repostButton)
-
-        let countsStackView = UIStackView()
-        countsStackView.frame = CGRect(x: buttonStackView.frame.origin.x, y: buttonStackView.frame.maxY, width: buttonStackViewWidth, height: 20)
-        countsStackView.alignment = .top
-        countsStackView.axis = .horizontal
-        countsStackView.distribution = .fillEqually
-        countsStackView.spacing = 10
-        profileView.addSubview(countsStackView)
-        countsStackView.addArrangedSubview(likesLabel)
-        countsStackView.addArrangedSubview(repostsLabel)
-
+        
+        let usernamePostTimeView = UIStackView()
+        usernamePostTimeView.alignment = .top
+        usernamePostTimeView.distribution = .fillEqually
+        usernamePostTimeView.axis = .vertical
+        usernamePostTimeView.addArrangedSubview(username)
+        usernamePostTimeView.addArrangedSubview(postTime)
+        
+        let likeView = View()
+        likeView.backgroundColor = .clear
+        likeView.addSubview(likeButton)
+        likeView.addSubview(likesLabel)
+        likeView.addConstraintsWithFormat(format: "H:[v0(32)]", views: likeButton)
+        likeView.addConstraintsWithFormat(format: "H:[v0(32)]", views: likesLabel)
+        likeView.addConstraintsWithFormat(format: "V:|[v0(36)]-4-[v1(20)]", views: likeButton, likesLabel)
+        likeView.addConstraint(NSLayoutConstraint(item: likeButton, attribute: .centerX, relatedBy: .equal, toItem: likeView, attribute: .centerX, multiplier: 1, constant: 0))
+        likeView.addConstraint(NSLayoutConstraint(item: likesLabel, attribute: .centerX, relatedBy: .equal, toItem: likeView, attribute: .centerX, multiplier: 1, constant: 0))
+        
+        let repostView = View()
+        repostView.backgroundColor = .clear
+        repostView.addSubview(repostButton)
+        repostView.addSubview(repostsLabel)
+        repostView.addConstraintsWithFormat(format: "H:[v0(32)]", views: repostButton)
+        repostView.addConstraintsWithFormat(format: "H:[v0(32)]", views: repostsLabel)
+        repostView.addConstraintsWithFormat(format: "V:|[v0(36)]-4-[v1(20)]", views: repostButton, repostsLabel)
+        repostView.addConstraint(NSLayoutConstraint(item: repostButton, attribute: .centerX, relatedBy: .equal, toItem: repostView, attribute: .centerX, multiplier: 1, constant: 0))
+        repostView.addConstraint(NSLayoutConstraint(item: repostsLabel, attribute: .centerX, relatedBy: .equal, toItem: repostView, attribute: .centerX, multiplier: 1, constant: 0))
+        
+        profileView.addSubview(profileImage)
+        profileView.addSubview(usernamePostTimeView)
+        profileView.addSubview(likeView)
+        profileView.addSubview(repostView)
+        
+        profileView.addConstraintsWithFormat(format: "V:[v0(56)]", views: profileImage)
+        profileView.addConstraintsWithFormat(format: "V:[v0(40)]", views: usernamePostTimeView)
+        profileView.addConstraintsWithFormat(format: "V:|-10-[v0]-|", views: likeView)
+        profileView.addConstraintsWithFormat(format: "V:|-10-[v0]-|", views: repostView)
+        profileView.addConstraintsWithFormat(format: "H:|-12-[v0(56)]-[v1]-[v2(48)][v3(48)]-16-|", views: profileImage, usernamePostTimeView, likeView, repostView)
+        profileView.addConstraint(NSLayoutConstraint(item: profileImage, attribute: .centerY, relatedBy: .equal, toItem: profileView, attribute: .centerY, multiplier: 1, constant: 0))
+        profileView.addConstraint(NSLayoutConstraint(item: usernamePostTimeView, attribute: .centerY, relatedBy: .equal, toItem: profileView, attribute: .centerY, multiplier: 1, constant: 0))
     }
 
     private func initializeProfileImage() {
         profileImage = CustomImageView()
-        profileImage.frame = CGRect(x: 8, y: 8, width: profilePictureSize, height: profilePictureSize)
         profileImage.contentMode = .scaleAspectFit
         profileImage.layer.cornerRadius = profilePictureSize/2
         profileImage.clipsToBounds = true
-        profileView.addSubview(profileImage)
 
         loadProfileImage()
     }
@@ -219,8 +224,6 @@ class PrismPostDetailViewController: UIViewController {
 
         toggleRepostButton()
     }
-
-
     
     @objc func backButtonAction() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -407,31 +410,31 @@ class PrismPostDetailViewController: UIViewController {
 
 extension PrismPostDetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offset = scrollView.contentOffset.y
-
-        if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
-            // scrolled up
-//            if offset < 50 {
-//                profileView.frame = CGRect(x: 0, y: (imageView.frame.maxY - 10), width: self.view.frame.width, height: 72)
+//        let offset = scrollView.contentOffset.y
+//
+//        if self.lastCollectionViewContentOffset > scrollView.contentOffset.y {
+//            // scrolled up
+////            if offset < 50 {
+////                profileView.frame = CGRect(x: 0, y: (imageView.frame.maxY - 10), width: self.view.frame.width, height: 72)
+////            }
+//        } else if self.lastCollectionViewContentOffset < scrollView.contentOffset.y {
+//            // scrolled down
+////            if offset > scrollView.contentSize.height - self.view.frame.height - 20 - 30 {
+////                profileView.frame.origin = CGPoint(x: 0, y: imageView.frame.maxY + offset)
+////            }
+//            if offset < 54 && profileView != nil {
+//                profileView.frame = CGRect(x: 0, y: (imageView.frame.maxY - offset), width: self.view.frame.width, height: 72)
 //            }
-        } else if self.lastCollectionViewContentOffset < scrollView.contentOffset.y {
-            // scrolled down
-//            if offset > scrollView.contentSize.height - self.view.frame.height - 20 - 30 {
-//                profileView.frame.origin = CGPoint(x: 0, y: imageView.frame.maxY + offset)
-//            }
-            if offset < 54 && profileView != nil {
-                profileView.frame = CGRect(x: 0, y: (imageView.frame.maxY - offset), width: self.view.frame.width, height: 72)
-            }
-        }
-        self.lastCollectionViewContentOffset = scrollView.contentOffset.y
+//        }
+//        self.lastCollectionViewContentOffset = scrollView.contentOffset.y
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if profileView != nil {
-            UIView.animate(withDuration: 0.25, animations: {
-                self.profileView.frame = CGRect(x: 0, y: (self.imageView.frame.maxY - 53), width: self.view.frame.width, height: 72)
-            })
-        }
+//        if profileView != nil {
+//            UIView.animate(withDuration: 0.25, animations: {
+//                self.profileView.frame = CGRect(x: 0, y: (self.imageView.frame.maxY - 53), width: self.view.frame.width, height: 72)
+//            })
+//        }
     }
 }
 
