@@ -225,6 +225,9 @@ class PrismPostDetailViewController: UIViewController {
         toggleRepostButton()
     }
     
+    /**
+     *
+     */
     @objc func backButtonAction() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.popViewController(animated: true)
