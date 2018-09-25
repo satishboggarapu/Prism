@@ -1,6 +1,0 @@
-framework module Pods_PrismTests {
-  umbrella header "Pods-PrismTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
