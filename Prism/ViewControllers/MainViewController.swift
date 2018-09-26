@@ -43,8 +43,6 @@ class MainViewController: UIViewController {
     private var uploadedImageUri: String!
     private var uploadedImageDescription: String!
 
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -65,8 +63,6 @@ class MainViewController: UIViewController {
         usersReference = Default.USERS_REFERENCE
 
         CurrentUser()
-        
-        
 
 //        refreshData()
     }
@@ -87,14 +83,17 @@ class MainViewController: UIViewController {
         }
 //        setupNavigationBar()
 //        initializeMenuBar()
-
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
     }
-    
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+    }
+
     @objc func appWillTerminate(_ application: UIApplication) {
 //        SDImageCache.shared().clearMemory()
 //        SDImageCache.shared().clearDisk()
@@ -315,7 +314,7 @@ extension MainViewController: PrismPostCollectionViewDelegate {
     }
 }
 
-extension MainViewController: ZoomingViewController {
+extension MainViewController: ZoomingViewControllerDelegate {
     func zoomingBackgroundView(for transition: ZoomTransitioningDelegate) -> UIView? {
         return nil
     }
@@ -443,7 +442,8 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
 //        StorageReference postImageRef = storageReference.child(Key.STORAGE_POST_IMAGES_REF).child(uploadedImageUri.getLastPathSegment());
 
         let postImageRef = storageReference.child(Key.STORAGE_POST_IMAGES_REF).child("\(imageName).jpeg") as StorageReference
-        if let uploadData = UIImageJPEGRepresentation(uploadImage, 1){
+        /*
+        if let uploadData = UIImageJPEGRepresentation(uploadImage, 1) {
             postImageRef.putData(uploadData, metadata: metadata, completion: { (metadata, error) in
 //                postImageRef.observe(.progress) { snapshot, a in
 //
@@ -492,6 +492,7 @@ extension MainViewController: UICollectionViewDataSource,  UICollectionViewDeleg
                 
             })
         }
+        */
         
     }
     

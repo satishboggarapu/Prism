@@ -13,6 +13,7 @@ target 'Prism' do
   pod 'Material'
   pod 'MaterialComponents'
   pod 'SDWebImage'
+  pod 'PinLayout'  
 
   target 'PrismTests' do
     inherit! :search_paths

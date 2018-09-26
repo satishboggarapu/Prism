@@ -15,6 +15,7 @@ import Motion
 import Firebase
 import FirebaseAuth
 import SDWebImage
+import PinLayout
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
@@ -65,7 +66,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         if Auth.auth().currentUser != nil {
-            self.navigationController?.pushViewController(MainViewController(), animated: false)
+            self.navigationController?.pushViewController(MainTabBarController(), animated: false)
         } else {
             self.addObservers()
             if animateFromRegister {

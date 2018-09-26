@@ -459,7 +459,7 @@ extension PrismPostDetailViewController: MoreDialogDelegate {
     }
 }
 
-extension PrismPostDetailViewController: ZoomingViewController {
+extension PrismPostDetailViewController: ZoomingViewControllerDelegate {
 
     func zoomingBackgroundView(for transition: ZoomTransitioningDelegate) -> UIView? {
         return nil

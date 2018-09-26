@@ -333,8 +333,8 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 // TODO: Set FirebaseAuth.displayName
-                let uid = user!.uid
-                let email = user!.email
+                let uid = user!.user.uid
+                let email = user!.user.email
                 
                 let profileReference = self.usersDatabaseRef.child(uid);
                 profileReference.child(Key.USER_PROFILE_FULL_NAME).setValue(fullName);
