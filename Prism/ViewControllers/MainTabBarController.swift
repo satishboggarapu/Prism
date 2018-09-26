@@ -14,21 +14,52 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setupTabBarViewControllers()
+        setupTabBar()
+    }
+    
+    /*
+     *  Initializes tabBar attributes
+     */
+    private func setupTabBar() {
+        tabBar.barTintColor = .navigationBarColor
+        tabBar.barStyle = .black
+        tabBar.isOpaque = false
+        tabBar.unselectedItemTintColor = .white
+    }
+    
+    /*
+     *  Initializes all the view controller for the controller.
+     */
+    private func setupTabBarViewControllers() {
+        let imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        
+        let feedTabBarItem = UITabBarItem(title: nil, image: Icons.IMAGE_FILTER_24, tag: 0)
+        feedTabBarItem.imageInsets = imageInsets
+        let discoveryTabBarItem = UITabBarItem(title: nil, image: Icons.SEARCH_24, tag: 1)
+        discoveryTabBarItem.imageInsets = imageInsets
+        let notificationTabBarItem = UITabBarItem(title: nil, image: Icons.NOTIFICATIONS_24, tag: 2)
+        notificationTabBarItem.imageInsets = imageInsets
+        let settingTabBarItem = UITabBarItem(title: nil, image: Icons.MORE_HORIZONTAL_LINES_24, tag: 3)
+        settingTabBarItem.imageInsets = imageInsets
+        
         let feedViewController = FeedViewController()
-        feedViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .featured, tag: 0)
+        feedViewController.tabBarItem = feedTabBarItem
         
         let discoveryViewController = DiscoveryViewController()
-        discoveryViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+        discoveryViewController.tabBarItem = discoveryTabBarItem
         
         let notificationViewController = NotificationViewController()
-        notificationViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 2)
+        notificationViewController.tabBarItem = notificationTabBarItem
         
         let settingViewController = SettingViewController()
-        settingViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 3)
+        settingViewController.tabBarItem = settingTabBarItem
         
         let tabBarList = [feedViewController, discoveryViewController, notificationViewController, settingViewController]
         viewControllers = tabBarList
     }
+    
+    
     
 
     /*
