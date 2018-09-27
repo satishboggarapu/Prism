@@ -14,7 +14,26 @@ class NotificationViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        view.backgroundColor = .green
+        view.backgroundColor = UIColor.loginBackground
+        
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.barTintColor = .statusBarBackground
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.isOpaque = false
+        navigationItem.setHidesBackButton(true, animated: false)
+        navigationController?.hidesBarsOnSwipe = true
+        
+        let navigationView = NavigationView()
+        navigationView.frame = CGRect(x: 0, y: 0, width: 100, height: 44)
+        
+        let signOutButton = UIBarButtonItem(title: "SignOut", style: .done, target: self, action: nil)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navigationView)
+        navigationItem.rightBarButtonItem = signOutButton
     }
     
 

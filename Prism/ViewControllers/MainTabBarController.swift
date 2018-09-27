@@ -22,7 +22,7 @@ class MainTabBarController: UITabBarController {
      *  Initializes tabBar attributes
      */
     private func setupTabBar() {
-        tabBar.barTintColor = .navigationBarColor
+        tabBar.barTintColor = .statusBarBackground
         tabBar.barStyle = .black
         tabBar.isOpaque = false
         tabBar.unselectedItemTintColor = .white
@@ -56,7 +56,8 @@ class MainTabBarController: UITabBarController {
         settingViewController.tabBarItem = settingTabBarItem
         
         let tabBarList = [feedViewController, discoveryViewController, notificationViewController, settingViewController]
-        viewControllers = tabBarList
+//        viewControllers = tabBarList
+        viewControllers = tabBarList.map { UINavigationController(rootViewController: $0)}
     }
     
     

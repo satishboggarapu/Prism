@@ -19,6 +19,7 @@
 		10638A1120B5B83900D8471B /* UICollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10638A1020B5B83900D8471B /* UICollectionViewExtensions.swift */; };
 		10660D6720CA4D290001EDF9 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10660D6620CA4D290001EDF9 /* UIButtonExtensions.swift */; };
 		106EAD9F2062E97C008E41B0 /* SDWebImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106EAD9E2062E97C008E41B0 /* SDWebImageHelper.swift */; };
+		10717E28215BFDFE0061069C /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10717E27215BFDFE0061069C /* NavigationView.swift */; };
 		10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10863A4D203FD57800FA851B /* UIColorExtensions.swift */; };
 		1091E1F4203E838500C282BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F3203E838500C282BA /* AppDelegate.swift */; };
 		1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1091E1F5203E838500C282BA /* LoginViewController.swift */; };
@@ -121,6 +122,7 @@
 		10638A1020B5B83900D8471B /* UICollectionViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtensions.swift; sourceTree = "<group>"; };
 		10660D6620CA4D290001EDF9 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
 		106EAD9E2062E97C008E41B0 /* SDWebImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDWebImageHelper.swift; sourceTree = "<group>"; };
+		10717E27215BFDFE0061069C /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		10863A4D203FD57800FA851B /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		1091E1F0203E838500C282BA /* Prism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prism.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1091E1F3203E838500C282BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				192E4A2B1DDAB32382236D47 /* MoreDialog.swift */,
 				192E4790320085376751F7F1 /* ZoomTransitioningDelegate.swift */,
 				192E44A288763762AEF945E3 /* ProfileViewMenuBar.swift */,
+				10717E27215BFDFE0061069C /* NavigationView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -763,6 +766,7 @@
 				10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */,
 				4F9C95852050D5BF00C08C9E /* MyTimeUnit.swift in Sources */,
 				10E3F55C204659EF00C82F3F /* Icons.swift in Sources */,
+				10717E28215BFDFE0061069C /* NavigationView.swift in Sources */,
 				10ADF6C22050D36000060A19 /* UIViewExtensions.swift in Sources */,
 				1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */,
 				10E3F557204659DF00C82F3F /* RegisterViewController.swift in Sources */,
