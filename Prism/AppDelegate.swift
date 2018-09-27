@@ -25,18 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UINavigationBar.appearance().barTintColor = UIColor.statusBarBackground
 
-        // get rid of black bar underneath navbar
+        // get rid of black bar underneath NavigationController
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
 
-        application.statusBarStyle = .lightContent
-
-        let statusBarBackgroundView = UIView()
-        statusBarBackgroundView.backgroundColor = UIColor.statusBarBackground
-
-        window?.addSubview(statusBarBackgroundView)
-        window?.addConstraintsWithFormat(format: "H:|[v0]|", views: statusBarBackgroundView)
-        window?.addConstraintsWithFormat(format: "V:|[v0(20)]", views: statusBarBackgroundView)
+        UIApplication.shared.statusBarView?.backgroundColor = .statusBarBackground
 
         // rootViewController from StoryBoard
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -97,7 +90,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        CachedImages.clearCache()
         print("cache cleared")
     }
+}
 
-
+extension UIApplication {
+    var statusBarView: UIView? {
+        if responds(to: Selector("statusBar")) {
+            return value(forKey: "statusBar") as? UIView
+        }
+        return nil
+    }
 }
 

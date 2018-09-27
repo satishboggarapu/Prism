@@ -25,6 +25,7 @@ class MainTabBarController: UITabBarController {
         tabBar.barTintColor = .statusBarBackground
         tabBar.barStyle = .black
         tabBar.isOpaque = false
+        tabBar.isTranslucent = false
         tabBar.unselectedItemTintColor = .white
     }
     

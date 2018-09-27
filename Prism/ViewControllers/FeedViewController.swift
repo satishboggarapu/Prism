@@ -36,7 +36,7 @@ class FeedViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.loginBackground
         
@@ -66,6 +66,7 @@ class FeedViewController: UIViewController {
      *  Initialize and setup app icon and name in navigation bar.
      */
     private func setupNavigationBar() {
+
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.barTintColor = .statusBarBackground
         navigationController?.navigationBar.isTranslucent = false
@@ -138,6 +139,33 @@ class FeedViewController: UIViewController {
             refreshControl.endRefreshing()
         }
     }
+    
+    private func loadMorePosts(_ index: Int) {
+        if index == prismPostArrayList.count - 1 && !isPullingData {
+            isPullingData = true
+            fetchMorePosts() { (result) in
+                if result {
+                    self.populateUserDetailsForAllPosts() { (result) in
+                        if result {
+                            let count = self.prismPostArrayList.count - index
+                            var indexPaths = [IndexPath]()
+                            for i in stride(from: 1, to: count, by: 1) {
+                                indexPaths.append(IndexPath(item: index + i, section: 0))
+                            }
+                            self.collectionView.performBatchUpdates({ () -> Void in
+                                self.collectionView.insertItems(at: indexPaths)
+
+                            }, completion: nil)
+                        } else {
+                            // TODO: Error
+                        }
+                    }
+                } else {
+                    // TODO: Error
+                }
+            }
+        }
+    }
 
     // MARK: Accessory Methods
 
@@ -173,7 +201,7 @@ extension FeedViewController {
      *  number of posts and loads them into an ArrayList of postIds and
      *  a HashMap of PrismObjects
      */
-    fileprivate func refreshData(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
+    private func refreshData(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         print("Inside refreshData")
         prismPostArrayList.removeAll()
         let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
@@ -198,7 +226,7 @@ extension FeedViewController {
      * updates the prismPost objects in that hashMap and then
      * updates the RecyclerViewAdapter so the UI gets updated
      */
-    fileprivate func populateUserDetailsForAllPosts(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
+    private func populateUserDetailsForAllPosts(completionHandler: @escaping ((_ exist : Bool) -> Void)) {
         print("Inside populateUserDetailsForAllPosts")
         usersReference.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
@@ -215,7 +243,7 @@ extension FeedViewController {
         })
     }
 
-    fileprivate func fetchMorePosts(completionHandler: @escaping ((_ exit: Bool) -> Void)) {
+    private func fetchMorePosts(completionHandler: @escaping ((_ exit: Bool) -> Void)) {
         print("Inside fetchMorePosts")
         let lastPostTimestamp = prismPostArrayList.last?.getTimestamp()
         let query = databaseReferenceAllPosts.queryOrdered(byChild: Key.POST_TIMESTAMP).queryStarting(atValue: lastPostTimestamp! + 1).queryLimited(toFirst: UInt(Default.IMAGE_LOAD_COUNT))
@@ -256,32 +284,7 @@ extension FeedViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.toggleRepostButton()
 //        cell.viewController = viewController
 
-        // load more posts
-        // TODO: Create a function for this
-        if indexPath.item == prismPostArrayList.count - 1 && !isPullingData {
-          isPullingData = true
-            fetchMorePosts() { (result) in
-                if result {
-                    self.populateUserDetailsForAllPosts() { (result) in
-                        if result {
-                            let count = self.prismPostArrayList.count - indexPath.item
-                            var indexPaths = [IndexPath]()
-                            for i in stride(from: 1, to: count, by: 1) {
-                                indexPaths.append(IndexPath(item: indexPath.item + i, section: 0))
-                            }
-                            self.collectionView.performBatchUpdates({ () -> Void in
-                                self.collectionView.insertItems(at: indexPaths)
-
-                            }, completion: nil)
-                        } else {
-                            // TODO: Error
-                        }
-                    }
-                } else {
-                    // TODO: Error
-                }
-            }
-        }
+        loadMorePosts(indexPath.item)
         return cell
     }
     
