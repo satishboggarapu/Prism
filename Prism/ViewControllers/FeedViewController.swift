@@ -27,6 +27,7 @@ class FeedViewController: UIViewController {
     private var reloadVisibleCells: Bool = true
     private var isPullingData: Bool = false
     private var lastCollectionViewContentOffset: CGFloat = 0
+    private var newPostButtonHidden: Bool = false
 
     // MARK: Database Attributes
     private var auth: Auth!
@@ -185,6 +186,17 @@ class FeedViewController: UIViewController {
 
     // MARK: Accessory Methods
 
+    private func toggleNewPostButton(hide: Bool, contentOffsetY: CGFloat) {
+        if hide && !newPostButtonHidden {
+            newPostButtonHidden = true
+            newPostButton.animate(.scale(0), .duration(0.25))
+        } else if !hide && newPostButtonHidden {
+            newPostButtonHidden = false
+            newPostButton.animate(.scale(1), .duration(0.25))
+        }
+        lastCollectionViewContentOffset = contentOffsetY
+    }
+
     private func getCellSize(_ index: Int) -> CGSize {
         let postId: String = prismPostArrayList[index].getPostId()!
         var imageHeightInPoints: CGFloat = 150
@@ -310,6 +322,15 @@ extension FeedViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let deltaValue: CGFloat = 100
+        if lastCollectionViewContentOffset - deltaValue > scrollView.contentOffset.y {
+            toggleNewPostButton(hide: false, contentOffsetY: scrollView.contentOffset.y)
+        } else if self.lastCollectionViewContentOffset + deltaValue < scrollView.contentOffset.y {
+            toggleNewPostButton(hide: true, contentOffsetY: scrollView.contentOffset.y)
+        }
     }
 }
 

@@ -14,6 +14,8 @@ protocol PrismPostCollectionViewDelegate: class {
     func profileViewSelected(_ prismPost: PrismPost)
 }
 
+// TODO: Delete this
+
 class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomImageViewDelegate {
 
     var delegate: PrismPostCollectionViewDelegate?
