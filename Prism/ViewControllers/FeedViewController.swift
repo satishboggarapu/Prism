@@ -19,6 +19,7 @@ class FeedViewController: UIViewController {
     private var activityIndicator: MDCActivityIndicator!
     private var refreshControl: UIRefreshControl!
     private var newPostButton: MDCFloatingButton!
+    private var imagePicketController: UIImagePickerController!
     
     // MARK: Attributes
     private var prismPostArrayList: [PrismPost]! = [PrismPost]()
@@ -47,6 +48,7 @@ class FeedViewController: UIViewController {
         setupRefreshControl()
         setupActivityIndicator()
         setupNewPostButton()
+        setupUIImagePickerController()
 
         // Database Initialization
         auth = Auth.auth()
@@ -55,7 +57,7 @@ class FeedViewController: UIViewController {
         usersReference = Default.USERS_REFERENCE
         userReference = Default.USERS_REFERENCE.child((auth.currentUser?.uid)!)
 
-        refreshData(false)
+//        refreshData(false)
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,7 +72,6 @@ class FeedViewController: UIViewController {
      *  Initialize and setup app icon and name in navigation bar.
      */
     private func setupNavigationBar() {
-
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.barTintColor = .statusBarBackground
         navigationController?.navigationBar.isTranslucent = false
@@ -124,6 +125,12 @@ class FeedViewController: UIViewController {
         view.addSubview(newPostButton)
     }
 
+    private func setupUIImagePickerController() {
+        imagePicketController = UIImagePickerController()
+        imagePicketController.delegate = self
+        imagePicketController.sourceType = .photoLibrary
+    }
+
     private func refreshData(_ isRefreshing: Bool) {
         activityIndicator.startAnimating()
         refreshData() { (result) in
@@ -154,7 +161,8 @@ class FeedViewController: UIViewController {
     @objc func newPostButtonAction() {
         print("newPostButton pressed")
 
-//        setupNavigationBarForImageUpload(uploadImage: Icons.SPLASH_SCREEN_ICON!)
+        present(imagePicketController, animated: true)
+
     }
     
     private func loadMorePosts(_ index: Int) {
@@ -218,7 +226,18 @@ class FeedViewController: UIViewController {
         return Date().seconds(from: lastRefreshTime) >= 4
     }
 
+}
 
+extension FeedViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            print("selected image")
+            let imageCropViewController = ImageCropViewController()
+            imageCropViewController.selectedImage = image
+            self.tabBarController?.navigationController?.pushViewController(imageCropViewController, animated: true)
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: Firebase Methods
@@ -310,7 +329,6 @@ extension FeedViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.setRepostsText()
         cell.toggleLikeButton()
         cell.toggleRepostButton()
-//        cell.viewController = viewController
 
         loadMorePosts(indexPath.item)
         return cell

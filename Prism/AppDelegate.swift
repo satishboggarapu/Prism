@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor.statusBarBackground
 
         // get rid of black bar underneath NavigationController
-        UINavigationBar.appearance().shadowImage = UIImage()
+//        UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
 
         UIApplication.shared.statusBarView?.backgroundColor = .statusBarBackground

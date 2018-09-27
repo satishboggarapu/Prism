@@ -12,6 +12,7 @@
 		10037D06215BD88C003F6C3C /* DiscoveryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10037D05215BD88C003F6C3C /* DiscoveryViewController.swift */; };
 		10037D08215BD8C5003F6C3C /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10037D07215BD8C5003F6C3C /* NotificationViewController.swift */; };
 		10037D0A215BD8F4003F6C3C /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10037D09215BD8F4003F6C3C /* SettingViewController.swift */; };
+		1005E9AC215D895500864324 /* ImageCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1005E9AB215D895500864324 /* ImageCropViewController.swift */; };
 		100763C22041B106005093C5 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100763C12041B106005093C5 /* Constraints.swift */; };
 		1011FAE02075BF3800468D82 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1011FADF2075BF3800468D82 /* DateExtensions.swift */; };
 		103399162061DFE000E105EC /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103399152061DFE000E105EC /* DictionaryExtensions.swift */; };
@@ -116,6 +117,7 @@
 		10037D05215BD88C003F6C3C /* DiscoveryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryViewController.swift; sourceTree = "<group>"; };
 		10037D07215BD8C5003F6C3C /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		10037D09215BD8F4003F6C3C /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		1005E9AB215D895500864324 /* ImageCropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropViewController.swift; sourceTree = "<group>"; };
 		100763C12041B106005093C5 /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		1011FADF2075BF3800468D82 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		103399152061DFE000E105EC /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 				10037D05215BD88C003F6C3C /* DiscoveryViewController.swift */,
 				10037D07215BD8C5003F6C3C /* NotificationViewController.swift */,
 				10037D09215BD8F4003F6C3C /* SettingViewController.swift */,
+				1005E9AB215D895500864324 /* ImageCropViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -769,6 +772,7 @@
 				10863A4E203FD57800FA851B /* UIColorExtensions.swift in Sources */,
 				4F9C95852050D5BF00C08C9E /* MyTimeUnit.swift in Sources */,
 				10E3F55C204659EF00C82F3F /* Icons.swift in Sources */,
+				1005E9AC215D895500864324 /* ImageCropViewController.swift in Sources */,
 				10717E28215BFDFE0061069C /* NavigationView.swift in Sources */,
 				10ADF6C22050D36000060A19 /* UIViewExtensions.swift in Sources */,
 				1091E1F6203E838500C282BA /* LoginViewController.swift in Sources */,

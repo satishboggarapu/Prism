@@ -35,6 +35,8 @@ public struct Icons {
     public static var ARROW_BACK_24 = Icons.icon("ic_arrow_back_white")
     public static var ACCOUNT_EDIT_24 = Icons.icon("ic_account_edit_24dp")
     public static var PLUS_24 = Icons.icon("ic_plus_24dp")
+    public static var IMAGE_24 = Icons.icon("ic_image_24dp")
+    public static var CAMERA_24 = Icons.icon("ic_camera_24dp")
     
     // Icons for Settings Page
     public static var SETTINGS_24 = Icons.icon("ic_settings_24dp")
