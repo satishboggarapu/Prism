@@ -7,6 +7,7 @@ import UIKit
 import Material
 import MaterialComponents
 import AVFoundation
+import PinLayout
 
 protocol PrismPostCollectionViewCellDelegate: class {
     func deletePost(_ prismPost: PrismPost)
@@ -17,6 +18,7 @@ protocol PrismPostCollectionViewCellDelegate: class {
 class PrismPostCollectionViewCell: UICollectionViewCell {
 
     // MARK: UIElements
+    var topRightView: UIView!
     var profileView: UIView!
     var bottomView: UIView!
     var profileImage: CustomImageView!
@@ -29,6 +31,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     var moreButton: UIButton!
     var reposts: UILabel!
     var backgroundImageView: UIImageView!
+    var blurEffectView: UIVisualEffectView!
     var heartImageView: UIImageView!
     var separatorView: UIView!
 
@@ -65,6 +68,36 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        let profileViewWidth: CGFloat = profilePictureSize + 8 + userName.intrinsicContentSize.width
+        let bottomViewWidth: CGFloat = likes.intrinsicContentSize.width + buttonSize * 3 + 8 * 4
+        let imageHeight: CGFloat = frame.height - profilePictureSize - buttonSize - dividerHeight - 8 * 4
+
+        // self
+        backgroundImageView.pin.all()
+        profileView.pin.hCenter().top(to: self.edge.top).marginTop(8).height(profilePictureSize).width(profileViewWidth)
+        postImage.pin.horizontally().top(to: profileView.edge.bottom).marginHorizontal(8).marginTop(8).height(imageHeight)
+        bottomView.pin.hCenter().top(to: postImage.edge.bottom).marginTop(8).width(bottomViewWidth).height(buttonSize)
+        separatorView.pin.horizontally().top(to: bottomView.edge.bottom).bottom(to: self.edge.bottom).marginTop(8).height(dividerHeight)
+        heartImageView.pin.hCenter(to: postImage.edge.hCenter).vCenter(to: postImage.edge.vCenter).height(PrismPostConstraints.HEART_IMAGEVIEW_HEIGHT.rawValue).width(PrismPostConstraints.HEART_IMAGEVIEW_HEIGHT.rawValue)
+        // backgroundImageView
+        blurEffectView.pin.all()
+        // profileView
+        profileImage.pin.vertically().left(to: profileView.edge.left).height(profilePictureSize).width(profilePictureSize)
+        topRightView.pin.vertically().left(to: profileImage.edge.right).right(to: profileView.edge.right).marginVertical(4).marginLeft(8)
+        // topRightView
+        userName.pin.horizontally().top(to: topRightView.edge.top).sizeToFit()
+        postDate.pin.horizontally().top(to: userName.edge.bottom).bottom(to: topRightView.edge.bottom).sizeToFit()
+        // bottomView
+        likes.pin.vCenter().left(to: bottomView.edge.left).sizeToFit()
+        likeButton.pin.vCenter().left(to: likes.edge.right).marginLeft(8).height(buttonSize).width(buttonSize)
+        repostButton.pin.vCenter().left(to: likeButton.edge.right).marginLeft(8).height(buttonSize).width(buttonSize)
+        moreButton.pin.vCenter().left(to: repostButton.edge.right).marginLeft(8).height(buttonSize).width(buttonSize)
+        reposts.pin.vCenter().left(to: moreButton.edge.right).right(to: bottomView.edge.right).sizeToFit()
+    }
+
     private func setupView() {
         // Initialize all UIElements
         initializeBackgroundImageView()
@@ -82,17 +115,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         initializeSeparatorView()
 
         // Set Profile View
-        let topRightView = UIView()
+        topRightView = UIView()
         topRightView.addSubview(userName)
         topRightView.addSubview(postDate)
-        topRightView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": userName]))
-        topRightView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": postDate]))
-        topRightView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0][v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": userName, "v1": postDate]))
         profileView.addSubview(profileImage)
         profileView.addSubview(topRightView)
-        profileView.addConstraintsWithFormat(format: "H:|[v0(\(profilePictureSize))]-\(defaultMargin)-[v1]|", views: profileImage, topRightView)
-        profileView.addConstraintsWithFormat(format: "V:|[v0(\(profilePictureSize))]|", views: profileImage)
-        profileView.addConstraintsWithFormat(format: "V:|-\(defaultMargin / 2)-[v0]-\(defaultMargin / 2)-|", views: topRightView)
 
         // Set Bottom View
         bottomView = UIView()
@@ -101,43 +128,13 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         bottomView.addSubview(repostButton)
         bottomView.addSubview(moreButton)
         bottomView.addSubview(reposts)
-        bottomView.addConstraintsWithFormat(format: "V:|[v0]|", views: likes)
-        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: likeButton)
-        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: repostButton)
-        bottomView.addConstraintsWithFormat(format: "V:|[v0(\(buttonSize))]|", views: moreButton)
-        bottomView.addConstraintsWithFormat(format: "V:|[v0]|", views: reposts)
-        bottomView.addConstraintsWithFormat(format: "H:|[v0]-\(defaultMargin)-[v1(\(buttonSize))]-\(defaultMargin)-[v2(\(buttonSize))]-\(defaultMargin)-[v3(\(buttonSize))]-\(topMargin)-[v4]|", views: likes, likeButton, repostButton, moreButton, reposts)
 
         // Add elements to the cell view
-        self.addSubview(profileView)
-        self.addSubview(postImage)
-        self.insertSubview(heartImageView, aboveSubview: postImage)
-        self.addSubview(bottomView)
-        self.addSubview(separatorView)
-        addConstraintsWithFormat(format: "H:[v0]", views: profileView)
-        addConstraint(NSLayoutConstraint(item: profileView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-        addConstraintsWithFormat(format: "H:|-\(leftMargin)-[v0]-\(leftMargin)-|", views: postImage)
-        addConstraint(NSLayoutConstraint(item: postImage, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-        addConstraintsWithFormat(format: "H:[v0(\(PrismPostConstraints.HEART_IMAGEVIEW_HEIGHT.rawValue))]", views: heartImageView)
-        addConstraint(NSLayoutConstraint(item: heartImageView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-        addConstraintsWithFormat(format: "V:[v0(\(PrismPostConstraints.HEART_IMAGEVIEW_HEIGHT.rawValue))]", views: heartImageView)
-        addConstraint(NSLayoutConstraint(item: heartImageView, attribute: .centerY, relatedBy: .equal, toItem: postImage, attribute: .centerY, multiplier: 1, constant: 0))
-        addConstraintsWithFormat(format: "H:[v0]", views: bottomView)
-        addConstraint(NSLayoutConstraint(item: bottomView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-        addConstraintsWithFormat(format: "H:|[v0]|", views: separatorView)
-
-        let views: [String: UIView] = ["v0": profileView,
-                                      "v1": postImage,
-                                      "v2": bottomView,
-                                      "v3": separatorView]
-        cellVerticalConstraint = NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(topMargin)-[v0]-\(topMargin)-[v1(<=\(imageMaxHeight))]-\(topMargin)-[v2]-\(topMargin)-[v3(\(dividerHeight))]|", options: NSLayoutFormatOptions(), metrics: nil, views: views)
-        addConstraints(cellVerticalConstraint)
-        
-        
-//        let separatorLine = UIImageView.init(frame: CGRect(x: 0, y: contentView.frame.height, width: contentView.frame.size.width, height: 1))
-//        separatorLine.backgroundColor = .white
-//        self.addSubview(separatorLine)
-
+        addSubview(profileView)
+        addSubview(postImage)
+        insertSubview(heartImageView, aboveSubview: postImage)
+        addSubview(bottomView)
+        addSubview(separatorView)
     }
 
 
@@ -147,17 +144,13 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         // cell background
         backgroundImageView = UIImageView()
         backgroundImageView.contentMode = .scaleAspectFit
-        self.insertSubview(backgroundImageView, at: 0)
-        addConstraintsWithFormat(format: "H:|[v0]|", views: backgroundImageView)
-        addConstraintsWithFormat(format: "V:|[v0]|", views: backgroundImageView)
+        insertSubview(backgroundImageView, at: 0)
 
         // blur effect
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         backgroundImageView.addSubview(blurEffectView)
-        backgroundImageView.addConstraintsWithFormat(format: "H:|[v0]|", views: blurEffectView)
-        backgroundImageView.addConstraintsWithFormat(format: "V:|[v0]|", views: blurEffectView)
     } 
 
     private func initializeProfileView() {
@@ -173,7 +166,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         profileImage.contentMode = .scaleAspectFit
         profileImage.layer.cornerRadius = profilePictureSize/2
         profileImage.clipsToBounds = true
-        profileImage.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializeUserName() {
@@ -181,7 +173,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 //        userName.text = "sboggarapu"
         userName.textColor = UIColor.white
         userName.font = boldFont
-        userName.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializePostDate() {
@@ -189,7 +180,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 //        postDate.text = "3 days ago"
         postDate.textColor = UIColor.white
         postDate.font = thinFont
-        postDate.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializePostImage() {
@@ -197,7 +187,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 //        postImage.image = UIImage(named: "image1.jpeg")
         postImage.contentMode = .scaleAspectFit
         postImage.clipsToBounds = true
-        postImage.translatesAutoresizingMaskIntoConstraints = false
         postImage.isUserInteractionEnabled = true
 
         // tap gesture
@@ -224,7 +213,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 //        likes.text = "1 like"
         likes.textColor = UIColor.white
         likes.font = mediumFont
-        likes.translatesAutoresizingMaskIntoConstraints = false
         likes.isUserInteractionEnabled = true
 
         // tap gesture
@@ -240,7 +228,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         likeButton.tintColor = UIColor.white
         likeButton.setTitle("", for: .normal)
         likeButton.addTarget(self, action: #selector(likesButtonAction(_:)), for: .touchUpInside)
-        likeButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializeRepostButton() {
@@ -250,7 +237,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         repostButton.tintColor = UIColor.white
         repostButton.setTitle("", for: .normal)
         repostButton.addTarget(self, action: #selector(repostButtonAction(_:)), for: .touchUpInside)
-        repostButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializeMoreButton() {
@@ -260,7 +246,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         moreButton.tintColor = UIColor.white
         moreButton.setTitle("", for: .normal)
         moreButton.addTarget(self, action: #selector(moreButtonAction(_:)), for: .touchUpInside)
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func initializeReposts() {
@@ -268,7 +253,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 //        reposts.text = "0 reposts"
         reposts.textColor = UIColor.white
         reposts.font = mediumFont
-        reposts.translatesAutoresizingMaskIntoConstraints = false
         reposts.isUserInteractionEnabled = true
 
         // tap gesture
