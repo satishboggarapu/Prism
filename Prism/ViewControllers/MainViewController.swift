@@ -112,7 +112,7 @@ class MainViewController: UIViewController {
         let navigationView = UIView()
         navigationView.frame = CGRect(x: 0, y: 0, width: 100, height: 44)
 
-        let iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
+        let iconImageView = UIImageView(image: Images.SPLASH_SCREEN_ICON)
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.frame = CGRect(x: 0, y: 8, width: 34, height: 34)
         navigationView.addSubview(iconImageView)
@@ -244,7 +244,7 @@ class MainViewController: UIViewController {
     @objc func newPostButtonAction(_ sender: FABButton) {
         print("newPostButton pressed")
 
-        setupNavigationBarForImageUpload(uploadImage: Icons.SPLASH_SCREEN_ICON!)
+        setupNavigationBarForImageUpload(uploadImage: Images.SPLASH_SCREEN_ICON!)
 
     }
 

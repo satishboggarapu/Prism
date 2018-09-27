@@ -59,7 +59,7 @@ class NavigationBar: UIView {
     private func initializeMainViewMode() {
         iconImageView = UIImageView()
         iconImageView.contentMode = .scaleAspectFit
-        iconImageView.image = Icons.SPLASH_SCREEN_ICON
+        iconImageView.image = Images.SPLASH_SCREEN_ICON
         self.addSubview(iconImageView)
 
         titleLabel = UILabel()

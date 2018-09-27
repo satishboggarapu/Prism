@@ -23,11 +23,11 @@ class MoreDialog: UIViewController {
     private var deleteButton: MDCFlatButton!
 
     weak var delegate: MoreDialogDelegate?
-    private var shouldDisplayDeleteButton: Bool!
+    private var shouldDisplayDeleteButton: Bool = false
 
     convenience init(prismPost: PrismPost) {
         self.init(nibName: nil, bundle: nil)
-        shouldDisplayDeleteButton = (prismPost.getUid() == CurrentUser.prismUser.getUid()) ? true : false
+//        shouldDisplayDeleteButton = (prismPost.getUid() == CurrentUser.prismUser.getUid()) ? true : false
         setupView()
     }
 

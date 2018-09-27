@@ -145,7 +145,6 @@ class PrismPostCollectionView: UICollectionViewCell, UICollectionViewDataSource,
         cell.setRepostsText()
         cell.toggleLikeButton()
         cell.toggleRepostButton()
-        cell.viewController = viewController
 
         // load more posts
         // TODO: Create a function for this

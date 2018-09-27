@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = navigationController
         navigationController.view.backgroundColor = UIColor(hex: 0x2b2b2b)
 
-        let iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
+        let iconImageView = UIImageView(image: Images.SPLASH_SCREEN_ICON)
         iconImageView.bounds.origin = CGPoint(x: 0, y: 0)
         iconImageView.bounds.size = Constraints.LoginViewController.getIconSize()
         iconImageView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)

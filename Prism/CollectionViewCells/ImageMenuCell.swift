@@ -4,7 +4,7 @@
 //
 
 import UIKit
-
+// TODO: Delete this
 class ImageMenuCell: UICollectionViewCell {
 
     let imageView: UIImageView = {

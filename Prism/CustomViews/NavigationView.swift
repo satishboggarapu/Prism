@@ -23,7 +23,7 @@ class NavigationView: UIView {
     }
     
     private func setupView() {
-        iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
+        iconImageView = UIImageView(image: Images.SPLASH_SCREEN_ICON)
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.frame = CGRect(x: 0, y: 4, width: 34, height: 34)
         addSubview(iconImageView)

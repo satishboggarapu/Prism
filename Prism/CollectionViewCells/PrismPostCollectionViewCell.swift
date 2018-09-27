@@ -37,27 +37,15 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     // MARK: Attributes
     weak var delegate: PrismPostCollectionViewCellDelegate?
-    var viewController = MainViewController()
     var prismPost: PrismPost!
-    var isPostLiked: Bool!
-    var isPostReposted: Bool!
-    var shouldDisplayBorderForProfilePic: Bool = false
 
     // Mark: Constraints
-    var cellVerticalConstraint: [NSLayoutConstraint]!
-    var topMargin: CGFloat = PrismPostConstraints.TOP_MARGIN.rawValue
-    var defaultMargin: CGFloat = PrismPostConstraints.DEFAULT_MARGIN.rawValue
-    var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
-    var buttonSize: CGFloat = PrismPostConstraints.BUTTON_HEIGHT.rawValue
-    var dividerHeight: CGFloat = PrismPostConstraints.DIVIDER_HEIGHT.rawValue
-    var boldFont: UIFont = SourceSansFont.bold(with: 17)
-    var mediumFont: UIFont = SourceSansFont.light(with: 15)
-    var thinFont: UIFont = SourceSansFont.light(with: 12)
-
-    let imageMaxWidth: CGFloat = PrismPostConstraints.IMAGE_MAX_WIDTH
-    let imageMaxHeight: CGFloat = PrismPostConstraints.IMAGE_MAX_HEIGHT
-    let leftMargin: CGFloat = PrismPostConstraints.LEFT_MARGIN
-
+    private var profilePictureSize: CGFloat = PrismPostConstraints.PROFILE_PICTURE_HEIGHT.rawValue
+    private var buttonSize: CGFloat = PrismPostConstraints.BUTTON_HEIGHT.rawValue
+    private var dividerHeight: CGFloat = PrismPostConstraints.DIVIDER_HEIGHT.rawValue
+    private var boldFont: UIFont = SourceSansFont.bold(with: 17)
+    private var mediumFont: UIFont = SourceSansFont.light(with: 15)
+    private var thinFont: UIFont = SourceSansFont.light(with: 12)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,10 +65,10 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
         // self
         backgroundImageView.pin.all()
-        profileView.pin.hCenter().top(to: self.edge.top).marginTop(8).height(profilePictureSize).width(profileViewWidth)
+        profileView.pin.hCenter().top(to: edge.top).marginTop(8).height(profilePictureSize).width(profileViewWidth)
         postImage.pin.horizontally().top(to: profileView.edge.bottom).marginHorizontal(8).marginTop(8).height(imageHeight)
         bottomView.pin.hCenter().top(to: postImage.edge.bottom).marginTop(8).width(bottomViewWidth).height(buttonSize)
-        separatorView.pin.horizontally().top(to: bottomView.edge.bottom).bottom(to: self.edge.bottom).marginTop(8).height(dividerHeight)
+        separatorView.pin.horizontally().top(to: bottomView.edge.bottom).bottom(to: edge.bottom).marginTop(8).height(dividerHeight)
         heartImageView.pin.hCenter(to: postImage.edge.hCenter).vCenter(to: postImage.edge.vCenter).height(PrismPostConstraints.HEART_IMAGEVIEW_HEIGHT.rawValue).width(PrismPostConstraints.HEART_IMAGEVIEW_HEIGHT.rawValue)
         // backgroundImageView
         blurEffectView.pin.all()
@@ -162,7 +150,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeProfilePicture() {
         profileImage = CustomImageView()
-//        profilePicture.image = Icons.SPLASH_SCREEN_ICON
         profileImage.contentMode = .scaleAspectFit
         profileImage.layer.cornerRadius = profilePictureSize/2
         profileImage.clipsToBounds = true
@@ -170,21 +157,18 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeUserName() {
         userName = UILabel()
-//        userName.text = "sboggarapu"
         userName.textColor = UIColor.white
         userName.font = boldFont
     }
 
     private func initializePostDate() {
         postDate = UILabel()
-//        postDate.text = "3 days ago"
         postDate.textColor = UIColor.white
         postDate.font = thinFont
     }
 
     private func initializePostImage() {
         postImage = CustomImageView()
-//        postImage.image = UIImage(named: "image1.jpeg")
         postImage.contentMode = .scaleAspectFit
         postImage.clipsToBounds = true
         postImage.isUserInteractionEnabled = true
@@ -210,7 +194,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeLikes() {
         likes = UILabel()
-//        likes.text = "1 like"
         likes.textColor = UIColor.white
         likes.font = mediumFont
         likes.isUserInteractionEnabled = true
@@ -250,7 +233,6 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
     private func initializeReposts() {
         reposts = UILabel()
-//        reposts.text = "0 reposts"
         reposts.textColor = UIColor.white
         reposts.font = mediumFont
         reposts.isUserInteractionEnabled = true
@@ -330,6 +312,7 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     // MARK: Tap Gesture Methods
 
     @objc func profileTapGestureAction(_ sender: UITapGestureRecognizer) {
+        print("profileTapGesture")
         delegate?.profileViewSelected(prismPost)
     }
 
@@ -355,16 +338,17 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         // TODO: Scale down the heartImageView so that is looks good for panorama pictures also
         animateLikeButton()
         animateHeartImageView(isSelected: !sender.isSelected)
-        if CurrentUser.hasLiked(prismPost) {
-            DatabaseAction.performUnlike(prismPost)
-            CurrentUser.unlikePost(prismPost)
-            prismPost.setLikes(likes: prismPost.getLikes()-1)
-        } else {
-            DatabaseAction.performLike(prismPost)
-            CurrentUser.likePost(prismPost)
-            prismPost.setLikes(likes: prismPost.getLikes()+1)
-        }
-        setLikesText()
+        // TODO: Likes Backend
+//        if CurrentUser.hasLiked(prismPost) {
+//            DatabaseAction.performUnlike(prismPost)
+//            CurrentUser.unlikePost(prismPost)
+//            prismPost.setLikes(likes: prismPost.getLikes()-1)
+//        } else {
+//            DatabaseAction.performLike(prismPost)
+//            CurrentUser.likePost(prismPost)
+//            prismPost.setLikes(likes: prismPost.getLikes()+1)
+//        }
+//        setLikesText()
     }
 
     @objc func repostButtonAction(_ sender: UIButton) {
@@ -379,10 +363,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
         } else {
             animateRepostButton()
             // repost post
-            DatabaseAction.performUnrepost(prismPost)
-            CurrentUser.unrepostPost(prismPost)
-            prismPost.setReposts(reposts: prismPost.getReposts() - 1)
-            setRepostsText()
+            // TODO: Repost Backend
+//            DatabaseAction.performUnrepost(prismPost)
+//            CurrentUser.unrepostPost(prismPost)
+//            prismPost.setReposts(reposts: prismPost.getReposts() - 1)
+//            setRepostsText()
         }
 
     }
@@ -390,10 +375,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
     @objc func repostAlertDialogButtonAction() {
         animateRepostButton()
         // unrepost post
-        DatabaseAction.performRepost(prismPost)
-        CurrentUser.repostPost(prismPost)
-        prismPost.setReposts(reposts: prismPost.getReposts() + 1)
-        setRepostsText()
+        // TODO: Repost Backend
+//        DatabaseAction.performRepost(prismPost)
+//        CurrentUser.repostPost(prismPost)
+//        prismPost.setReposts(reposts: prismPost.getReposts() + 1)
+//        setRepostsText()
     }
 
     @objc func moreButtonAction(_ sender: UIButton) {
@@ -585,11 +571,11 @@ class PrismPostCollectionViewCell: UICollectionViewCell {
 
 extension PrismPostCollectionViewCell: MoreDialogDelegate {
     func moreDialogReportButtonAction() {
-
+        // TODO: Report Button Action
     }
 
     func moreDialogShareButtonAction() {
-
+        // TODO: Share Button Action
     }
 
     func moreDialogDeleteButtonAction() {

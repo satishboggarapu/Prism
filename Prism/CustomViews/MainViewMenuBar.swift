@@ -6,7 +6,7 @@
 // TODO: Clean this up
 
 import UIKit
-
+// TODO: Delete this
 class MainViewMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     lazy var collectionView: UICollectionView = {

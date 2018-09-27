@@ -104,7 +104,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func initializeIconImageView() {
-        iconImageView = UIImageView(image: Icons.SPLASH_SCREEN_ICON)
+        iconImageView = UIImageView(image: Images.SPLASH_SCREEN_ICON)
         iconImageView.frame = Constraints.LoginViewController.getIconFrame()
         iconImageView.contentMode = .scaleAspectFit
         scrollView.addSubview(iconImageView)

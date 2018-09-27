@@ -62,6 +62,7 @@
 		192E486C5979A78CFA444475 /* SourceSansPro-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 192E434357C28B01BB584205 /* SourceSansPro-BlackItalic.ttf */; };
 		192E498270A225491FAA2348 /* SourceSansFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E425BFCAA5B6FADA5E03E /* SourceSansFont.swift */; };
 		192E49DC424B564645CE2595 /* SourceSansPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 192E450879EF8422616E9AC4 /* SourceSansPro-Light.ttf */; };
+		192E4AE3BEBBAD07CE78ACA0 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E468FBA7DF95936B2C521 /* Images.swift */; };
 		192E4BC9144D9996A413E0B1 /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 192E428DE079C705C6F67318 /* SourceSansPro-Italic.ttf */; };
 		192E4C1277313C3406F4FD11 /* LabelMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4E032ABD9200A979DE31 /* LabelMenuCell.swift */; };
 		192E4C28371F6F44578037B4 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40A7ADA16934A87DB9F3 /* ImageManager.swift */; };
@@ -165,6 +166,7 @@
 		192E4518D6E1CA9CCD6A4601 /* SourceSansPro-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; path = "SourceSansPro-ExtraLight.ttf"; sourceTree = "<group>"; };
 		192E4611420BAAF669FE0A4C /* ProfileViewPostsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewPostsCollectionViewCell.swift; sourceTree = "<group>"; };
 		192E4678BF58B239D159B832 /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		192E468FBA7DF95936B2C521 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		192E4711142E676DC6844EDA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		192E471F840E5BCA85CB7636 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; path = "SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
 		192E4739330EC657C54F1CA3 /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; path = "SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				106EAD9E2062E97C008E41B0 /* SDWebImageHelper.swift */,
 				192E49ADF8D50296D952D15A /* PrismPostConstraints.swift */,
 				192E425BFCAA5B6FADA5E03E /* SourceSansFont.swift */,
+				192E468FBA7DF95936B2C521 /* Images.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -804,6 +807,7 @@
 				192E498270A225491FAA2348 /* SourceSansFont.swift in Sources */,
 				192E44A2F0F6D7324BBE723C /* ProfileViewPostsCollectionViewCell.swift in Sources */,
 				192E4D9E1D326CFB39ABB089 /* ProfileViewCollectionViewLayout.swift in Sources */,
+				192E4AE3BEBBAD07CE78ACA0 /* Images.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

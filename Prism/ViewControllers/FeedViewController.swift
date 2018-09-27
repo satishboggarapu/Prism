@@ -18,6 +18,7 @@ class FeedViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var activityIndicator: MDCActivityIndicator!
     private var refreshControl: UIRefreshControl!
+    private var newPostButton: MDCFloatingButton!
     
     // MARK: Attributes
     private var prismPostArrayList: [PrismPost]! = [PrismPost]()
@@ -44,6 +45,7 @@ class FeedViewController: UIViewController {
         setupCollectionView()
         setupRefreshControl()
         setupActivityIndicator()
+        setupNewPostButton()
 
         // Database Initialization
         auth = Auth.auth()
@@ -60,6 +62,7 @@ class FeedViewController: UIViewController {
         
         collectionView.pin.all()
         activityIndicator.pin.vCenter().hCenter()
+        newPostButton.pin.right(to: view.edge.right).bottom(to: view.edge.bottom).marginRight(24).marginBottom(24).height(56).width(56)
     }
     
     /*
@@ -90,8 +93,6 @@ class FeedViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.bounces = true
-        // TODO: Remove this
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell1")
         collectionView.register(PrismPostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         view.addSubview(collectionView)
     }
@@ -111,6 +112,15 @@ class FeedViewController: UIViewController {
         activityIndicator.sizeToFit()
         activityIndicator.cycleColors = [.materialBlue]
         view.insertSubview(activityIndicator, aboveSubview: collectionView)
+    }
+    
+    private func setupNewPostButton() {
+        newPostButton = MDCFloatingButton(shape: .default)
+        newPostButton.backgroundColor = .iosBlue
+        newPostButton.setImage(Icons.PLUS_24, for: .normal)
+        newPostButton.setImageTintColor(.white, for: .normal)
+        newPostButton.addTarget(self, action: #selector(newPostButtonAction), for: .touchUpInside)
+        view.addSubview(newPostButton)
     }
 
     private func refreshData(_ isRefreshing: Bool) {
@@ -138,6 +148,12 @@ class FeedViewController: UIViewController {
         } else {
             refreshControl.endRefreshing()
         }
+    }
+
+    @objc func newPostButtonAction() {
+        print("newPostButton pressed")
+
+//        setupNavigationBarForImageUpload(uploadImage: Icons.SPLASH_SCREEN_ICON!)
     }
     
     private func loadMorePosts(_ index: Int) {
